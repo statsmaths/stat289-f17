@@ -82,6 +82,31 @@ Steroids Probably Aren't Causing Baseball's Power Surge
 ![](img/diagram03.jpg)
 
 
+# STAT 289
+
+### Naming
+
+Technically, this class is **MATH 289**, but I'm going
+to call it **STAT 289** in these notes because it is really
+not a mathematics course.
+
+### Course Goal
+
+The goal for this semester is to learn the skills to collect,
+analyse, and communicate results about data.
+
+We will do a lot of programming in the course, but it is **not**
+a programming class.
+
+### Versus MATH 209
+
+I will be teaching this class in a similar way that I teach
+MATH 209. However, we will move at a slightly faster pace and
+will cover the modelling aspects of data more thoroughly.
+
+I'll assume that you have previously seen hypothesis testing and
+are at least roughly familiar with linear regression.
+
 # Syllabus
 
 ### Computing
@@ -108,9 +133,9 @@ is pre-installed on many campus computers.
 The lab computers will be available as well, though I find them to be
 quite slow and poorly maintained. We will devote a substantial
 amount of the time learning how to work within the R programming
-framework.
+framework. \pause
 
-\pause **Please bring your laptop to our next class meeting!**
+**Please bring your laptop to our next class meeting!**
 
 ### References
 
@@ -132,9 +157,12 @@ account, which we will cover during our next class.
 
 ### Grades
 
-All grades in this course will be given on as a letter grade.
+All grades in this course will be given as either a letter grade
+or on a 4-point scale.
+
 While occasionally possible to receive pluses / minuses or
-fractional points, these will usually be given a whole letter grade.
+fractional points, these will usually be given a whole letter or
+number grade.
 
 ### Grade Breakdown
 
@@ -142,7 +170,8 @@ There are three components to your final grade:
 
 - Labs, 10%
 - Participation, 10%
-- Data Reports, 80%
+- Quizzes, 30% (drop lowest 2)
+- Data Reports, 50%
 
 
 ### Lab and Participation Grades
@@ -174,6 +203,15 @@ will have an interactive lab associated with it. These consist of a
 set of questions that must be answered with either small snippets of
 code or short descriptive answers. Your solutions must be uploaded
 to your GitHub page.
+
+### Quizzes
+
+There will be short quizzes given during the semester. These will be
+at the end of class on Tuesdays. All will consist of entirely objective
+questions, such as True/False, multiple choice, and matching. \pause
+
+You will be able to drop your two lowest grades; therefore,
+make-up quizzes will be offered only in extreme circumstances.
 
 ### Data Reports
 
@@ -221,7 +259,6 @@ meetings of the course.
 - WEEK 14 - Penalized Regression and Text Processing
 
 # Questions?
-
 
 ### Questions for You
 
