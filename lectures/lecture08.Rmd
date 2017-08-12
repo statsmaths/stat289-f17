@@ -1,0 +1,213 @@
+---
+title: "Lecture 08: Simple Regression"
+author: "Taylor Arnold"
+date: " "
+fontsize: 11pt
+output:
+  beamer_presentation:
+    template: template.beamer
+    pandoc_args: "--latex-engine=xelatex"
+    theme: "metropolis"
+    fonttheme: "professionalfonts"
+    slide_level: 2
+    df_print: tibble
+    fig_width: 9
+    fig_height: 5.5
+    fig_caption: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+library(dplyr)
+options(dplyr.print_max = 6, dplyr.print_min = 6)
+options(width = 60)
+
+library(ggplot2)
+library(dplyr)
+data(msleep)
+library(smodels)
+library(readr)
+
+msleep <- select(msleep, awake, sleep_rem)
+msleep <- filter(msleep, !is.na(awake))
+msleep <- filter(msleep, !is.na(sleep_rem))
+```
+
+# Statistical models
+
+## Statistical models
+
+- Today we turn our attention to modeling, which complements
+the graphical and data manipulation techniques that we have
+so far covered.
+- The first model we will look at is linear regression. You have,
+in fact, already seen this graphically when fitting a smoothing line
+to data using `geom_smooth("lm")`.
+-Today we will start to see how to implement this model directly
+in R and how to analyze how well it fits the data at hand.
+
+## Statistical models
+
+Statistical models are often characterized as an abstraction of an
+underlying truth or generative process, and in some cases
+this is probably the best way to think of them. I, however, view
+statistical models as a way of explaining variation in a dataset. In
+this framework there are three desirable properties of any model:
+
+- captures as much variation as possible
+- has minimal amount of complexity
+- is generalizable to new data
+
+# Linear regression
+
+## The regression model
+
+A regression model assumes that the value of one variable, which we will call $y_i$, is
+on average equal to a function of another variable $x_i$. In this set-up the variable
+$x$ is called the **predictor** variable and $y$ is called the **response**.
+
+There
+are many other terms for these depending on the field of application. Examples include
+independent / dependent, regressor / regressand, explanatory / explained, feature / output,
+risk / outcome.
+
+## The regression model
+
+We can write this relationship mathematically as:
+
+\begin{align*}
+\text{mean}(y_i) &= f(x_i)
+\end{align*}
+
+A common use of statistical modeling is to estimate the value of the function $f$ given a set
+of data.
+
+## The linear regression model
+
+One way to do this is to assume that the function $f$ is a linear function and can
+therefore be described with simply an intercept $\alpha$ and slope $\beta$:
+
+\begin{align*}
+\text{mean}(y_i) &= \alpha + x_i \cdot \beta
+\end{align*}
+
+This model is called a **linear regression**; it requires only estimating two values.
+There are many different algorithms for estimating these parameters.
+
+## lm_basic()
+
+The `lm_basic` function in R uses the classical and most common of these, which we will define shortly. An
+example of how to do this is given by:
+
+```{r}
+model <- lm_basic(awake ~ sleep_rem, data = msleep)
+```
+
+Here we using treating lung cancer as the response and poverty as the predictor variable.
+
+## coef()
+
+To see the estimated value of the slope and intercept, we use the `coef` function:
+
+```{r}
+coef(model)
+```
+
+## coef()
+
+Using this output, the relationship implied by the model is:
+
+\begin{align*}
+\text{mean}(awake) &= 18.536 + \text{sleep\_rem} \cdot -2.626
+\end{align*}
+
+## residuals
+
+The **residuals** of a regression model are defined as the difference between the predicted
+value from the model and the observed value. It is very similar to the deviance that we saw
+earlier:
+
+\begin{align*}
+r_1 &= y_1 - f(x_1) \\
+r_2 &= y_2 - f(x_2) \\
+&\vdots \\\
+r_n &= y_n - f(x_n)
+\end{align*}
+
+## residuals
+
+We can also think of these residuals graphically:
+
+```{r echo = FALSE}
+msleep2 <- mutate(msleep, pred = predict(model))
+ggplot(msleep2, aes(sleep_rem, awake)) +
+  geom_smooth(method = "lm") +
+  geom_point() +
+  geom_segment(aes(xend = sleep_rem, yend = pred))
+```
+
+## ols
+
+The `lm` function is choosing an intercept and slope in order to minimize the sum of the
+squared residuals. The technique is called **ordinary least squares**; it has a number of
+very nice computational and theoretical properties.
+
+
+# goodness of fit
+
+## sums of squares
+
+We can calculate the sum of squared deviances (often called the **total sum of squares**, or TSS) as:
+
+```{r}
+tss <- sum((msleep$awake - mean(msleep$awake))^2)
+```
+
+And the sum of squared residuals (RSS).
+
+```{r}
+msleep <- mutate(msleep,
+      awake_residual = awake - 18.536 + sleep_rem * 2.626)
+rss <- sum(msleep$awake_residual^2)
+```
+
+## r-squared
+
+The ratio of these indicates how much of the variation
+is captured in the regression line.
+
+```{r}
+rss / tss
+```
+
+Usually, we take the value `1 - rss/tss` so that numbers close to $1$ indicate
+a great fit and values near $0$ indicate a relatively poor fit. This quantity
+is formally called the coefficient of determination, or more commonly **r-squared**.
+
+# regression table
+
+## reg_table
+
+The most useful way for us to summarize a regression object is to use
+the function `reg_table`:
+
+```{r, eval = FALSE}
+reg_table(model)
+```
+
+The output includes a description of the residuals, the model coefficients, as
+well as the R-squared value.
+
+## reg_table
+
+\footnotesize
+
+```{r, eval = TRUE}
+reg_table(model)
+```
+
+## reg_table
+
+There are various options to the function that will be very handy as we move forward.
