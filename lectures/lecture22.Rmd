@@ -1,0 +1,85 @@
+---
+title: "Lecture 22: Mapping in R"
+author: "Taylor Arnold"
+date: " "
+fontsize: 10pt
+output:
+  beamer_presentation:
+    template: template.beamer
+    pandoc_args: "--latex-engine=xelatex"
+    theme: "metropolis"
+    fonttheme: "professionalfonts"
+    slide_level: 2
+    df_print: tibble
+    fig_width: 9
+    fig_height: 5.5
+    fig_caption: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+library(dplyr)
+options(dplyr.print_max = 6, dplyr.print_min = 6)
+options(width = 60)
+
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(smodels)
+library(ggmap)
+library(leaflet)
+
+theme_set(theme_minimal())
+
+taxi <- read_csv("https://statsmaths.github.io/stat_data/nyc_taxi_50.csv")
+taxi <- filter(taxi, pickup_longitude != 0,
+                                 pickup_latitude != 0,
+                                 dropoff_longitude != 0,
+                                 dropoff_latitude != 0,
+                                 tip_amount > 0)
+taxi <- sample_n(taxi, 5000)
+```
+
+## basic point plot
+
+```{r}
+qmplot(pickup_longitude, pickup_latitude, data = taxi)
+```
+
+## some interesting defaults
+
+```{r}
+qmplot(pickup_longitude, pickup_latitude, data = taxi,
+       color = I("orange"), alpha = I(0.2))
+```
+
+## leaflet
+
+```{r}
+taxi2 <- filter(taxi, pickup_NTACode == "MN12")
+m <- leaflet()
+m <- addTiles(m)
+m <- addProviderTiles(m, providers$Stamen.Toner)
+m <- addMarkers(m, lng = taxi$pickup_longitude,
+                   lat = taxi$pickup_latitude,
+                   clusterOptions = markerClusterOptions())
+m
+
+m <- leaflet()
+m <- addTiles(m)
+m <- addProviderTiles(m, providers$Stamen.Toner)
+m <- addPopups(m,  lng = taxi2$pickup_longitude,
+                   lat = taxi2$pickup_latitude,
+                   popup = as.character(taxi2$fare_amount),
+                   options = popupOptions(closeButton = FALSE))
+m
+
+
+options = popupOptions(closeButton = FALSE)
+```
+
+
+
+

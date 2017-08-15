@@ -36,10 +36,20 @@
 # properly.
 
 install.packages("dplyr")
+install.packages("forcats")
+install.packages("readr")
 install.packages("ggplot2")
+install.packages("plotly")
 install.packages("stringr")
-install.packages("cleanNLP")
+install.packages("tidytext")
 install.packages("ggmap")
 install.packages("ggrepel")
 install.packages("gtable")
 install.packages("devtools")
+install.packages("rmarkdown")
+install.packages("roxygen2")
+install.packages("leaflet")
+
+devtools::install_github("statsmaths/smodels")
+
+

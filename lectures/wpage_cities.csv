@@ -1,0 +1,240 @@
+line,city,link,lat,lon,country
+"<th scope=""row""><a href=""/wiki/Shanghai"" title=""Shanghai"">Shanghai</a></th>",Shanghai,/wiki/Shanghai,31.22861,121.47472,China
+"<th scope=""row""><a href=""/wiki/Karachi"" title=""Karachi"">Karachi</a></th>",Karachi,/wiki/Karachi,24.86,67.01, Pakistan
+"<th scope=""row""><a href=""/wiki/Beijing"" title=""Beijing"">Beijing</a></th>",Beijing,/wiki/Beijing,39.917,116.383,NA
+"<th scope=""row""><a href=""/wiki/Delhi"" title=""Delhi"">Delhi</a></th>",Delhi,/wiki/Delhi,28.61,77.23,NA
+"<th scope=""row""><a href=""/wiki/Lagos"" title=""Lagos"">Lagos</a></th>",Lagos,/wiki/Lagos,6.455027,3.384082,Nigeria
+"<th scope=""row""><a href=""/wiki/Dhaka"" title=""Dhaka"">Dhaka</a></th>",Dhaka,/wiki/Dhaka,23.7,90.367,Bangladesh
+"<th scope=""row""><a href=""/wiki/Guangzhou"" title=""Guangzhou"">Guangzhou</a></th>",Guangzhou,/wiki/Guangzhou,23.133,113.267,NA
+"<th scope=""row""><a href=""/wiki/Istanbul"" title=""Istanbul"">Istanbul</a></th>",Istanbul,/wiki/Istanbul,41.01361,28.955,Turkey
+"<th scope=""row""><a href=""/wiki/Tokyo"" title=""Tokyo"">Tokyo</a></th>",Tokyo,/wiki/Tokyo,35.683,139.683,Japan
+"<th scope=""row""><a href=""/wiki/Mumbai"" title=""Mumbai"">Mumbai</a></th>",Mumbai,/wiki/Mumbai,18.975,72.82583,India
+"<th scope=""row""><a href=""/wiki/Moscow"" title=""Moscow"">Moscow</a></th>",Moscow,/wiki/Moscow,55.75,37.617,Russia
+"<th scope=""row""><a href=""/wiki/S%C3%A3o_Paulo"" title=""São Paulo"">São Paulo</a></th>",São Paulo,/wiki/S%C3%A3o_Paulo,-23.55,-46.633,NA
+"<th scope=""row""><a href=""/wiki/Shenzhen"" title=""Shenzhen"">Shenzhen</a></th>",Shenzhen,/wiki/Shenzhen,22.55,114.1,China
+"<th scope=""row""><a href=""/wiki/Suzhou"" title=""Suzhou"">Suzhou</a></th>",Suzhou,/wiki/Suzhou,31.3,120.6,China
+"<th scope=""row""><a href=""/wiki/Lahore"" title=""Lahore"">Lahore</a></th>",Lahore,/wiki/Lahore,31.54972,74.34361,Pakistan
+"<th scope=""row""><a href=""/wiki/Cairo"" title=""Cairo"">Cairo</a></th>",Cairo,/wiki/Cairo,30.04444,31.23583,Egypt
+"<th scope=""row""><a href=""/wiki/Kinshasa"" title=""Kinshasa"">Kinshasa</a></th>",Kinshasa,/wiki/Kinshasa,-4.325,15.32222,Democratic Republic of the Congo
+"<th scope=""row""><a href=""/wiki/Jakarta"" title=""Jakarta"">Jakarta</a></th>",Jakarta,/wiki/Jakarta,-6.2,106.817,Indonesia
+"<th scope=""row""><a href=""/wiki/Seoul"" title=""Seoul"">Seoul</a></th>",Seoul,/wiki/Seoul,37.567,126.967,South Korea[1]
+"<th scope=""row""><a href=""/wiki/Mexico_City"" title=""Mexico City"">Mexico City</a></th>",Mexico City,/wiki/Mexico_City,19.433,-99.133,Mexico
+"<th scope=""row""><a href=""/wiki/Lima"" title=""Lima"">Lima</a></th>",Lima,/wiki/Lima,-12.04333,-77.02833,NA
+"<th scope=""row""><a href=""/wiki/London"" title=""London"">London</a></th>",London,/wiki/London,51.50722,-0.1275,NA
+"<th scope=""row""><a href=""/wiki/Xi%27an"" title=""Xi'an"">Xi'an</a></th>",Xi'an,/wiki/Xi%27an,34.267,108.9,People's Republic of China
+"<th scope=""row""><a href=""/wiki/New_York_City"" title=""New York City"">New York City</a></th>",New York City,/wiki/New_York_City,40.7127,-74.0059,NA
+"<th scope=""row""><a href=""/wiki/Bengaluru"" class=""mw-redirect"" title=""Bengaluru"">Bengaluru</a></th>",Bengaluru,/wiki/Bengaluru,12.967,77.567,India
+"<th scope=""row""><a href=""/wiki/Bangkok"" title=""Bangkok"">Bangkok</a></th>",Bangkok,/wiki/Bangkok,13.75,100.467,Thailand
+"<th scope=""row""><a href=""/wiki/Nanjing"" title=""Nanjing"">Nanjing</a></th>",Nanjing,/wiki/Nanjing,32.05,118.767,People's Republic of China
+"<th scope=""row""><a href=""/wiki/Dongguan"" title=""Dongguan"">Dongguan</a></th>",Dongguan,/wiki/Dongguan,23.033,113.717,China
+"<th scope=""row""><a href=""/wiki/Chongqing"" title=""Chongqing"">Chongqing</a></th>",Chongqing,/wiki/Chongqing,29.55833,106.56667,China
+"<th scope=""row""><a href=""/wiki/Tehran"" title=""Tehran"">Tehran</a></th>",Tehran,/wiki/Tehran,35.68917,51.38889,NA
+"<th scope=""row""><a href=""/wiki/Quanzhou"" title=""Quanzhou"">Quanzhou</a></th>",Quanzhou,/wiki/Quanzhou,24.917,118.583,People's Republic of China
+"<th scope=""row""><a href=""/wiki/Shenyang"" title=""Shenyang"">Shenyang</a></th>",Shenyang,/wiki/Shenyang,41.8,123.4,People's Republic of China
+"<th scope=""row""><a href=""/wiki/Bogot%C3%A1"" title=""Bogotá"">Bogotá</a></th>",Bogotá,/wiki/Bogot%C3%A1,4.71111,-74.07222,Colombia
+"<th scope=""row""><a href=""/wiki/Hyderabad"" title=""Hyderabad"">Hyderabad</a></th>",Hyderabad,/wiki/Hyderabad,17.37,78.48,India
+"<th scope=""row""><a href=""/wiki/Ho_Chi_Minh_City"" title=""Ho Chi Minh City"">Ho Chi Minh City</a></th>",Ho Chi Minh City,/wiki/Ho_Chi_Minh_City,10.776889,106.700806, Vietnam
+"<th scope=""row""><a href=""/wiki/Hong_Kong"" title=""Hong Kong"">Hong Kong</a></th>",Hong Kong,/wiki/Hong_Kong,NA,NA,NA
+"<th scope=""row""><a href=""/wiki/Baghdad"" title=""Baghdad"">Baghdad</a></th>",Baghdad,/wiki/Baghdad,33.333,44.383,Iraq
+"<th scope=""row""><a href=""/wiki/Fuzhou"" title=""Fuzhou"">Fuzhou</a></th>",Fuzhou,/wiki/Fuzhou,26.07611,119.30639,China
+"<th scope=""row""><a href=""/wiki/Chennai"" title=""Chennai"">Chennai</a></th>",Chennai,/wiki/Chennai,13.083,80.267,India
+"<th scope=""row""><a href=""/wiki/Changsha"" title=""Changsha"">Changsha</a></th>",Changsha,/wiki/Changsha,28.19611,112.97222,China
+"<th scope=""row""><a href=""/wiki/Wuhan"" title=""Wuhan"">Wuhan</a></th>",Wuhan,/wiki/Wuhan,30.583,114.283,China
+"<th scope=""row""><a href=""/wiki/Tianjin"" title=""Tianjin"">Tianjin</a></th>",Tianjin,/wiki/Tianjin,39.133,117.183,People's Republic of China
+"<th scope=""row""><a href=""/wiki/Hanoi"" title=""Hanoi"">Hanoi</a></th>",Hanoi,/wiki/Hanoi,21.028472,105.854167,Vietnam
+"<th scope=""row""><a href=""/wiki/Faisalabad"" title=""Faisalabad"">Faisalabad</a></th>",Faisalabad,/wiki/Faisalabad,31.41667,73.09111,Pakistan
+"<th scope=""row""><a href=""/wiki/Rio_de_Janeiro"" title=""Rio de Janeiro"">Rio de Janeiro</a></th>",Rio de Janeiro,/wiki/Rio_de_Janeiro,-22.90833,-43.19639,Brazil
+"<th scope=""row""><a href=""/wiki/Qingdao"" title=""Qingdao"">Qingdao</a></th>",Qingdao,/wiki/Qingdao,36.067,120.383,NA
+"<th scope=""row""><a href=""/wiki/Foshan"" title=""Foshan"">Foshan</a></th>",Foshan,/wiki/Foshan,23.01667,113.11667,China
+"<th scope=""row""><a href=""/wiki/Zunyi"" title=""Zunyi"">Zunyi</a></th>",Zunyi,/wiki/Zunyi,27.683,106.9,People's Republic of China
+"<th scope=""row""><a href=""/wiki/Santiago"" title=""Santiago"">Santiago</a></th>",Santiago,/wiki/Santiago,-33.45,-70.667,NA
+"<th scope=""row""><a href=""/wiki/Riyadh"" title=""Riyadh"">Riyadh</a></th>",Riyadh,/wiki/Riyadh,24.633,46.717,Saudi Arabia
+"<th scope=""row""><a href=""/wiki/Ahmedabad"" title=""Ahmedabad"">Ahmedabad</a></th>",Ahmedabad,/wiki/Ahmedabad,23.03,72.58,India
+"<th scope=""row""><a href=""/wiki/Singapore"" title=""Singapore"">Singapore</a></th>",Singapore,/wiki/Singapore,NA,NA,NA
+"<th scope=""row""><a href=""/wiki/Shantou"" title=""Shantou"">Shantou</a></th>",Shantou,/wiki/Shantou,23.35,116.667,China
+"<th scope=""row""><a href=""/wiki/Ankara"" title=""Ankara"">Ankara</a></th>",Ankara,/wiki/Ankara,39.933,32.867,NA
+"<th scope=""row""><a href=""/wiki/Yangon"" title=""Yangon"">Yangon</a></th>",Yangon,/wiki/Yangon,16.85,96.183,Myanmar
+"<th scope=""row""><a href=""/wiki/Saint_Petersburg"" title=""Saint Petersburg"">Saint Petersburg</a></th>",Saint Petersburg,/wiki/Saint_Petersburg,59.95,30.3,Russia
+"<th scope=""row""><a href=""/wiki/Casablanca"" title=""Casablanca"">Casablanca</a></th>",Casablanca,/wiki/Casablanca,33.533,-7.583,NA
+"<th scope=""row""><a href=""/wiki/Abidjan"" title=""Abidjan"">Abidjan</a></th>",Abidjan,/wiki/Abidjan,5.317,-4.033,Ivory Coast
+"<th scope=""row""><a href=""/wiki/Chengdu"" title=""Chengdu"">Chengdu</a></th>",Chengdu,/wiki/Chengdu,30.65861,104.06472,NA
+"<th scope=""row""><a href=""/wiki/Alexandria"" title=""Alexandria"">Alexandria</a></th>",Alexandria,/wiki/Alexandria,31.2,29.917,Egypt
+"<th scope=""row""><a href=""/wiki/Kolkata"" title=""Kolkata"">Kolkata</a></th>",Kolkata,/wiki/Kolkata,22.567,88.367,India
+"<th scope=""row""><a href=""/wiki/Surat"" title=""Surat"">Surat</a></th>",Surat,/wiki/Surat,21.17024,72.83106083,India
+"<th scope=""row""><a href=""/wiki/Johannesburg"" title=""Johannesburg"">Johannesburg</a></th>",Johannesburg,/wiki/Johannesburg,-26.20444,28.04556,South Africa
+"<th scope=""row""><a href=""/wiki/Dar_es_Salaam"" title=""Dar es Salaam"">Dar es Salaam</a></th>",Dar es Salaam,/wiki/Dar_es_Salaam,-6.8,39.283,Tanzania
+"<th scope=""row""><a href=""/wiki/Shijiazhuang"" title=""Shijiazhuang"">Shijiazhuang</a></th>",Shijiazhuang,/wiki/Shijiazhuang,38.067,114.483,China
+"<th scope=""row""><a href=""/wiki/Harbin"" title=""Harbin"">Harbin</a></th>",Harbin,/wiki/Harbin,45.75,126.633,China
+"<th scope=""row""><a href=""/wiki/Giza"" title=""Giza"">Giza</a></th>",Giza,/wiki/Giza,30.017,31.217,Egypt
+"<th scope=""row""><a href=""/wiki/%C4%B0zmir"" title=""İzmir"">İzmir</a></th>",İzmir,/wiki/%C4%B0zmir,38.42,27.14,NA
+"<th scope=""row""><a href=""/wiki/Zhengzhou"" title=""Zhengzhou"">Zhengzhou</a></th>",Zhengzhou,/wiki/Zhengzhou,34.767,113.65,China
+"<th scope=""row""><a href=""/wiki/New_Taipei_City"" title=""New Taipei City"">New Taipei City</a></th>",New Taipei City,/wiki/New_Taipei_City,25.01111,121.44583,Republic of China (Taiwan)
+"<th scope=""row""><a href=""/wiki/Los_Angeles"" title=""Los Angeles"">Los Angeles</a></th>",Los Angeles,/wiki/Los_Angeles,34.05,-118.25,NA
+"<th scope=""row""><a href=""/wiki/Changchun"" title=""Changchun"">Changchun</a></th>",Changchun,/wiki/Changchun,43.9,125.2,China
+"<th scope=""row""><a href=""/wiki/Cape_Town"" title=""Cape Town"">Cape Town</a></th>",Cape Town,/wiki/Cape_Town,-33.92528,18.42389,South Africa
+"<th scope=""row""><a href=""/wiki/Yokohama"" title=""Yokohama"">Yokohama</a></th>",Yokohama,/wiki/Yokohama,35.44417,139.63806,Japan
+"<th scope=""row""><a href=""/wiki/Khartoum"" title=""Khartoum"">Khartoum</a></th>",Khartoum,/wiki/Khartoum,15.50056,32.56,Sudan
+"<th scope=""row""><a href=""/wiki/Guayaquil"" title=""Guayaquil"">Guayaquil</a></th>",Guayaquil,/wiki/Guayaquil,-2.183,-79.883,Ecuador
+"<th scope=""row""><a href=""/wiki/Hangzhou"" title=""Hangzhou"">Hangzhou</a></th>",Hangzhou,/wiki/Hangzhou,30.25,120.167,People's Republic of China
+"<th scope=""row""><a href=""/wiki/Xiamen"" title=""Xiamen"">Xiamen</a></th>",Xiamen,/wiki/Xiamen,24.4798361,118.0894194,China
+"<th scope=""row""><a href=""/wiki/Berlin"" title=""Berlin"">Berlin</a></th>",Berlin,/wiki/Berlin,52.50722,13.14583,Germany
+"<th scope=""row""><a href=""/wiki/Busan"" title=""Busan"">Busan</a></th>",Busan,/wiki/Busan,35.167,129.067, South Korea
+"<th scope=""row""><a href=""/wiki/Ningbo"" title=""Ningbo"">Ningbo</a></th>",Ningbo,/wiki/Ningbo,29.867,121.55,China
+"<th scope=""row""><a href=""/wiki/Jeddah"" title=""Jeddah"">Jeddah</a></th>",Jeddah,/wiki/Jeddah,21.54333,39.17278,NA
+"<th scope=""row""><a href=""/wiki/Durban"" title=""Durban"">Durban</a></th>",Durban,/wiki/Durban,-29.883,31.05,South Africa
+"<th scope=""row""><a href=""/wiki/Hyderabad,_Sindh"" title=""Hyderabad, Sindh"">Hyderabad</a></th>",Hyderabad,"/wiki/Hyderabad,_Sindh",25.37917,68.36833,Pakistan
+"<th scope=""row""><a href=""/wiki/Algiers"" title=""Algiers"">Algiers</a></th>",Algiers,/wiki/Algiers,36.75389,3.05889,NA
+"<th scope=""row""><a href=""/wiki/Kabul"" title=""Kabul"">Kabul</a></th>",Kabul,/wiki/Kabul,34.533,69.167,Afghanistan
+"<th scope=""row""><a href=""/wiki/Hefei"" title=""Hefei"">Hefei</a></th>",Hefei,/wiki/Hefei,31.867,117.283,China
+"<th scope=""row""><a href=""/wiki/Mashhad"" title=""Mashhad"">Mashhad</a></th>",Mashhad,/wiki/Mashhad,36.3,59.6,NA
+"<th scope=""row""><a href=""/wiki/Pyongyang"" title=""Pyongyang"">Pyongyang</a></th>",Pyongyang,/wiki/Pyongyang,39.01944,125.73806,NA
+"<th scope=""row""><a href=""/wiki/Madrid"" title=""Madrid"">Madrid</a></th>",Madrid,/wiki/Madrid,40.383,-3.717,NA
+"<th scope=""row""><a href=""/wiki/Baku"" title=""Baku"">Baku</a></th>",Baku,/wiki/Baku,40.39528,49.88222,Azerbaijan
+"<th scope=""row""><a href=""/wiki/Peshawar"" title=""Peshawar"">Peshawar</a></th>",Peshawar,/wiki/Peshawar,34.017,71.583,Pakistan
+"<th scope=""row""><a href=""/wiki/Rawalpindi"" title=""Rawalpindi"">Rawalpindi</a></th>",Rawalpindi,/wiki/Rawalpindi,33.6,73.033,Pakistan
+"<th scope=""row""><a href=""/wiki/Tangshan"" title=""Tangshan"">Tangshan</a></th>",Tangshan,/wiki/Tangshan,39.62306,118.17611,China
+"<th scope=""row""><a href=""/wiki/Ekurhuleni_Metropolitan_Municipality"" class=""mw-redirect"" title=""Ekurhuleni Metropolitan Municipality"">Ekurhuleni</a></th>",Ekurhuleni,/wiki/Ekurhuleni_Metropolitan_Municipality,-26.21861,28.16278,South Africa
+"<th scope=""row""><a href=""/wiki/Nairobi"" title=""Nairobi"">Nairobi</a></th>",Nairobi,/wiki/Nairobi,-1.283,36.817,Kenya
+"<th scope=""row""><a href=""/wiki/Zhongshan"" title=""Zhongshan"">Zhongshan</a></th>",Zhongshan,/wiki/Zhongshan,22.533,113.35,China
+"<th scope=""row""><a href=""/wiki/Multan"" title=""Multan"">Multan</a></th>",Multan,/wiki/Multan,30.19778,71.46972,Pakistan
+"<th scope=""row""><a href=""/wiki/Pune"" title=""Pune"">Pune</a></th>",Pune,/wiki/Pune,NA,NA,India
+"<th scope=""row""><a href=""/wiki/Addis_Ababa"" title=""Addis Ababa"">Addis Ababa</a></th>",Addis Ababa,/wiki/Addis_Ababa,9.03,38.74,Ethiopia
+"<th scope=""row""><a href=""/wiki/Jaipur"" title=""Jaipur"">Jaipur</a></th>",Jaipur,/wiki/Jaipur,26.9,75.8,NA
+"<th scope=""row""><a href=""/wiki/Buenos_Aires"" title=""Buenos Aires"">Buenos Aires</a></th>",Buenos Aires,/wiki/Buenos_Aires,-34.60333,-58.38167,Argentina
+"<th scope=""row""><a href=""/wiki/Wenzhou"" title=""Wenzhou"">Wenzhou</a></th>",Wenzhou,/wiki/Wenzhou,28,120.7,People's Republic of China
+"<th scope=""row""><a href=""/wiki/Incheon"" title=""Incheon"">Incheon</a></th>",Incheon,/wiki/Incheon,37.483,126.633, South Korea
+"<th scope=""row""><a href=""/wiki/Quezon_City"" title=""Quezon City"">Quezon City</a></th>",Quezon City,/wiki/Quezon_City,14.63,121.03,NA
+"<th scope=""row""><a href=""/wiki/Kiev"" title=""Kiev"">Kiev</a></th>",Kiev,/wiki/Kiev,50.45,30.52333,Ukraine
+"<th scope=""row""><a href=""/wiki/Salvador,_Bahia"" title=""Salvador, Bahia"">Salvador</a></th>",Salvador,"/wiki/Salvador,_Bahia",-12.97472,-38.47667,NA
+"<th scope=""row""><a href=""/wiki/Rome"" title=""Rome"">Rome</a></th>",Rome,/wiki/Rome,NA,NA,NA
+"<th scope=""row""><a href=""/wiki/Luanda"" title=""Luanda"">Luanda</a></th>",Luanda,/wiki/Luanda,-8.83833,13.23444,Angola
+"<th scope=""row""><a href=""/wiki/Lucknow"" title=""Lucknow"">Lucknow</a></th>",Lucknow,/wiki/Lucknow,26.8,80.9,India
+"<th scope=""row""><a href=""/wiki/Kaohsiung"" title=""Kaohsiung"">Kaohsiung</a></th>",Kaohsiung,/wiki/Kaohsiung,22.633,120.267,Republic of China (Taiwan)
+"<th scope=""row""><a href=""/wiki/Kanpur"" title=""Kanpur"">Kanpur</a></th>",Kanpur,/wiki/Kanpur,26.449923,80.331874, India
+"<th scope=""row""><a href=""/wiki/Surabaya"" title=""Surabaya"">Surabaya</a></th>",Surabaya,/wiki/Surabaya,-7.26528,112.7425,NA
+"<th scope=""row""><a href=""/wiki/Taichung"" title=""Taichung"">Taichung</a></th>",Taichung,/wiki/Taichung,24.15,120.667,Republic of China (Taiwan)
+"<th scope=""row""><a href=""/wiki/Basra"" title=""Basra"">Basra</a></th>",Basra,/wiki/Basra,30.5,47.817,Iraq
+"<th scope=""row""><a href=""/wiki/Toronto"" title=""Toronto"">Toronto</a></th>",Toronto,/wiki/Toronto,43.7,-79.4,Canada
+"<th scope=""row""><a href=""/wiki/Taipei"" title=""Taipei"">Taipei</a></th>",Taipei,/wiki/Taipei,25.033,121.633,NA
+"<th scope=""row""><a href=""/wiki/Gujranwala"" title=""Gujranwala"">Gujranwala</a></th>",Gujranwala,/wiki/Gujranwala,32.15667,74.19,Pakistan
+"<th scope=""row""><a href=""/wiki/Chicago"" title=""Chicago"">Chicago</a></th>",Chicago,/wiki/Chicago,41.83694,-87.68472,NA
+"<th scope=""row""><a href=""/wiki/Osaka"" title=""Osaka"">Osaka</a></th>",Osaka,/wiki/Osaka,34.69389,135.50222,NA
+"<th scope=""row""><a href=""/wiki/Quito"" title=""Quito"">Quito</a></th>",Quito,/wiki/Quito,-0.233,-78.517,NA
+"<th scope=""row""><a href=""/wiki/Chaozhou"" title=""Chaozhou"">Chaozhou</a></th>",Chaozhou,/wiki/Chaozhou,23.667,116.633,People's Republic of China
+"<th scope=""row""><a href=""/wiki/Dubai"" title=""Dubai"">Dubai</a></th>",Dubai,/wiki/Dubai,25.26306,55.29722,United Arab Emirates
+"<th scope=""row""><a href=""/wiki/Fortaleza"" title=""Fortaleza"">Fortaleza</a></th>",Fortaleza,/wiki/Fortaleza,-3.71833,-38.54278,NA
+"<th scope=""row""><a href=""/wiki/Chittagong"" title=""Chittagong"">Chittagong</a></th>",Chittagong,/wiki/Chittagong,22.367,91.8,Bangladesh
+"<th scope=""row""><a href=""/wiki/Bandung"" title=""Bandung"">Bandung</a></th>",Bandung,/wiki/Bandung,-6.912,107.6097,NA
+"<th scope=""row""><a href=""/wiki/Managua"" title=""Managua"">Managua</a></th>",Managua,/wiki/Managua,12.13639,-86.25139,Nicaragua
+"<th scope=""row""><a href=""/wiki/Bras%C3%ADlia"" title=""Brasília"">Brasília</a></th>",Brasília,/wiki/Bras%C3%ADlia,-15.79389,-47.88278,NA
+"<th scope=""row""><a href=""/wiki/Belo_Horizonte"" title=""Belo Horizonte"">Belo Horizonte</a></th>",Belo Horizonte,/wiki/Belo_Horizonte,-19.917,-43.933,Brazil
+"<th scope=""row""><a href=""/wiki/Daegu"" title=""Daegu"">Daegu</a></th>",Daegu,/wiki/Daegu,35.867,128.6,NA
+"<th scope=""row""><a href=""/wiki/Houston"" title=""Houston"">Houston</a></th>",Houston,/wiki/Houston,29.76278,-95.38306,NA
+"<th scope=""row""><a href=""/wiki/Douala"" title=""Douala"">Douala</a></th>",Douala,/wiki/Douala,4.05,9.683,Cameroon
+"<th scope=""row""><a href=""/wiki/Medellin"" class=""mw-redirect"" title=""Medellin"">Medellin</a></th>",Medellin,/wiki/Medellin,6.23083,-75.59056, Colombia
+"<th scope=""row""><a href=""/wiki/Yaound%C3%A9"" title=""Yaoundé"">Yaoundé</a></th>",Yaoundé,/wiki/Yaound%C3%A9,3.867,11.517,NA
+"<th scope=""row""><a href=""/wiki/Nagpur"" title=""Nagpur"">Nagpur</a></th>",Nagpur,/wiki/Nagpur,21.15,79.09,India
+"<th scope=""row""><a href=""/wiki/Cali"" title=""Cali"">Cali</a></th>",Cali,/wiki/Cali,3.42056,-76.52222,Colombia
+"<th scope=""row""><a href=""/wiki/Tashkent"" title=""Tashkent"">Tashkent</a></th>",Tashkent,/wiki/Tashkent,41.267,69.217, Uzbekistan
+"<th scope=""row""><a href=""/wiki/Nagoya"" title=""Nagoya"">Nagoya</a></th>",Nagoya,/wiki/Nagoya,35.183,136.9,NA
+"<th scope=""row""><a href=""/wiki/Isfahan"" title=""Isfahan"">Isfahan</a></th>",Isfahan,/wiki/Isfahan,32.633,51.65,Iran
+"<th scope=""row""><a href=""/wiki/Phnom_Penh"" title=""Phnom Penh"">Phnom Penh</a></th>",Phnom Penh,/wiki/Phnom_Penh,11.55,104.917,Cambodia
+"<th scope=""row""><a href=""/wiki/Kochi"" title=""Kochi"">Kochi</a></th>",Kochi,/wiki/Kochi,9.97,76.28,India
+"<th scope=""row""><a href=""/wiki/Paris"" title=""Paris"">Paris</a></th>",Paris,/wiki/Paris,48.8567,2.3508,France
+"<th scope=""row""><a href=""/wiki/Ouagadougou"" title=""Ouagadougou"">Ouagadougou</a></th>",Ouagadougou,/wiki/Ouagadougou,12.35722,-1.53528,Burkina Faso
+"<th scope=""row""><a href=""/wiki/Lanzhou"" title=""Lanzhou"">Lanzhou</a></th>",Lanzhou,/wiki/Lanzhou,36.033,103.8,China
+"<th scope=""row""><a href=""/wiki/Kano"" title=""Kano"">Kano</a></th>",Kano,/wiki/Kano,12,8.517,Nigeria
+"<th scope=""row""><a href=""/wiki/Dalian"" title=""Dalian"">Dalian</a></th>",Dalian,/wiki/Dalian,38.92083,121.63917,People's Republic of China
+"<th scope=""row""><a href=""/wiki/Guatemala_City"" title=""Guatemala City"">Guatemala City</a></th>",Guatemala City,/wiki/Guatemala_City,14.61333,-90.53528,NA
+"<th scope=""row""><a href=""/wiki/Havana"" title=""Havana"">Havana</a></th>",Havana,/wiki/Havana,23.133,-82.383,Cuba
+"<th scope=""row""><a href=""/wiki/Medan"" title=""Medan"">Medan</a></th>",Medan,/wiki/Medan,3.583,98.667,NA
+"<th scope=""row""><a href=""/wiki/Accra"" title=""Accra"">Accra</a></th>",Accra,/wiki/Accra,5.55,-0.2,NA
+"<th scope=""row""><a href=""/wiki/Visakhapatnam"" title=""Visakhapatnam"">Visakhapatnam</a></th>",Visakhapatnam,/wiki/Visakhapatnam,17.70417,83.29778,India
+"<th scope=""row""><a href=""/wiki/Jinan"" title=""Jinan"">Jinan</a></th>",Jinan,/wiki/Jinan,36.667,116.983,China
+"<th scope=""row""><a href=""/wiki/Karaj"" title=""Karaj"">Karaj</a></th>",Karaj,/wiki/Karaj,35.83556,51.01028,NA
+"<th scope=""row""><a href=""/wiki/Minsk"" title=""Minsk"">Minsk</a></th>",Minsk,/wiki/Minsk,53.9,27.567,NA
+"<th scope=""row""><a href=""/wiki/Caracas"" title=""Caracas"">Caracas</a></th>",Caracas,/wiki/Caracas,10.48056,-66.90361,Venezuela
+"<th scope=""row""><a href=""/wiki/Sana%27a"" title=""Sana'a"">Sana'a</a></th>",Sana'a,/wiki/Sana%27a,15.34833,44.20639,Yemen
+"<th scope=""row""><a href=""/wiki/Sapporo"" title=""Sapporo"">Sapporo</a></th>",Sapporo,/wiki/Sapporo,43.067,141.35,NA
+"<th scope=""row""><a href=""/wiki/Islamabad"" title=""Islamabad"">Islamabad</a></th>",Islamabad,/wiki/Islamabad,33.717,73.067,Pakistan
+"<th scope=""row""><a href=""/wiki/Tainan"" title=""Tainan"">Tainan</a></th>",Tainan,/wiki/Tainan,NA,NA,Republic of China (Taiwan)
+"<th scope=""row""><a href=""/wiki/Bucharest"" title=""Bucharest"">Bucharest</a></th>",Bucharest,/wiki/Bucharest,44.4325,26.10389,Romania
+"<th scope=""row""><a href=""/wiki/Curitiba"" title=""Curitiba"">Curitiba</a></th>",Curitiba,/wiki/Curitiba,-25.417,-49.25,Brazil
+"<th scope=""row""><a href=""/wiki/Shiraz"" title=""Shiraz"">Shiraz</a></th>",Shiraz,/wiki/Shiraz,29.617,52.533,NA
+"<th scope=""row""><a href=""/wiki/Vienna"" title=""Vienna"">Vienna</a></th>",Vienna,/wiki/Vienna,48.2,16.367,NA
+"<th scope=""row""><a href=""/wiki/Brazzaville"" title=""Brazzaville"">Brazzaville</a></th>",Brazzaville,/wiki/Brazzaville,-4.26778,15.29194,Republic of the Congo
+"<th scope=""row""><a href=""/wiki/Bhopal"" title=""Bhopal"">Bhopal</a></th>",Bhopal,/wiki/Bhopal,23.25,77.417,India
+"<th scope=""row""><a href=""/wiki/Hamburg"" title=""Hamburg"">Hamburg</a></th>",Hamburg,/wiki/Hamburg,53.56528,10.00139,Germany
+"<th scope=""row""><a href=""/wiki/Manila"" title=""Manila"">Manila</a></th>",Manila,/wiki/Manila,14.58,121,NA
+"<th scope=""row""><a href=""/wiki/Kuala_Lumpur"" title=""Kuala Lumpur"">Kuala Lumpur</a></th>",Kuala Lumpur,/wiki/Kuala_Lumpur,NA,NA,Malaysia
+"<th scope=""row""><a href=""/wiki/Maputo"" title=""Maputo"">Maputo</a></th>",Maputo,/wiki/Maputo,-25.967,32.583,NA
+"<th scope=""row""><a href=""/wiki/Budapest"" title=""Budapest"">Budapest</a></th>",Budapest,/wiki/Budapest,47.4925,19.05139,NA
+"<th scope=""row""><a href=""/wiki/Warsaw"" title=""Warsaw"">Warsaw</a></th>",Warsaw,/wiki/Warsaw,52.233,21.017,NA
+"<th scope=""row""><a href=""/wiki/Lusaka"" title=""Lusaka"">Lusaka</a></th>",Lusaka,/wiki/Lusaka,-15.417,28.283,Zambia
+"<th scope=""row""><a href=""/wiki/Kathmandu"" title=""Kathmandu"">Kathmandu</a></th>",Kathmandu,/wiki/Kathmandu,27.7,85.333,Nepal
+"<th scope=""row""><a href=""/wiki/Tabriz"" title=""Tabriz"">Tabriz</a></th>",Tabriz,/wiki/Tabriz,38.067,46.3,Iran
+"<th scope=""row""><a href=""/wiki/Palembang"" title=""Palembang"">Palembang</a></th>",Palembang,/wiki/Palembang,-2.98611,104.75556,NA
+"<th scope=""row""><a href=""/wiki/Almaty"" title=""Almaty"">Almaty</a></th>",Almaty,/wiki/Almaty,43.2775,76.89583,Kazakhstan
+"<th scope=""row""><a href=""/wiki/Tijuana"" title=""Tijuana"">Tijuana</a></th>",Tijuana,/wiki/Tijuana,32.525,-117.03333,NA
+"<th scope=""row""><a href=""/wiki/Patna"" title=""Patna"">Patna</a></th>",Patna,/wiki/Patna,25.6,85.1,India
+"<th scope=""row""><a href=""/wiki/Montreal"" title=""Montreal"">Montreal</a></th>",Montreal,/wiki/Montreal,45.5,-73.567,Canada
+"<th scope=""row""><a href=""/wiki/Davao_City"" title=""Davao City"">Davao City</a></th>",Davao City,/wiki/Davao_City,7.07,125.6,Philippines
+"<th scope=""row""><a href=""/wiki/Harare"" title=""Harare"">Harare</a></th>",Harare,/wiki/Harare,-17.86389,31.02972,Zimbabwe
+"<th scope=""row""><a href=""/wiki/Barcelona"" title=""Barcelona"">Barcelona</a></th>",Barcelona,/wiki/Barcelona,41.383,2.183, Spain
+"<th scope=""row""><a href=""/wiki/Maracaibo"" title=""Maracaibo"">Maracaibo</a></th>",Maracaibo,/wiki/Maracaibo,10.65,-71.633,Venezuela
+"<th scope=""row""><a href=""/wiki/Caloocan"" title=""Caloocan"">Caloocan</a></th>",Caloocan,/wiki/Caloocan,14.65,120.97,Philippines
+"<th scope=""row""><a href=""/wiki/Philadelphia"" title=""Philadelphia"">Philadelphia</a></th>",Philadelphia,/wiki/Philadelphia,39.95,-75.167,NA
+"<th scope=""row""><a href=""/wiki/Novosibirsk"" title=""Novosibirsk"">Novosibirsk</a></th>",Novosibirsk,/wiki/Novosibirsk,NA,NA,Russia
+"<th scope=""row""><a href=""/wiki/Phoenix,_Arizona"" title=""Phoenix, Arizona"">Phoenix</a></th>",Phoenix,"/wiki/Phoenix,_Arizona",33.45,-112.067,United States
+"<th scope=""row""><a href=""/wiki/Bulawayo"" title=""Bulawayo"">Bulawayo</a></th>",Bulawayo,/wiki/Bulawayo,-20.17,28.58,Zimbabwe
+"<th scope=""row""><a href=""/wiki/Oran"" title=""Oran"">Oran</a></th>",Oran,/wiki/Oran,35.69694,-0.63306,Algeria
+"<th scope=""row""><a href=""/wiki/Semarang"" title=""Semarang"">Semarang</a></th>",Semarang,/wiki/Semarang,-6.967,110.417,NA
+"<th scope=""row""><a href=""/wiki/Recife"" title=""Recife"">Recife</a></th>",Recife,/wiki/Recife,-8.05,-34.9,Brazil
+"<th scope=""row""><a href=""/wiki/Kobe"" title=""Kobe"">Kobe</a></th>",Kobe,/wiki/Kobe,34.69,135.19556,NA
+"<th scope=""row""><a href=""/wiki/Daejeon"" title=""Daejeon"">Daejeon</a></th>",Daejeon,/wiki/Daejeon,NA,NA,South Korea
+"<th scope=""row""><a href=""/wiki/Kampala"" title=""Kampala"">Kampala</a></th>",Kampala,/wiki/Kampala,0.31361,32.58111,Uganda
+"<th scope=""row""><a href=""/wiki/Kawasaki,_Kanagawa"" title=""Kawasaki, Kanagawa"">Kawasaki</a></th>",Kawasaki,"/wiki/Kawasaki,_Kanagawa",35.517,139.7,NA
+"<th scope=""row""><a href=""/wiki/Guadalajara"" title=""Guadalajara"">Guadalajara</a></th>",Guadalajara,/wiki/Guadalajara,20.667,-103.35,Mexico
+"<th scope=""row""><a href=""/wiki/Auckland"" title=""Auckland"">Auckland</a></th>",Auckland,/wiki/Auckland,-36.84056,174.74,New Zealand
+"<th scope=""row""><a href=""/wiki/Vijayawada"" title=""Vijayawada"">Vijayawada</a></th>",Vijayawada,/wiki/Vijayawada,16.5193,80.6305,India
+"<th scope=""row""><a href=""/wiki/Fukuoka"" title=""Fukuoka"">Fukuoka</a></th>",Fukuoka,/wiki/Fukuoka,33.583,130.4,Japan
+"<th scope=""row""><a href=""/wiki/Kwangju"" class=""mw-redirect"" title=""Kwangju"">Kwangju</a></th>",Kwangju,/wiki/Kwangju,NA,NA,South Korea
+"<th scope=""row""><a href=""/wiki/Porto_Alegre"" title=""Porto Alegre"">Porto Alegre</a></th>",Porto Alegre,/wiki/Porto_Alegre,-30.03306,-51.23,Brazil
+"<th scope=""row""><a href=""/wiki/Kyoto"" title=""Kyoto"">Kyoto</a></th>",Kyoto,/wiki/Kyoto,35.01167,135.76833,NA
+"<th scope=""row""><a href=""/wiki/San_Antonio"" title=""San Antonio"">San Antonio</a></th>",San Antonio,/wiki/San_Antonio,29.417,-98.5,NA
+"<th scope=""row""><a href=""/wiki/Santa_Cruz_de_la_Sierra"" title=""Santa Cruz de la Sierra"">Santa Cruz de la Sierra</a></th>",Santa Cruz de la Sierra,/wiki/Santa_Cruz_de_la_Sierra,-17.8,-63.183,NA
+"<th scope=""row""><a href=""/wiki/Munich"" title=""Munich"">Munich</a></th>",Munich,/wiki/Munich,48.133,11.567,Germany
+"<th scope=""row""><a href=""/wiki/Kharkov"" class=""mw-redirect"" title=""Kharkov"">Kharkov</a></th>",Kharkov,/wiki/Kharkov,50.00444,36.23139,Ukraine
+"<th scope=""row""><a href=""/wiki/Yekaterinburg"" title=""Yekaterinburg"">Yekaterinburg</a></th>",Yekaterinburg,/wiki/Yekaterinburg,NA,NA,Russia
+"<th scope=""row""><a href=""/wiki/San_Diego"" title=""San Diego"">San Diego</a></th>",San Diego,/wiki/San_Diego,32.715,-117.1625,NA
+"<th scope=""row""><a href=""/wiki/Barranquilla"" title=""Barranquilla"">Barranquilla</a></th>",Barranquilla,/wiki/Barranquilla,10.96389,-74.79639,Colombia
+"<th scope=""row""><a href=""/wiki/Milan"" title=""Milan"">Milan</a></th>",Milan,/wiki/Milan,45.467,9.183,Italy
+"<th scope=""row""><a href=""/wiki/Ibadan"" title=""Ibadan"">Ibadan</a></th>",Ibadan,/wiki/Ibadan,7.39639,3.91667,Nigeria
+"<th scope=""row""><a href=""/wiki/Makassar"" title=""Makassar"">Makassar</a></th>",Makassar,/wiki/Makassar,-5.133,119.417,Indonesia
+"<th scope=""row""><a href=""/wiki/C%C3%B3rdoba,_Argentina"" title=""Córdoba, Argentina"">Córdoba</a></th>",Córdoba,"/wiki/C%C3%B3rdoba,_Argentina",-31.417,-64.183,Argentina
+"<th scope=""row""><a href=""/wiki/Prague"" title=""Prague"">Prague</a></th>",Prague,/wiki/Prague,50.083,14.417,Czech Republic
+"<th scope=""row""><a href=""/wiki/Mandalay"" title=""Mandalay"">Mandalay</a></th>",Mandalay,/wiki/Mandalay,21.975,96.08333,Myanmar
+"<th scope=""row""><a href=""/wiki/Dallas"" title=""Dallas"">Dallas</a></th>",Dallas,/wiki/Dallas,32.77583,-96.79667,NA
+"<th scope=""row""><a href=""/wiki/Montevideo"" title=""Montevideo"">Montevideo</a></th>",Montevideo,/wiki/Montevideo,-34.88361,-56.18194,NA
+"<th scope=""row""><a href=""/wiki/Nizhny_Novgorod"" title=""Nizhny Novgorod"">Nizhny Novgorod</a></th>",Nizhny Novgorod,/wiki/Nizhny_Novgorod,NA,NA,Russia
+"<th scope=""row""><a href=""/wiki/Abuja"" title=""Abuja"">Abuja</a></th>",Abuja,/wiki/Abuja,9.067,7.483,Nigeria
+"<th scope=""row""><a href=""/wiki/Calgary"" title=""Calgary"">Calgary</a></th>",Calgary,/wiki/Calgary,51.05,-114.067,Canada
+"<th scope=""row""><a href=""/wiki/Saitama,_Saitama"" title=""Saitama, Saitama"">Saitama</a></th>",Saitama,"/wiki/Saitama,_Saitama",35.86139,139.64556,NA
+"<th scope=""row""><a href=""/wiki/Hiroshima"" title=""Hiroshima"">Hiroshima</a></th>",Hiroshima,/wiki/Hiroshima,34.38528,132.45528,NA
+"<th scope=""row""><a href=""/wiki/Rosario,_Santa_Fe"" title=""Rosario, Santa Fe"">Rosario</a></th>",Rosario,"/wiki/Rosario,_Santa_Fe",-32.95,-60.667,Argentina
+"<th scope=""row""><a href=""/wiki/Brisbane"" title=""Brisbane"">Brisbane</a></th>",Brisbane,/wiki/Brisbane,NA,NA,NA
+"<th scope=""row""><a href=""/wiki/Belgrade"" title=""Belgrade"">Belgrade</a></th>",Belgrade,/wiki/Belgrade,44.817,20.467,NA
+"<th scope=""row""><a href=""/wiki/Campinas"" title=""Campinas"">Campinas</a></th>",Campinas,/wiki/Campinas,-22.90083,-47.05722,Brazil
+"<th scope=""row""><a href=""/wiki/Ulsan"" title=""Ulsan"">Ulsan</a></th>",Ulsan,/wiki/Ulsan,NA,NA,South Korea
+"<th scope=""row""><a href=""/wiki/Omsk"" title=""Omsk"">Omsk</a></th>",Omsk,/wiki/Omsk,NA,NA,Russia
+"<th scope=""row""><a href=""/wiki/Dakar"" title=""Dakar"">Dakar</a></th>",Dakar,/wiki/Dakar,14.69278,-17.44667,Senegal
+"<th scope=""row""><a href=""/wiki/Abu_Dhabi"" title=""Abu Dhabi"">Abu Dhabi</a></th>",Abu Dhabi,/wiki/Abu_Dhabi,24.467,54.367, United Arab Emirates
+"<th scope=""row""><a href=""/wiki/Monterrey"" title=""Monterrey"">Monterrey</a></th>",Monterrey,/wiki/Monterrey,25.667,-100.3,NA
+"<th scope=""row""><a href=""/wiki/Tripoli"" title=""Tripoli"">Tripoli</a></th>",Tripoli,/wiki/Tripoli,32.88722,13.19139,Libya
+"<th scope=""row""><a href=""/wiki/Rostov-on-Don"" title=""Rostov-on-Don"">Rostov-on-Don</a></th>",Rostov-on-Don,/wiki/Rostov-on-Don,NA,NA,Russia
+"<th scope=""row""><a href=""/wiki/T%27bilisi"" class=""mw-redirect"" title=""T'bilisi"">T'bilisi</a></th>",T'bilisi,/wiki/T%27bilisi,41.717,44.783,Georgia
+"<th scope=""row""><a href=""/wiki/Fez,_Morocco"" title=""Fez, Morocco"">Fez</a></th>",Fez,"/wiki/Fez,_Morocco",34.033,-5,Morocco
+"<th scope=""row""><a href=""/wiki/Birmingham"" title=""Birmingham"">Birmingham</a></th>",Birmingham,/wiki/Birmingham,52.48306,-1.89361,NA
+"<th scope=""row""><a href=""/wiki/Yerevan"" title=""Yerevan"">Yerevan</a></th>",Yerevan,/wiki/Yerevan,40.183,44.517,Armenia
+"<th scope=""row""><a href=""/wiki/Cologne"" title=""Cologne"">Cologne</a></th>",Cologne,/wiki/Cologne,50.93639,6.95278,Germany
+"<th scope=""row""><a href=""/wiki/Tunis"" title=""Tunis"">Tunis</a></th>",Tunis,/wiki/Tunis,36.80639,10.18167,NA

@@ -1,0 +1,243 @@
+---
+title: "Lecture 18: Strings in R"
+author: "Taylor Arnold"
+date: " "
+fontsize: 9pt
+output:
+  beamer_presentation:
+    template: template.beamer
+    pandoc_args: "--latex-engine=xelatex"
+    theme: "metropolis"
+    fonttheme: "professionalfonts"
+    slide_level: 2
+    df_print: tibble
+    fig_width: 9
+    fig_height: 5.5
+    fig_caption: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+library(dplyr)
+options(dplyr.print_max = 6, dplyr.print_min = 6)
+options(width = 60)
+
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(smodels)
+library(forcats)
+library(stringi)
+
+theme_set(theme_minimal())
+```
+
+## basic string manipulation
+
+Today we will cover the main aspects of working with raw
+strings in R using the **stringi** package. To load
+the package call:
+```{r}
+library(stringi)
+```
+## stringi
+
+The main advantages of this package over this package compared
+to those in base-R are:
+
+* consistent syntax - the string you are operating on is always
+the first element and functions all start with `stri_`
+* great support for non-latin character sets and proper UTF-8
+handling
+* in some cases much faster than alternatives
+
+## stringi
+
+We will work with two datasets that come pre-installed with
+**stringr** (a wrapper around **stringi**), a list of common
+English tokens named `words` and a list of short sentences
+named `sentences`. We will wrap these up as data frames in
+order to make them usable by the **dplyr** verbs we have
+been learning:
+
+```{r}
+df_words <- data_frame(words = stringr::words)
+df_sent <- data_frame(sent = stringr::sentences)
+```
+
+## stri_sub
+
+The first function we will look at is `stri_sub` that takes
+a substring of each input by position; for example the following
+finds the first three characters of every string in the data
+set of words:
+
+```{r}
+mutate(df_words, chars = stri_sub(words, 1, 3))
+```
+
+## stri_sub
+
+Notice that R silently ignores the fact that the first word
+that has only one letter (it is returned as-is).
+We can use negative values to begin at the end of the string
+(-1 is the last character, -2 the second to last and so on).
+So the last two characters can be grabbed with this:
+
+```{r}
+mutate(df_words, chars = stri_sub(words, -2, -1))
+```
+
+## stri_length
+
+The function `stri_length` describes how many characters are
+in a string:
+
+```{r}
+mutate(df_words, num_char = stri_length(words))
+```
+
+## stri_trans_toupper
+
+And the functions `stri_trans_toupper` and `stri_trans_tolower` do exactly
+as they describe:
+
+```{r}
+mutate(df_words, up = stri_trans_toupper(words), down = stri_trans_tolower(words))
+```
+
+## stri_trans_totitle
+
+We even have `stri_trans_totitle` to convert to title case:
+
+```{r}
+stri_trans_totitle("The birch canoe slid on the smooth planks.")
+```
+
+# matching fixed strings
+
+## stri_detect
+
+A function that finds patterns is the function
+`stri_detect`, which returns either `TRUE` or `FALSE`
+for whether an element has a string withing in. We
+can use this conjunction with the `filter` command
+to find examples with a particular string in it:
+
+```{r}
+filter(df_sent, stri_detect(sent, fixed = "hand"))
+```
+
+## stri_count
+
+Similarly `stri_count` tells us how often a sentence
+uses a particular string. For instance, how many times
+are the digraphs "th", "ch", and "sh" used in each
+sentence:
+
+```{r}
+temp <-
+mutate(df_sent, th = stri_count(sent, fixed = "th"),
+                sh = stri_count(sent, fixed = "sh"),
+                ch = stri_count(sent, fixed = "ch"),
+                sent = stri_sub(sent, 1, 20))
+```
+
+I took a substring of the first column to make it fit on
+the page.
+
+## stri_count
+
+```{r}
+temp
+```
+
+## stri_replace_all
+
+The function `stri_replace_all` replaces one pattern with
+another. Perhaps we want to replace all of those borning
+"e"'s with "ë":
+
+```{r}
+mutate(df_sent, sent = stri_replace_all(sent, "ë", fixed = "e"))
+```
+
+## stri_replace
+
+The function `stri_replace` without the "all" only replaces
+the first occurrence in each string.
+
+# matching patterns
+
+## patterns
+
+Trying to use the previous functions with a fixed string
+can be useful, but the true strength of these functions
+come from their ability to accept a pattern known as a
+regular expression.
+
+We don't have time to cover these in great detail, but
+will show a few important examples. The first example we
+will us is the "." symbol which matches any character.
+
+## patterns
+
+So, for instance the following finds any time that we have
+the letters "w" and "s" separated by any third character.
+Can you find where this occurs in each line?
+
+```{r}
+filter(df_sent, stri_detect(sent, regex = "w.s"))
+```
+
+## anchors
+
+Two other special characters are "^" and "$",
+called *anchors*. The first matches  the start of a
+sentence and the second matches the end of a sentence. So, which words
+end with the letter "w"?
+
+```{r}
+filter(df_words, stri_detect(words, regex = "w$"))
+```
+
+## anchors
+
+Or start with "sh"?
+
+```{r}
+filter(df_words, stri_detect(words, regex = "^sh"))
+```
+
+## stri_extract
+
+There is on other **stringi** function we did not mention
+earlier: `stri_extract`. Given a pattern it returns the
+string that matches it. This is not very useful without
+regular expression but with them is an invaluable tool.
+
+## stri_extract
+
+For example, what characters follow the pattern "th"?
+
+```{r}
+temp <- mutate(df_sent, triple = stri_extract(sent, regex = "th."))
+count(temp, triple, sort = TRUE)
+```
+
+## HTML tags
+
+There are many other more complex regular expressions. For
+example, this one is very useful:
+
+```{r, eval = FALSE}
+stri_replace(html, " ", regex = "<[^>]+>")
+```
+
+If `html` is a string, this will replace all of the characters
+in html tags with a single space. We will use that in our lab
+today.
+
+

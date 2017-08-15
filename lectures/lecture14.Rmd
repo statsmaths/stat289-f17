@@ -1,0 +1,126 @@
+---
+title: "Lecture 14: Other Models"
+author: "Taylor Arnold"
+date: " "
+fontsize: 10pt
+output:
+  beamer_presentation:
+    template: template.beamer
+    pandoc_args: "--latex-engine=xelatex"
+    theme: "metropolis"
+    fonttheme: "professionalfonts"
+    slide_level: 2
+    df_print: tibble
+    fig_width: 9
+    fig_height: 5.5
+    fig_caption: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+library(dplyr)
+options(dplyr.print_max = 6, dplyr.print_min = 6)
+options(width = 60)
+
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(smodels)
+library(forcats)
+
+theme_set(theme_minimal())
+msleep <- na.omit(msleep)
+
+set.seed(1)
+```
+
+## lm()
+
+So far, we have seen how to use the function `lm_basic` to
+build linear regression models.
+
+As I probably mentioned before, this is just a soft wrapper
+around the base R function `lm`, with the following tweaks:
+
+- you are forced to supply a data frame
+- the summary table produces confidence intervals rather
+than standard errors
+
+I don't use this function in my own work, but find it easier
+for teaching.
+
+## lm()
+
+One major benefit of the "real" `lm` is that there are many
+more options available for calling it, such as including
+sample weights.
+
+## glm()
+
+There are many other functions in R that have similar calling
+mechanisms to `lm` but run different underlying models.
+
+For example, `glm` fits generalized linear models. These can
+be used, amongst other things, for fitting a model to a binary
+response:
+
+```{r}
+df <- data_frame(y = c(0,0,0,0,1,1,1,1), x = rnorm(8))
+model <- glm(y ~ x, data = df, family = binomial())
+```
+
+## glm()
+
+```{r}
+summary(model)
+```
+
+## rlm()
+
+In the **MASS** package (included with all standard R
+installations) is the `rlm` function for fitting robust
+linear regression:
+
+```{r}
+library(MASS)
+x <- rnorm(100)
+y <- 1 + x + rnorm(100, sd = 0.2)
+y[50] <- 1e4
+model_lm <- lm(y ~ x)
+model_rlm <- rlm(y ~ x)
+```
+
+## rlm()
+
+```{r}
+summary(model_lm)
+```
+
+## rlm()
+
+```{r}
+summary(model_rlm)
+```
+
+## other models
+
+If you have a need for a specific model, you can usually
+find an R package that support it. In most cases, the model
+will roughly resemble calling `lm`.
+
+Some common examples you may run into:
+
+- `gam::gam` for generalized additive models
+- `nls` for non-linear regression
+- `lme4::lmer` for mixed effects models
+- `quantreg::qr` for quantila regression
+- `glmnet::glmnet` for the generalized elastic net
+- `randomforest::randomforest` for random forest classifications
+- `forcast::auto.arima` for modeling time series
+
+
+
+
+
