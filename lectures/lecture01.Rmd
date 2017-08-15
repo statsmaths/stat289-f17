@@ -140,8 +140,8 @@ fractional points, these will usually be given a whole letter grade.
 
 There are three components to your final grade:
 
-- Labs, 20%
-- Data Reports, 80% (20% each)
+- Labs, 25%
+- Data Reports, 75% (25% each)
 
 
 ### Lab and Participation Grades
