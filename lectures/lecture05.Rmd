@@ -29,6 +29,11 @@ library(smodels)
 data(msleep)
 ```
 
+##
+
+![](img/data_pipeline_model.png)
+
+
 ## Numeric Summaries
 
 Graphics are an excellent way of summarizing and
@@ -36,7 +41,6 @@ presenting information contained in a dataset. In many cases it
 can be useful to combine these with purely numeric summaries.
 These summaries are something colloquially called *statistics*,
 though I prefer to avoid this terminology.
-
 
 ## Mean
 

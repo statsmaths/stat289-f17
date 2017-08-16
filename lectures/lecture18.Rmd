@@ -34,6 +34,11 @@ library(stringi)
 theme_set(theme_minimal())
 ```
 
+
+##
+
+![](img/data_pipeline_transform.png)
+
 ## basic string manipulation
 
 Today we will cover the main aspects of working with raw

@@ -37,6 +37,10 @@ bikes <- read_csv("https://statsmaths.github.io/stat_data/bikes.csv")
 bikes
 ```
 
+##
+
+![](img/data_pipeline_transform.png)
+
 ## relabeling categories
 
 Notice that the season and weather conditions in the bikes dataset

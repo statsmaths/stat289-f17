@@ -35,6 +35,10 @@ theme_set(theme_minimal())
 set.seed(1)
 ```
 
+##
+
+![](img/data_pipeline_visualize.png)
+
 ## qplot
 
 When we first saw plots in this course, I introduced the `qplot`

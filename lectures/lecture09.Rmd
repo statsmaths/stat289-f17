@@ -37,6 +37,10 @@ msleep <- filter(msleep, !is.na(sleep_rem))
 
 # Statistical Arguments
 
+##
+
+![](img/data_pipeline_communicate.png)
+
 ## argument types
 
 There are two basic approaches to making logical arguments,

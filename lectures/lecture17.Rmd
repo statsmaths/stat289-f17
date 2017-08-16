@@ -38,6 +38,10 @@ bikes <- read_csv("https://statsmaths.github.io/stat_data/bikes.csv")
 bikes <- select(bikes, season, year, temp)
 ```
 
+##
+
+![](img/data_pipeline_transform.png)
+
 ## Advanced summarizing
 
 I wrote the function `group_summarize` because I found that students

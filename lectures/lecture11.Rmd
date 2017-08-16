@@ -33,6 +33,10 @@ library(readr)
 
 # movie dataset
 
+##
+
+![](img/data_pipeline_collect.png)
+
 ## goal
 
 We are going to start today by having you all open either

@@ -37,6 +37,10 @@ msleep <- filter(msleep, !is.na(sleep_rem))
 
 # Statistical models
 
+##
+
+![](img/data_pipeline_model.png)
+
 ## Statistical models
 
 - Today we turn our attention to modeling, which complements

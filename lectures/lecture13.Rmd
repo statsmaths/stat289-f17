@@ -34,6 +34,10 @@ theme_set(theme_minimal())
 msleep <- na.omit(msleep)
 ```
 
+##
+
+![](img/data_pipeline_model.png)
+
 ## regression inference
 
 We have seen how to use the `lm_basic` function to fit models for the

@@ -30,6 +30,10 @@ data(msleep)
 
 # Grammar of Graphics
 
+##
+
+![](img/data_pipeline_visualize.png)
+
 ## ggplot2
 
 Last time, we used the **ggplot2** package to construct

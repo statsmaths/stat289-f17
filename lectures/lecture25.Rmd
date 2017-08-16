@@ -35,6 +35,10 @@ theme_set(theme_minimal())
 set.seed(1)
 ```
 
+##
+
+![](img/data_pipeline_transform.png)
+
 ## gathering data
 
 In some cases we have datasets where multiple columns could be

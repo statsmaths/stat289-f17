@@ -29,6 +29,10 @@ data(msleep)
 library(smodels)
 ```
 
+##
+
+![](img/data_pipeline_transform.png)
+
 ## Data Types
 
 We have already discussed that variables in R

@@ -71,16 +71,7 @@ Steroids Probably Aren't Causing Baseball's Power Surge
 
 ###
 
-![](img/diagram01.jpg)
-
-###
-
-![](img/diagram02.jpg)
-
-###
-
-![](img/diagram03.jpg)
-
+![](img/data_science_all.png)
 
 # Syllabus
 

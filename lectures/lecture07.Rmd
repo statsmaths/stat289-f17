@@ -1,5 +1,5 @@
 ---
-title: "Lecture 06: Data Manipulation"
+title: "Lecture 07: Data Manipulation"
 author: "Taylor Arnold"
 date: " "
 fontsize: 11pt
@@ -29,6 +29,10 @@ library(dplyr)
 data(msleep)
 library(smodels)
 ```
+
+##
+
+![](img/data_pipeline_transform.png)
 
 ## Data manipulation
 

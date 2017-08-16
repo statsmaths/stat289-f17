@@ -39,6 +39,10 @@ coins2 <- data_frame(number = c(1,1,4,5,1,3,4,4), cup = c(rep("A", 4), rep("B", 
 
 # One-way Inference
 
+##
+
+![](img/data_pipeline_model.png)
+
 ## inference
 
 The first model we will look at is

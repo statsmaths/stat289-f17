@@ -35,6 +35,10 @@ library(ggrepel)
 theme_set(theme_minimal())
 ```
 
+##
+
+![](img/data_pipeline_transform.png)
+
 ## NLP
 
 We have been using basic string processing functions in **stringi**

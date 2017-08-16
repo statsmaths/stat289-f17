@@ -25,6 +25,10 @@ options(width = 68)
 
 # Graphics in R
 
+##
+
+![](img/data_pipeline_visualize.png)
+
 ## Introduction
 
 \orange{One of the most important} tasks in data analysis is

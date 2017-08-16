@@ -36,6 +36,10 @@ msleep <- na.omit(msleep)
 set.seed(1)
 ```
 
+##
+
+![](img/data_pipeline_model.png)
+
 ## lm()
 
 So far, we have seen how to use the function `lm_basic` to

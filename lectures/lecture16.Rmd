@@ -38,6 +38,20 @@ bikes <- read_csv("https://statsmaths.github.io/stat_data/bikes.csv")
 
 # Sampling and selecting data
 
+##
+
+![](img/data_pipeline_simulate.png)
+
+##
+
+![](img/data_pipeline_gather.png)
+
+
+##
+
+![](img/data_pipeline_transform.png)
+
+
 ## Sampling and selecting data
 
 We already know the `filter` function for taking a fixed

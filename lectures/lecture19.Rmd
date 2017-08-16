@@ -35,6 +35,10 @@ library(ggrepel)
 theme_set(theme_minimal())
 ```
 
+##
+
+![](img/data_pipeline_gather.png)
+
 ## web scraping
 
 Today, we are going to use R to systemically build a dataset from
@@ -68,7 +72,7 @@ Make sure to view the site itself as well in a browser.
 ## extracting cities
 
 Searching through the source HTML, we see that rows in the
-city table always start with the string '<th scope="row">'.
+city table always start with the string `<th scope="row">`.
 Let's filter our dataset to only include these rows:
 
 ```{r}
