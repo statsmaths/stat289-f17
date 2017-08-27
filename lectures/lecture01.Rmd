@@ -232,14 +232,7 @@ Type `example(plot)` and see what happens.
 
 ### Questions for You
 
-1. What are you interested in learning this semester?
-1. What applications are you most excited about?
-1. What's you background, formal or otherwise, in statistics?
-1. Which of the following are you generally familiar with?
-    - t-tests
-    - linear regression
-    - Python or R
-    - GitHub
+(see handout)
 
 ### For next time
 
