@@ -73,6 +73,21 @@ Steroids Probably Aren't Causing Baseball's Power Surge
 
 ![](img/data_science_all.png)
 
+# Disclaimer
+
+### Statistics in 289
+
+This course is an accelerated version of what I teach in
+Introduction to Statistics (MATH209). However, this course
+is truly about the holistic process of **doing** statistics.
+There will be very little mathematical content. For that,
+you'll need the MATH329 (Probability) and MATH330 (Statistics)
+sequence.
+
+\orange{So, come into this course with an open mind about
+what we will be covering. I believe you will find it interesting,
+fun, and incredibly useful.}
+
 # Syllabus
 
 ### Computing
@@ -121,12 +136,6 @@ All of your work for this semester will be submitted through GitHub,
 the same platform that hosts our website. You'll need to set up a free
 account, which we will cover during our next class.
 
-### Grades
-
-All grades in this course will be given on as a letter grade.
-While occasionally possible to receive pluses / minuses or
-fractional points, these will usually be given a whole letter grade.
-
 ### Grade Breakdown
 
 There are three components to your final grade:
@@ -144,9 +153,11 @@ and finally a 100% reduction (F).
 
 ### Final Grade
 
+All grades in this course will be given on as a letter grade.
 I want to make the grading extremely transparent, so your final grade will
 simply consist of taking your weighted numerical average using the following
-conversions:
+conversions (pluses increase the number by 0.33 and minuses decrease
+it by 0.33):
 
 - A: 4
 - B: 3
