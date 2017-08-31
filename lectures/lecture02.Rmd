@@ -1,7 +1,7 @@
 ---
 title: "Lecture 02: Introduction to R and RStudio"
 author: "Taylor Arnold"
-date: "30 August 2017"
+date: "31 August 2017"
 fontsize: 11pt
 output:
   beamer_presentation:
