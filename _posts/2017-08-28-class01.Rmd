@@ -16,10 +16,10 @@ knitr::opts_chunk$set(dpi = 300)
 
 ### John Tukey
 
-![](assets/img/tukey.jpg)
+![](../assets/img/tukey.jpg)
 
-``The best thing about being a statistician is that
-you get to play in everyone's backyard.''
+"The best thing about being a statistician is that
+you get to play in everyone's backyard."
 
 ### About me
 
@@ -60,7 +60,7 @@ Steroids Probably Aren't Causing Baseball's Power Surge
 
 ### Data Analysis
 
-![](assets/img/data_science_all.png)
+![](../assets/img/data_science_all.png)
 
 ### Statistics in 289
 
@@ -91,7 +91,7 @@ We will use the **R** programming environment throughout the
 semester. It is freely available for all major operating systems and
 is pre-installed on many campus computers.
 
-![](assets/img/RStudio-Logo-Blue-Gray-250.png)
+![](../assets/img/RStudio-Logo-Blue-Gray-250.png)
 
 ### Computers
 
@@ -101,7 +101,7 @@ quite slow and poorly maintained. We will devote a substantial
 amount of the time learning how to work within the R programming
 framework.
 
-\pause **Please bring your laptop to our next class meeting!**
+**Please bring your laptop to our next class meeting!**
 
 ### References
 
@@ -113,7 +113,7 @@ from a number of sources for material.
 All of the materials and assignments for the course will be posted
 on the class website:
 
-> [https://statsmaths.github.io/stat289](https://statsmaths.github.io/stat289)
+- [https://statsmaths.github.io/stat289](https://statsmaths.github.io/stat289)
 
 ### GitHub
 
@@ -179,7 +179,7 @@ You are expected to submit work on-time.
 You should aim to attend all class meetings.
 
 However I am fully aware that through the course of the semester various issues
--- illness, sports, and family emergencies --
+- illness, sports, and family emergencies -
 will prevent many of you from attending every class.
 
 Please be respectful of my time, keep my informed of any
@@ -193,7 +193,7 @@ meetings of the course.
 Go ahead and launch RStudio. You should see a window that looks like
 this:
 
-![](assets/img/r-interface-2016.png)
+![](../assets/img/r-interface-2016.png)
 
 ### RStudio Console
 
