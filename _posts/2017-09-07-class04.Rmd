@@ -20,7 +20,7 @@ library(dplyr)
 library(viridis)
 ```
 
-![](img/data_pipeline_visualize.png)
+![](../assets/img/data_pipeline_visualize.png)
 
 ## More Graphics Layers
 
@@ -28,6 +28,12 @@ Last time we introduced a brief history of the theory of graphics
 and developed the concepts and syntax behind building graphics in
 R with the **ggplot2** package. Today we will continue this by
 looking at the remaining layer types within the Grammar of Graphics.
+
+We will once again work with the `mpg` dataset:
+
+```{r, message = FALSE}
+mpg <- read_csv("https://statsmaths.github.io/stat_data/mpg.csv")
+```
 
 ### Scales
 

@@ -20,7 +20,7 @@ library(dplyr)
 library(viridis)
 ```
 
-![](img/data_pipeline_visualize.png)
+![](../assets/img/data_pipeline_visualize.png)
 
 ## A Brief History of Statistical Graphics
 

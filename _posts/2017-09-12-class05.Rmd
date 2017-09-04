@@ -1,5 +1,5 @@
 ---
-title: "Class 05: "
+title: "Class 05: Data Types and One Table Verbs"
 author: "Taylor Arnold"
 output: html_notebook
 ---
@@ -20,10 +20,267 @@ library(dplyr)
 library(viridis)
 ```
 
+![](../assets/img/data_pipeline_transform.png)
 
+## Transforming Data
 
+### Verbs
 
+Today we are going to cover a set of functions that take
+a data frame as an input and return a new version of the
+data frame. These functions are called *verbs* and come
+from the **dplyr** package. If you are familiar with
+running database queries, note that all of these verbs
+map onto SQL commands. In fact, R can be set up so that
+**dplyr** is called over a database rather than a local
+data frame in memory.
 
+There are over 30 verbs within **dplyr**, though most are
+either a minor variant or a specific application of another
+verb. Today we will see just five of them, which do the
+following:
 
+- select a subset of rows from the original dataset (`filter`)
+- rearrange the rows of the input (`arrange`)
+- pick a subset of the variable from the original (`select`)
+- create new variables (`mutate`)
+- collapse rows into a single summary (`summarize`)
+
+In the case of all verbs, the first argument is the original
+data frame and the output is a new data frame. It is important
+to note that **verbs do not modify the original data**; they
+operate on a copy of the original data.
+
+To illustrate these verbs we will work with a dataset of
+the every commercial flight that departed from New York City
+in 2013.
+
+```{r, message = FALSE}
+flights <- read_csv("https://statsmaths.github.io/stat_data/flights.csv")
+```
+
+We will work with this data set all week as it is a great example
+of the power of **dplyr**. Note that this dataset is not small;
+if you did not follow my instructions in `setup.R` for how to stop
+R from saving old datasets I suggest doing that now as your computer
+will start having trouble with all of the old data copies we are
+creating.
+
+### Filtering rows
+
+The filter function takes a dataset and returns a subset of the rows
+of the original data. The first argument is the dataset and the
+remaining arguments are logical statements that filter the data
+frame. Only rows where the statements are true will be returned.
+
+Let's grab only those flights that left after 11pm (2300):
+
+```{r}
+filter(flights, dep_time > 2300)
+```
+
+Notice that the result now has only 2,581 rows. However, the original
+dataset has not been changed. If we want to test for whether a
+variable is exactly equal to another value we use two equal signs
+`==`. Here are all the flights that departed on Christmas Day:
+
+```{r}
+filter(flights, month == 11, day == 25)
+```
+
+If we want to do more with the data frame, we can save the results
+as a new data frame:
+
+```{r}
+flights_dec25 <- filter(flights, month == 11, day == 25)
+```
+
+In order to filter flights that took off between noon (1200) and
+3pm (1500), that is easy with two logical statements (notice the
+`>=` and `<=` for greater then and equal to and less than or
+equal to):
+
+```{r}
+filter(flights, dep_time >= 1200, dep_time <= 1500)
+```
+
+How might we get flights that left between 11pm and 4am? Here
+we need to say that either one of two conditions are true: the
+flight left after 11pm OR before 4am. To encode this we use
+a vertical bar `|` to stand in for the statement OR:
+
+```{r}
+filter(flights, dep_time >= 2300 | dep_time <= 400)
+```
+
+Pay close attention to the syntax as a lot of students at first
+want to map directly from English into R with:
+
+```{r}
+dep_time >= 2300 | <= 400
+```
+
+But this will throw an error message. Finally, you may want to
+check whether a variable is in a fixed set of values (most often
+this occurs with a categorical variable). To do this we use the
+operator `%in%`. For example, here we select only those rows that
+correspond to flights to Boston (BOS), Providence (PVD), or
+Manchester, New Hampshire (MHT):
+
+```{r}
+filter(flights, dest %in% c("BOS", "PVD", "MHT"))
+```
+
+### Arranging rows
+
+Next, we will see how to reorder to rows in a data frame using the
+`arrange` function. Like all verbs it takes the data frame as its
+first argument. Other arguments specify which variables to sort by:
+
+```{r}
+arrange(flights, dep_time)
+```
+
+Other variables break ties in earlier variables:
+
+```{r}
+arrange(flights, dep_time, arr_time)
+```
+
+To sort a variable in reverse order, wrap it in the `desc` function:
+
+```{r}
+arrange(flights, desc(dep_time), arr_time)
+```
+
+### Selecting columns
+
+With larger datasets (or when producing reports) it is sometimes
+useful to select just a subset of the columns in the original
+dataset. To do this, we use the `select` function. The first input
+is the data set, with other arguments being variables we want to
+look at:
+
+```{r}
+select(flights, dep_time, origin, dest)
+```
+
+I will now use this throughout our class notes so that you may
+more clearly see what is going on without the variables of interest
+(which tend to be on the end as we add them) being hidden.
+
+### Adding and modifying variables
+
+The `mutate` function creates new variable in our dataset as a
+function of other variables already present in the data. The
+function always add variables at the end of the dataset, so in
+order to see the results we will work with a smaller subset:
+
+```{r}
+flights_sml <- select(flights, year, month, day, arr_delay,
+                      dep_delay, distance, air_time)
+```
+
+Lets calculate the average speed of the flight. The mutate function
+takes the data frame as its first argument followed by named arguments
+describing the new variables:
+
+```{r}
+mutate(flights_sml, speed = distance / air_time * 60)
+```
+
+Similarly, we can figure out how much time was lost or gained
+between the departure delay and arrival delay:
+
+```{r}
+mutate(flights_sml, gain = arr_delay - dep_delay)
+```
+
+Note that you can overwrite variables that already exist with mutate
+as well, though in general this should be avoided.
+
+### Summarizing data
+
+The `summarize` function collapses a data frame into a single row
+summary. We need to specify exactly what summaries are performed.
+Here, we will grab the mean values for arrival and departure delays:
+
+```{r}
+summarize(flights, avg_dep_delay = mean(dep_delay),
+                   avg_arr_delay = mean(arr_delay))
+```
+
+There is also a special function called `n()` that summarizes the
+total number of rows:
+
+```{r}
+summarize(flights, avg_dep_delay = mean(dep_delay),
+                   avg_arr_delay = mean(arr_delay),
+                   n = n())
+```
+
+Other summary functions that you might find useful:
+
+- `min`
+- `max`
+- `median`
+- `sd` - standard deviation
+- `quantile(x, 0.25)` - generalization of median; here, a value
+that is greater than 25% of the data
+- `first`, `last`, `nth`
+
+Summarizing datasets does not seem particularly useful here as
+we have other ways of computing the means and counts of a dataset
+without using a new function. The real power of the summary
+function comes when we learn how to group datasets next class.
+
+## Pipes
+
+The pipe operator `%>%` is a relative newcomer within the R
+ecosystem. It is incredibly useful for writing readable code
+with **dplyr** and ggplot2. The pipe passes the output of
+one function to the first argument of the next function. Because
+`ggplot` and all of the dplyr verbs take a data frame as its
+first input we can pipe together a number of operations without
+saving the intermediate results.
+
+For example, lets see the average change in delay between departure
+and arrival for flights leaving from JFK:
+
+```{r}
+flights %>%
+  filter(origin == "JFK") %>%
+  mutate(gain = arr_delay - dep_delay) %>%
+  ggplot(aes(gain)) +
+    geom_histogram()
+```
+
+We can also save the results of a long piped set of commands as
+a new dataset:
+
+```{r}
+flights_best_gain_jfk <- flights %>%
+  filter(origin == "JFK") %>%
+  mutate(gain = arr_delay - dep_delay) %>%
+  filter(gain > 10) %>%
+  arrange(desc(gain)) %>%
+  select(year, month, day, dep_time, dest, gain)
+flights_best_gain_jfk
+```
+
+Notice the standard syntax of the piped commands: each line after
+the first is indented and we usually pipe the data itself as the
+first line. With a **ggplot2** command, subsequent rows are indented
+twice.
+
+## Resources
+
+Here are several good resources if you want to learn more about
+the **dplyr** package:
+
+- [R for Data Science: Chapter 5](http://r4ds.had.co.nz/transform.html)
+- [data transformation cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/source/pdfs/data-transformation-cheatsheet.pdf)
+
+Of course, you can also ask me any questions you may have!
 
 
