@@ -20,7 +20,35 @@ library(dplyr)
 library(viridis)
 ```
 
+Another layer type with a default value are **scales**, which
+are associated with every variable-assigned aesthetic. For
+example, the `scale_x_continuous` and `scale_y_continuous`
+functions define the range of the two dimensions of the plot.
+The defaults (just fitting all of the data) usuall work well,
+but we can modify them when needed:
 
+```{r}
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point() +
+  scale_x_continuous(limits = c(0, 7.5))
+```
+
+There are also alternative scales for the x and y coordinates,
+such as `scale_x_log10` and `scale_x_sqrt`.
+
+The color scales determine the exact colors being used. The
+**viridis** package provides an alternative scale for the
+colors that I prefer:
+
+```{r}
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point(aes(color = cty)) +
+  scale_color_viridis()
+```
+
+The viridis package is particularly useful when producing
+plots for overhead projectors, plots that may need to printed,
+or plots that are color-blind friendly.
 
 
 
