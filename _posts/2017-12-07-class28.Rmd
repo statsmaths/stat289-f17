@@ -1,5 +1,5 @@
 ---
-title: "Class 28: "
+title: "Class 28: Presentations IV"
 author: "Taylor Arnold"
 output: html_notebook
 ---
@@ -19,3 +19,6 @@ library(dplyr)
 library(ggplot2)
 library(viridis)
 ```
+
+No class notes today as we will be having presentations on
+project III.

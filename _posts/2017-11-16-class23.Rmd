@@ -1,5 +1,5 @@
 ---
-title: "Class 23: "
+title: "Class 23: Shape Files and Spatial Joins"
 author: "Taylor Arnold"
 output: html_notebook
 ---

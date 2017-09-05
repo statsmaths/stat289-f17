@@ -1,5 +1,5 @@
 ---
-title: "Class 21: "
+title: "Class 21: Model Selection and Predictive Text Analysis"
 author: "Taylor Arnold"
 output: html_notebook
 ---

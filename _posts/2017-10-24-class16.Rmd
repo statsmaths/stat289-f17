@@ -1,5 +1,5 @@
 ---
-title: "Class 16: "
+title: "Class 16: Presentations I"
 author: "Taylor Arnold"
 output: html_notebook
 ---
@@ -13,11 +13,5 @@ knitr::opts_chunk$set(out.width = "100%")
 knitr::opts_chunk$set(dpi = 300)
 ```
 
-```{r, message = FALSE}
-library(readr)
-library(dplyr)
-library(ggplot2)
-library(viridis)
-```
-
-
+No notes today. We will be hearing presentations from the
+first project.
