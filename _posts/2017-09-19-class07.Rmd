@@ -134,9 +134,9 @@ least squares is concerned with minimizing.
 ```{r, warning = FALSE}
 tea <- mutate(tea, score_pred = 89 + num_reviews * 0.002)
 ggplot(tea, aes(num_reviews, score)) +
-  geom_line(color = "orange") +
-  geom_segment(aes(xend = num_reviews, yend = score_pred),
-               alpha = 0.5)
+  geom_smooth(method = "lm") +
+  geom_point() +
+  geom_segment(aes(xend = num_reviews, yend = score_pred))
 ```
 
 Notice that this line under-guesses most of the score of teas, particularly
@@ -156,15 +156,15 @@ Let's use the predict function to fit this model
 to our data:
 
 ```{r}
-tea <- mutate(tea, pred = predict(model))
+tea <- mutate(tea, score_pred = predict(model))
 ```
 
 And now plot the fitted values. Does it visually
 correspond to where you would expect the best fit
 line to run?
 
-```{r echo = FALSE}
-ggplot(tea, aes(num_reviews, score)) +
+```{r}
+ggplot(tea, aes(num_reviews, score_pred)) +
   geom_smooth(method = "lm") +
   geom_point() +
   geom_segment(aes(xend = num_reviews, yend = pred))
@@ -222,7 +222,7 @@ the number of reviews and the price of the tea:
 
 ```{r}
 model <- lm(score ~ num_reviews + price, data = tea)
-tea <- mutate(tea, pred = predict(model))
+tea <- mutate(tea, score_pred = predict(model))
 model
 ```
 
@@ -237,7 +237,7 @@ tea_grid <- data_frame(num_reviews = tea_grid[,1],
                        price = tea_grid[,2])
 tea_grid$score_pred <- predict(model, newdata = tea_grid)
 ggplot(tea_grid, aes(price, num_reviews)) +
-  geom_point(aes(color = score_pred), size = 5)
+  geom_point(aes(color = score_pred), size = 5) +
   scale_color_viridis() +
   theme_minimal()
 ```
@@ -263,11 +263,11 @@ find that one should not rely too closely on the exact output
 ## Inference for Regression Models
 
 You should all be familiar with the structure of statistical hypothesis
-testing and confidence intervals. If not, the following are good sources
+testing and confidence intervals. If not, the following is a good sources
 for a brief review or catch-up:
 
-- []()
-- []()
+- [*Nature* Points of Significance: Significance, P values
+and t-tests](https://www.nature.com/nmeth/journal/v10/n11/pdf/nmeth.2698.pdf)
 
 We can easily get p-values that test whether each coefficient in a
 regression model is zero by calling the `summary` function on the
@@ -308,15 +308,6 @@ In general, in order to be valid hypothesis tests, we need to decide
 on the exact model before seeing any of the data and only run one
 model on the dataset. While we can run more models and modify them
 as we observe results, these can only be used for exploratory purposes.
-
-
-
-
-
-
-
-
-
 
 
 
