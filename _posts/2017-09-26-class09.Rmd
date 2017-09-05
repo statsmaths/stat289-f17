@@ -20,7 +20,7 @@ library(dplyr)
 library(viridis)
 ```
 
-![](img/data_pipeline_communicate.png)
+![](../assets/img/data_pipeline_communicate.png)
 
 ## argument types
 
