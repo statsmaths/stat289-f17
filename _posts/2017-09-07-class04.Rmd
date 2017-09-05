@@ -22,6 +22,75 @@ library(viridis)
 
 ![](../assets/img/data_pipeline_visualize.png)
 
+## Aesthetics: A brief review
+
+We will once again work with the `mpg` dataset for
+today's notes:
+
+```{r, message = FALSE}
+mpg <- read_csv("https://statsmaths.github.io/stat_data/mpg.csv")
+```
+
+Most of you seemed fairly confident last time about
+how to construct basic plots such as a scatter plot:
+
+```{r}
+ggplot(mpg, aes(displ, cty)) +
+  geom_point()
+```
+
+Most confusion, though I think nearly everyone figured
+it out by the end of class, came from the difference between
+assigning aesthetics to a fixed value versus a variable
+in the dataset. These need a different syntax and doing
+it incorrectly produces very unhelpful error messages or
+(even worse) silently ignores your request.
+
+In short, to assign a variable to an aesthetic value,
+always put it inside of the `aes` function and include
+it as the first set of inputs to the geometry. Fixed
+values go after the variable values and must be outside
+of the `aes` function. Here is a plot with a variable
+color but a fixed size:
+
+```{r}
+ggplot(mpg, aes(displ, cty)) +
+  geom_point(aes(color = class), size = 5)
+```
+
+Here is a variable size and a fixed color:
+
+```{r}
+ggplot(mpg, aes(displ, cty)) +
+  geom_point(aes(size = hwy), color = "salmon")
+```
+
+And here is a plot with fixed size and fixed color:
+
+```{r}
+ggplot(mpg, aes(displ, cty)) +
+  geom_point(size = 5, color = "salmon")
+```
+
+Finally, recall that we are using inheritance from the
+`ggplot` function to assign the same dataset, x and
+(if needed) y aesthetics to each layer. We can modify
+any of these if needed. For example, here I add both
+the city and highway miles per gallon to the same plot:
+
+```{r}
+ggplot(mpg, aes(displ, cty)) +
+  geom_point() +
+  geom_point(aes(y = hwy), color = "red")
+```
+
+Notice that in this example we still have to hold by the
+rules for aesthetic mappings. In the second call to
+`geom_point`, y is mapped to a variable (`hwy`) and
+therefore goes first and inside of `aes`. The color
+is a fixed value and therefore goes outside of `aes`
+and follows it.
+
 ## More Graphics Layers
 
 Last time we introduced a brief history of the theory of graphics
@@ -29,11 +98,6 @@ and developed the concepts and syntax behind building graphics in
 R with the **ggplot2** package. Today we will continue this by
 looking at the remaining layer types within the Grammar of Graphics.
 
-We will once again work with the `mpg` dataset:
-
-```{r, message = FALSE}
-mpg <- read_csv("https://statsmaths.github.io/stat_data/mpg.csv")
-```
 
 ### Scales
 
