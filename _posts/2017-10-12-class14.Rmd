@@ -20,6 +20,8 @@ library(dplyr)
 library(viridis)
 ```
 
+![](../assets/img/data_pipeline_model.png)
+
 
 ## California Housing Prices
 
@@ -64,7 +66,8 @@ income and median house value. I'll put a best fit line through
 the data to visually see how well it performs:
 
 ```{r, message = FALSE, warning = FALSE}
-qplot(mean_household_income, median_house_value, data = ca) +
+ggplot(ca, aes(mean_household_income, median_house_value)) +
+  geom_point() +
   geom_smooth(method = "lm")
 ```
 
@@ -75,7 +78,8 @@ Let's remove the `model = 'lm'` in the `geom_smooth` layer and see what
 a non-linear fit looks like:
 
 ```{r, message = FALSE, warning = FALSE}
-qplot(mean_household_income, median_house_value, data = ca) +
+ggplot(ca, aes(mean_household_income, median_house_value)) +
+  geom_point() +
   geom_smooth()
 ```
 
@@ -119,7 +123,8 @@ model <- lm(median_house_value ~ mean_household_income +
             subset = train_id == "train",
             data = ca)
 ca$value_pred <- predict(model, newdata = ca)
-qplot(mean_household_income, value_pred, data = ca)
+ggplot(ca, aes(mean_household_income, value_pred)) +
+  geom_point()
 ```
 
 Notice that our polynomial now predicts a non-linear relationship
@@ -150,7 +155,8 @@ model <- lm(median_house_value ~
             subset = train_id == "train",
             data = ca)
 ca$value_pred <- predict(model, newdata = ca)
-qplot(mean_household_income, value_pred, data = ca)
+ggplot(ca, aes(mean_household_income, value_pred)) +
+  geom_point()
 ```
 
 Note that the predicted values are the same as before, however
@@ -167,7 +173,8 @@ model <- lm(median_house_value ~ poly(mean_household_income, 15),
             subset = train_id == "train",
             data = ca)
 ca$value_pred <- predict(model, newdata = ca)
-qplot(mean_household_income, value_pred, data = ca)
+ggplot(ca, aes(mean_household_income, value_pred)) +
+  geom_point()
 ```
 
 Notice that we get *edge effects*, where the polynomial acts
@@ -336,15 +343,15 @@ map.
 
 ```{r, message = FALSE}
 library(viridis)
-qplot(longitude, latitude, data = ca[ca$train_id != 'test',],
-      color = median_house_value, size = I(0.5)) +
+ggplot(ca[ca$train_id != 'test',], aes(longitude, latitude)) +
+  geom_point(aes(color = median_house_value), size = 0.5) +
   scale_color_viridis()
 ```
 
 If you know California well, you may be able to infer a lot from this
 plot. Otherwise, layering a map under the data helps substantially.
-Using the **ggmap** package, I can replace the `qplot` function with
-the `qmplot` function to reproduce the prior plot with a map.
+Using the **ggmap** package, I can reproduce the prior plot with a map.
+We will see later more formally how to make this work:
 
 ```{r, message = FALSE}
 library(ggmap)
@@ -390,7 +397,8 @@ buckets:
 
 ```{r}
 ca$mean_household_income_cut <- cut(ca$mean_household_income, 10, labels = FALSE)
-qplot(mean_household_income, mean_household_income_cut, data = ca)
+ggplot(ca, aes(mean_household_income, mean_household_income_cut)) +
+  geom_point()
 ```
 
 A linear model fit on this variable (we use the `factor` function
@@ -403,7 +411,9 @@ model <- lm(median_house_value ~ factor(mean_household_income_cut),
             subset = train_id == "train",
             data = ca)
 ca$value_pred <- predict(model, newdata = ca)
-qplot(mean_household_income, value_pred, data = ca)
+
+ggplot(ca, aes(mean_household_income, value_pred)) +
+  geom_point()
 ```
 
 Similarly, the `bin` function in the **smodels** package breaks the
@@ -414,7 +424,8 @@ the same width:
 ```{r}
 library(smodels)
 ca$mean_household_income_bin <- bin(ca$mean_household_income, 10)
-qplot(mean_household_income, mean_household_income_bin, data = ca)
+ggplot(ca, aes(mean_household_income, mean_household_income_bin)) +
+  geom_point()
 ```
 
 There is not a direct function for computing two dimensional cuts or bins,
@@ -457,7 +468,9 @@ model <- gam(median_house_value ~
             subset = train_id == "train",
             data = ca)
 ca$value_pred <- predict(model, newdata = ca)
-qplot(mean_household_income, value_pred, data = ca)
+
+ggplot(ca, aes(mean_household_income, value_pred)) +
+  geom_point()
 ```
 
 We can add two smoothed variable together much as we did with the poly

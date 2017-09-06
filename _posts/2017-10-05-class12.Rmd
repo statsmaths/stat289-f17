@@ -20,6 +20,8 @@ library(dplyr)
 library(viridis)
 ```
 
+![](../assets/img/data_pipeline_transform.png)
+
 ## Airline data again
 
 Today we will once again look at the NYC flights dataset:

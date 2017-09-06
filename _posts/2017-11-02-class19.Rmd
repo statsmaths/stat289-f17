@@ -249,7 +249,7 @@ for (i in 1:nrow(wpage)) {
 
 Running that takes several minutes and I do not want to ping
 the Wikipedia server more than necessary. Here, I will just
-load the final results, which I have loaded to the class 
+load the final results, which I have loaded to the class
 website:
 
 ```{r, echo = FALSE, eval = TRUE, message = FALSE}
@@ -260,8 +260,8 @@ wpage
 We can now plot the data as follows:
 
 ```{r, echo = FALSE, eval = TRUE, message = FALSE}
-qplot(lon, lat, data = wpage, label = city, geom = "blank") +
-  geom_text(size = 2.5) +
+ggplot(wpage, aes(lon, lat)) +
+  geom_text(aes(label = city)) +
   theme_minimal()
 ```
 
@@ -270,7 +270,7 @@ We can label the most common countries by using the
 
 ```{r, echo = FALSE, eval = TRUE, message = FALSE}
 library(forcats)
-qplot(lon, lat, data = wpage, label = city, geom = "blank") +
+ggplot(wpage, aes(lon, lat)) +
   geom_point(aes(color = fct_lump(country, 4))) +
   theme_minimal()
 ```
@@ -284,8 +284,8 @@ count(wpage, country, sort = TRUE)
 ## Shortcuts with XML
 
 The techniques above are very useful because they can be used to
-extract meaningful data from arbitrary textual sources. When 
-working with properly formed HTML or XML, it is possible to 
+extract meaningful data from arbitrary textual sources. When
+working with properly formed HTML or XML, it is possible to
 short cut many of these tricks by using a proper XML parser. The
 **XML** package in R provides full-feature XML parser; it is
 fantastic but would require a dedicated class or more to work

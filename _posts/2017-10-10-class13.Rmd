@@ -21,6 +21,8 @@ library(dplyr)
 library(viridis)
 ```
 
+![](../assets/img/data_pipeline_model.png)
+
 
 ## Cars Dataset
 
@@ -224,7 +226,9 @@ in order to plot exactly what is going on.
 
 ```{r}
 co <- coef(lm(cty ~ displ, data = cars, subset = train_id == "train"))
-qplot(alpha, beta, data = df[-1,], geom = c("point", "line")) +
+ggplot(df[-1,], aes(alpha, beta)) +
+  geom_point() +
+  geom_line() +
   annotate("point", x = co[1], y = co[2], col = 'red', size = I(5)) +
   theme_minimal()
 ```
@@ -299,8 +303,11 @@ algorithm:
 
 ```{r}
 co <- coef(lm(cty ~ displ, data = cars, subset = train_id == "train"))
-qplot(alpha, beta, data = df[-1,], geom = c("point", "line")) +
-  annotate("point", x = co[1], y = co[2], col = 'red')
+ggplot(df[-1,], aes(alpha, beta)) +
+  geom_point() +
+  geom_line() +
+  annotate("point", x = co[1], y = co[2], col = 'red') +
+  theme_minimal()
 ```
 
 Notice that the algorithm takes a few steps to get a good ratio between alpha
@@ -310,16 +317,22 @@ to be more precise:
 
 ```{r}
 df <- grad_descent(x, y, iter = 1000, rho = 0.01)
-qplot(alpha, beta, data = df, geom = c("point", "line")) +
-  annotate("point", x = co[1], y = co[2], col = 'red')
+ggplot(df[-1,], aes(alpha, beta)) +
+  geom_point() +
+  geom_line() +
+  annotate("point", x = co[1], y = co[2], col = 'red') +
+  theme_minimal()
 ```
 
 Even 1000 steps has a noticeable error rate, let's increase it to 10k:
 
 ```{r}
 df <- grad_descent(x, y, iter = 10000, rho = 0.01)
-qplot(alpha, beta, data = df, geom = c("point", "line")) +
-  annotate("point", x = co[1], y = co[2], col = 'red')
+ggplot(df[-1,], aes(alpha, beta)) +
+  geom_point() +
+  geom_line() +
+  annotate("point", x = co[1], y = co[2], col = 'red') +
+  theme_minimal()
 ```
 
 Now, at least at this scale, the optimization task approachs the optimal
@@ -334,8 +347,8 @@ grid <- data_frame(alpha = grid[,1], beta = grid[,2])
 grid$se <- mapply(function(u, v) sum((y - u - v * x)^2), grid$alpha, grid$beta)
 df <- grad_descent(x, y, iter = 10000, rho = 0.01)
 
-qplot(alpha, beta, data = grid, color = -sqrt(se),
-      size = I(10)) +
+ggplot(grid, aes(alpha, beta)) +
+  geom_point(aes(color = -sqrt(se)), size = 10) +
   scale_color_viridis() +
   geom_line(data = df, color = "salmon", size = 2.5) +
   theme_minimal()
@@ -347,8 +360,11 @@ around step 500:
 
 ```{r}
 df <- grad_descent(x, y, iter = 500, rho = 0.06)
-qplot(alpha, beta, data = df, geom = c("point", "line")) +
-  annotate("point", x = co[1], y = co[2], col = 'red')
+ggplot(df[-1,], aes(alpha, beta)) +
+  geom_point() +
+  geom_line() +
+  annotate("point", x = co[1], y = co[2], col = 'red') +
+  theme_minimal()
 ```
 
 Now, you may wonder why we do not just set the learning rate very high. Let's
@@ -357,8 +373,10 @@ number of iterations to just 10 and label the actual steps on the plot:
 
 ```{r}
 df <- grad_descent(x, y, iter = 10, rho = 0.08)
-qplot(alpha, beta, data = df, label = iter, size = I(8), geom = c("text")) +
-  annotate("point", x = co[1], y = co[2], col = 'red', size = 10) +
+ggplot(df[-1,], aes(alpha, beta)) +
+  geom_point() +
+  geom_line() +
+  annotate("point", x = co[1], y = co[2], col = 'red') +
   theme_minimal()
 ```
 

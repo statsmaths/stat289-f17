@@ -22,6 +22,8 @@ library(viridis)
 library(methods)
 ```
 
+![](../assets/img/data_pipeline_model.png)
+
 ## Matricies
 
 ### Linear Maps
@@ -324,7 +326,7 @@ Let's now try to apply these theoretical ideas to an actual dataset.
 I'll load in the flights data from my website:
 
 ```{r, message = FALSE}
-flights <- read_csv("~/files/ml_data/flights_15min.csv")
+flights <- read_csv("https://statsmaths.github.io/ml_data/flights_15min.csv")
 ```
 
 Note that the flights data, like every other dataset we have used,

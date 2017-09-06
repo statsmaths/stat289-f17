@@ -20,3 +20,6 @@ library(dplyr)
 library(viridis)
 ```
 
+![](../assets/img/data_pipeline_model.png)
+
+

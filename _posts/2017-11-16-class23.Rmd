@@ -19,3 +19,6 @@ library(dplyr)
 library(ggplot2)
 library(viridis)
 ```
+
+![](../assets/img/data_pipeline_transform.png)
+
