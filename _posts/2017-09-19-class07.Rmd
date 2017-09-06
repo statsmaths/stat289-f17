@@ -134,9 +134,8 @@ least squares is concerned with minimizing.
 ```{r, warning = FALSE}
 tea <- mutate(tea, score_pred = 89 + num_reviews * 0.002)
 ggplot(tea, aes(num_reviews, score)) +
-  geom_smooth(method = "lm") +
-  geom_point() +
-  geom_segment(aes(xend = num_reviews, yend = score_pred))
+  geom_line(aes(y = score_pred), color = "orange") +
+  geom_point()
 ```
 
 Notice that this line under-guesses most of the score of teas, particularly
@@ -164,10 +163,10 @@ correspond to where you would expect the best fit
 line to run?
 
 ```{r}
-ggplot(tea, aes(num_reviews, score_pred)) +
+ggplot(tea, aes(num_reviews, score)) +
   geom_smooth(method = "lm") +
   geom_point() +
-  geom_segment(aes(xend = num_reviews, yend = pred))
+  geom_segment(aes(xend = num_reviews, yend = score_pred))
 ```
 
 ## Evaluating models
@@ -243,7 +242,7 @@ ggplot(tea_grid, aes(price, num_reviews)) +
 ```
 
 Also, the productiveness of the model has been
-greatly improved over the simple linear regression from
+improved over the simple linear regression from
 before:
 
 ```{r}

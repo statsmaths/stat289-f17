@@ -85,14 +85,14 @@ variable is exactly equal to another value we use two equal signs
 `==`. Here are all the flights that departed on Christmas Day:
 
 ```{r}
-filter(flights, month == 11, day == 25)
+filter(flights, month == 12, day == 25)
 ```
 
 If we want to do more with the data frame, we can save the results
 as a new data frame:
 
 ```{r}
-flights_dec25 <- filter(flights, month == 11, day == 25)
+flights_dec25 <- filter(flights, month == 12, day == 25)
 ```
 
 In order to filter flights that took off between noon (1200) and
