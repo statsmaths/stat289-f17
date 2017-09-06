@@ -22,7 +22,7 @@ library(viridis)
 
 ![](../assets/img/data_pipeline_transform.png)
 
-## basic string manipulation
+## Basic string manipulation
 
 Today we will cover the main aspects of working with raw
 strings in R using the **stringi** package. To load
@@ -31,7 +31,6 @@ the package call:
 ```{r}
 library(stringi)
 ```
-## stringi
 
 The main advantages of this package over this package compared
 to those in base-R are:
@@ -41,8 +40,6 @@ the first element and functions all start with `stri_`
 * great support for non-latin character sets and proper UTF-8
 handling
 * in some cases much faster than alternatives
-
-## stringi
 
 We will work with two datasets that come pre-installed with
 **stringr** (a wrapper around **stringi**), a list of common
@@ -56,7 +53,7 @@ df_words <- data_frame(words = stringr::words)
 df_sent <- data_frame(sent = stringr::sentences)
 ```
 
-## stri_sub
+### stri_sub
 
 The first function we will look at is `stri_sub` that takes
 a substring of each input by position; for example the following
@@ -67,10 +64,9 @@ set of words:
 mutate(df_words, chars = stri_sub(words, 1, 3))
 ```
 
-## stri_sub
-
 Notice that R silently ignores the fact that the first word
 that has only one letter (it is returned as-is).
+
 We can use negative values to begin at the end of the string
 (-1 is the last character, -2 the second to last and so on).
 So the last two characters can be grabbed with this:
@@ -79,7 +75,7 @@ So the last two characters can be grabbed with this:
 mutate(df_words, chars = stri_sub(words, -2, -1))
 ```
 
-## stri_length
+### Other simple stringi functions
 
 The function `stri_length` describes how many characters are
 in a string:
@@ -88,8 +84,6 @@ in a string:
 mutate(df_words, num_char = stri_length(words))
 ```
 
-## stri_trans_toupper
-
 And the functions `stri_trans_toupper` and `stri_trans_tolower` do exactly
 as they describe:
 
@@ -97,17 +91,15 @@ as they describe:
 mutate(df_words, up = stri_trans_toupper(words), down = stri_trans_tolower(words))
 ```
 
-## stri_trans_totitle
-
 We even have `stri_trans_totitle` to convert to title case:
 
 ```{r}
 stri_trans_totitle("The birch canoe slid on the smooth planks.")
 ```
 
-# matching fixed strings
+## matching fixed strings
 
-## stri_detect
+### stri_detect
 
 A function that finds patterns is the function
 `stri_detect`, which returns either `TRUE` or `FALSE`
@@ -119,7 +111,7 @@ to find examples with a particular string in it:
 filter(df_sent, stri_detect(sent, fixed = "hand"))
 ```
 
-## stri_count
+### stri_count
 
 Similarly `stri_count` tells us how often a sentence
 uses a particular string. For instance, how many times
@@ -137,8 +129,6 @@ mutate(df_sent, th = stri_count(sent, fixed = "th"),
 I took a substring of the first column to make it fit on
 the page.
 
-## stri_count
-
 ```{r}
 temp
 ```
@@ -153,14 +143,14 @@ another. Perhaps we want to replace all of those borning
 mutate(df_sent, sent = stri_replace_all(sent, "ë", fixed = "e"))
 ```
 
-## stri_replace
-
 The function `stri_replace` without the "all" only replaces
-the first occurrence in each string.
+the first occurrence in each string. It is not usually as
+useful as the `_all` variant, but named to be consistent
+with other **stringi** functions.
 
-# matching patterns
+## matching patterns
 
-## patterns
+### patterns
 
 Trying to use the previous functions with a fixed string
 can be useful, but the true strength of these functions
@@ -168,10 +158,13 @@ come from their ability to accept a pattern known as a
 regular expression.
 
 We don't have time to cover these in great detail, but
-will show a few important examples. The first example we
-will us is the "." symbol which matches any character.
+will show a few important examples. For a more complete
+description of regular expressions in R, see the pdf
+file here:
 
-## patterns
+- [Basic Regular Expression Cheatsheet](https://www.rstudio.com/wp-content/uploads/2016/09/RegExCheatsheet.pdf)
+
+The first example we will use is the "." symbol which matches any character.
 
 So, for instance the following finds any time that we have
 the letters "w" and "s" separated by any third character.
@@ -181,7 +174,7 @@ Can you find where this occurs in each line?
 filter(df_sent, stri_detect(sent, regex = "w.s"))
 ```
 
-## anchors
+### anchors
 
 Two other special characters are "^" and "$",
 called *anchors*. The first matches  the start of a
@@ -192,22 +185,18 @@ end with the letter "w"?
 filter(df_words, stri_detect(words, regex = "w$"))
 ```
 
-## anchors
-
 Or start with "sh"?
 
 ```{r}
 filter(df_words, stri_detect(words, regex = "^sh"))
 ```
 
-## stri_extract
+### stri_extract
 
 There is on other **stringi** function we did not mention
 earlier: `stri_extract`. Given a pattern it returns the
 string that matches it. This is not very useful without
 regular expression but with them is an invaluable tool.
-
-## stri_extract
 
 For example, what characters follow the pattern "th"?
 
