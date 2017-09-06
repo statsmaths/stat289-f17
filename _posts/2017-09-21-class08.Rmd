@@ -49,7 +49,7 @@ to the output:
 ```{r}
 model <- lm(cty ~ displ + class,
             data = cars)
-cars$score_pred <- predict(model, newdata = cars)
+cars$cty_pred <- predict(model, newdata = cars)
 model
 ```
 
@@ -58,6 +58,43 @@ each class of car. If you look more carefully you'll see that
 there is no mention of "2seater" in the list. This value is
 excluded because otherwise we would have perfect collinearity
 between the variables (a violation of the model assumptions)
+
+The model created here can be thought of as a set of parallel
+lines, one for each class of car. We can see that here:
+
+```{r}
+ggplot(cars, aes(displ, cty_pred)) +
+  geom_line(aes(color = class)) +
+  geom_point(aes(color = class)) 
+```
+
+Notice, for example, that compact and midsize have very close 
+estimates in the regression model and very close lines on the
+plot.
+
+Here, we have different offsets for each class but the same slope.
+It is possible, easy in fact, to have different slopes and the same
+intercept. We simply use the `:` sign instead of the `+` sign in
+the formula specification.
+
+```{r}
+model <- lm(cty ~ displ:class,
+            data = cars)
+cars$cty_pred <- predict(model, newdata = cars)
+model
+```
+
+Here, the model gives the difference between each classes slope and 
+the baseline slope.
+
+```{r}
+ggplot(cars, aes(displ, cty_pred)) +
+  geom_line(aes(color = class)) +
+  geom_point(aes(color = class)) 
+```
+
+Finally, we could use a `*` in place of the `:` to have different slopes
+and intercepts. 
 
 ## Extensions to the linear model
 
@@ -68,13 +105,54 @@ mechanisms to `lm` but run different underlying models.
 
 For example, `glm` fits generalized linear models. These can
 be used, amongst other things, for fitting a model to a binary
-response:
+response. The *logit* model assumes the following relationship
+between the response y and the inputs x:
+
+$$ \frac{\mathbb{P}[y_i = 1]}{1 - \mathbb{P}[y_i = 1]} = \alpha + x_{1,i} \beta_1 + \cdots + x_{p,i} \beta_p  $$
+
+Which is often simplified using the logit function itself:
+
+$$ \text{logit}(\mathbb{P}[Y_i = 1]) = \alpha + x_{1,i} \beta_1 + \cdots + x_{p,i} \beta_p $$
+
+Fitting the model is easy; we just use `glm` and specify the
+binomial model:
 
 ```{r}
 df <- data_frame(y = c(0,0,0,0,1,1,1,1), x = rnorm(8))
 model <- glm(y ~ x, data = df, family = binomial())
 summary(model)
 ```
+
+It is much harder, impossible perhaps, to fully understand the
+meaning of the coefficents (though we can make sense of the
+difference between it being negative, postive, and zero). To
+get predictions - which we will describe as the probability
+that y is equal to 1 - we would need to apply the inverse
+logit function:
+
+$$ \mathbb{P}[Y_i = 1] = \text{logit}^{-1} (\alpha + x_{1,i} \beta_1 + \cdots + x_{p,i} \beta_p) $$
+
+Be careful, because the `predict` by default returns the linear
+combination of the inputs without the inverse logit transformation.
+Notice here that the range is not between zero and one:
+
+```{r}
+df$pred <- predict(model, newdata = df)
+quantile(df$pred)
+```
+
+To get the predicted probabilities, we need to add an option to
+the predict function:
+
+```{r}
+df$pred <- predict(model, newdata = df, type = "response")
+quantile(df$pred)
+```
+
+Of course, we could also apply the inverse logit function
+ourselves, but that is more error prone and needs to be
+changed depending on the "family" choosen for the logistic
+regression. 
 
 ### Robust linear models
 
