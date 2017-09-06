@@ -33,10 +33,10 @@ various aspects of the flights. Most of the names of these
 should be self-explanatory:
 
 ```{r}
-airlines <- read_csv("https://raw.githubusercontent.com/statsmaths/stat_data/gh-pages/f_airlines.csv")
-airports <- read_csv("https://raw.githubusercontent.com/statsmaths/stat_data/gh-pages/f_airports.csv")
-planes <- read_csv("https://raw.githubusercontent.com/statsmaths/stat_data/gh-pages/f_planes.csv")
-weather <- read_csv("https://raw.githubusercontent.com/statsmaths/stat_data/gh-pages/f_weather.csv")
+airlines <- read_csv("https://statsmaths.github.io/stat_data/f_airlines.csv")
+airports <- read_csv("https://statsmaths.github.io/stat_data/f_airports.csv")
+planes <- read_csv("https://statsmaths.github.io/stat_data/f_planes.csv")
+weather <- read_csv("https://statsmaths.github.io/stat_data/f_weather.csv")
 ```
 
 ## Relational data keys
@@ -85,7 +85,7 @@ Before moving forward, I'll create a smaller version of the flights
 dataset to make sure that this prints out well in the HTML notes:
 
 ```{r}
-flights_sml <- flights %>% 
+flights_sml <- flights %>%
   select(year:day, hour, tailnum, carrier)
 ```
 
@@ -106,7 +106,7 @@ in the first table and the name of the key in the second table. Here we
 use it to combine the flights dataset with the airports data:
 
 ```{r}
-flights_sml <- flights %>% 
+flights_sml <- flights %>%
   select(year:day, hour, origin, dest)
 left_join(flights_sml, airports, by = c("dest" = "faa"))
 ```
@@ -114,13 +114,13 @@ left_join(flights_sml, airports, by = c("dest" = "faa"))
 Notice that the destination for the fourth row did not match
 with any rows of the airports data. The airport "BQN" was not found
 (if you are curious, BQN is in Aguadilla, Puerto Rico; presumably
-the airports data onlyincludes those in the 50 US states). 
+the airports data onlyincludes those in the 50 US states).
 
 ### Inner and outer joins
 
 There are four mutating joins available in **dplyr**. These have the
 same syntax. If the join key is a primary key in one table and there
-are no missing matches, they all function exactly the same. If the 
+are no missing matches, they all function exactly the same. If the
 join key is a primary key in one table and not all foreign keys in
 the other table match an entry in the other, the following happens:
 
@@ -148,7 +148,7 @@ join on many variables at once, provide a vector of all the names
 to the option `by`:
 
 ```{r}
-flights_sml <- flights %>% 
+flights_sml <- flights %>%
   select(year:day, hour, origin, dest)
 
 inner_join(flights_sml, weather,
@@ -164,7 +164,7 @@ dataset but the year of creating in the `airplanes` dataset. If
 we join these two, we see that a suffix is added to each variable:
 
 ```{r}
-flights_sml <- flights %>% 
+flights_sml <- flights %>%
   select(year:day, tailnum)
 
 inner_join(flights_sml, planes,
@@ -185,7 +185,7 @@ inner_join(flights_sml, planes,
 If we do not specify the key to join with in the `by` option, **dplyr**
 will assume that we want to join on all common keys. A warning will be
 produced warning which variables were choosen. This can be useful in a
-pinch, but generally is a bad idea to rely on. 
+pinch, but generally is a bad idea to rely on.
 
 ## Filtering joins
 
