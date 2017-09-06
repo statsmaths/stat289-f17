@@ -21,37 +21,30 @@ library(dplyr)
 library(viridis)
 ```
 
-![](../img/data_pipeline_transform.png)
+![](../assets/img/data_pipeline_transform.png)
 
 ## NLP
 
 We have been using basic string processing functions in **stringi**
 to perform basic web scraping and data manipulation tasks.
 
-Today, we extend these ideas by using the **tidytext** package to
-parse the actual text and extract meaningful information from it.
-
-## tidytext
+Today, we extend these ideas by using the **tokenizers** package and
+two functions I wrote and put into the **smodels** package to parse
+the actual text and extract meaningful information from it.
 
 The basic idea of cleanNLP is to turn text into a data frame with
 one row per word. The basic usage is as follows:
 
-```{r}
-library(tidytext)
+```{r, message = FALSE}
+library(smodels)
+library(tokenizers)
+library(stringi)
 
-input <- data_frame(text = c("Penguins are awesome.",
-                             "Birds that can swim!"),
-                    id = c("p1", "p2"))
-data <- unnest_tokens(input, word, text)
-```
-
-## tidytext
-
-```{r}
+input <- c("Penguins are awesome.",
+           "Birds that can swim!")
+data <- term_list_to_df(tokenize_words(input))
 data
 ```
-
-## website text
 
 Previously, when we scrapped data from Wikipedia we did
 not do anything with the raw text (though you should have
@@ -66,8 +59,6 @@ wpage <- mutate(wpage,
         line = stri_replace_all(line, "", regex = "<[^>]+>"))
 ```
 
-## website text
-
 Here is the result (using `stri_wrap` just for display
 purposes):
 
@@ -76,21 +67,20 @@ text <- stri_flatten(wpage$line, collapse = " ")
 stri_wrap(text)[1:10]
 ```
 
-## website text
-
-Let's build a small example with just three cities:
+Let's now build a small example with just three cities:
 
 ```{r}
 urls <- c("https://en.wikipedia.org/wiki/Lagos",
           "https://en.wikipedia.org/wiki/London",
           "https://en.wikipedia.org/wiki/Saint_Petersburg")
 
-df <- data_frame(city = c("Lagos", "London",
+df <- data_frame(id = 1:3,
+                 city = c("Lagos", "London",
                           "Saint Petersburg"))
 df$text <- NA
 ```
 
-## website text
+### website text
 
 And cycle over these to extract a text column in our
 dataset:
@@ -107,85 +97,90 @@ for (i in 1:3) {
 stri_length(df$text)
 ```
 
-## tidytext
-
-With **tidytext**, we can extract the tokens from these three
-pages, keeping the city name intact:
+With **term_list_to_df**, we can extract the tokens from these three
+pages. 
 
 ```{r}
-tokens <- unnest_tokens(df, word, text)
-tokens
+token_data <- term_list_to_df(tokenize_words(df$text))
+token_data
 ```
 
+The `id` column from `df` can be used to join these tokens with the
+original token data:
 
-## top tokens
+```{r}
+tokens <- left_join(token_data, select(df, -text), by = "id")
+```
+
+### Finding top tokens
 
 Let's use our new grouping function to find the top words
 in each city page:
 
 ```{r}
-temp <- group_by(tokens, city, word)
-temp <- count(temp, city)
-temp <- group_by(temp, city)
-top_n(temp, n = 3)
+tokens %>%
+  group_by(city, token) %>%
+  count(city) %>%
+  group_by(city) %>%
+  top_n(n = 3, n)
 ```
-
-## stop words
 
 Two of the city names pop up, but the other words are just
 common, boring English terms. We can use a stopword list
-to remove these.
-
-## stop words
+to remove these. I'll grab a list here from the **tidytext**
+package
 
 ```{r}
+library(tidytext)
+data(stop_words)
 stop_words
 ```
-
-## top tokens
 
 The `anti_join` function returns the first dataset with
 all rows matching the second removed.
 
 ```{r}
-temp <- anti_join(tokens, stop_words)
-temp <- group_by(temp, city, word)
-temp <- count(temp, city)
-temp <- group_by(temp, city)
-top_n(temp, n = 3)
+tokens %>%
+  anti_join(stop_words, by = c("token" = "word")) %>%
+  group_by(city, token) %>%
+  count(city) %>%
+  group_by(city) %>%
+  top_n(n = 3, n)
 ```
 
-## custom stop words
-
-We can build a better list using our data itself:
+This removes words that are common in a large corpus, but still leaves
+those words that are not particularly useful in this particular context
+such as "city" and the names of each specific city. We can build a better
+list using our data itself:
 
 ```{r}
-temp <- group_by(tokens, word)
-temp <- ungroup(count(temp))
-custom_stop_words <- top_n(temp, n = 300)
-custom_stop_words
+custom_stop_words <- tokens %>%
+  group_by(token) %>%
+  count(sort = TRUE) %>%
+  ungroup() %>%
+  top_n(n = 300, n)
 ```
 
-## top tokens
+### top tokens
 
 Which yields these much improved results:
 
 ```{r}
-temp <- anti_join(tokens, custom_stop_words)
-temp <- group_by(temp, city, word)
-temp <- count(temp, city)
-temp <- group_by(temp, city)
+tokens %>%
+  anti_join(custom_stop_words, by = "token") %>%
+  count(city, token) %>%
+  group_by(city) %>%
+  top_n(n = 3, n)
 ```
 
-## top tokens
+Note that there are more than three entries for London and
+Saint Petersburg due to ties.
 
-```{r}
-top_n(temp, n = 3)
-```
+## Idea for using this
 
-## idea for using this
-
-Here are some ways that you can use this in your
+In the next class, our final discussion of text, we will
+see how to build models out of token lists. In the meantime,
+here are some suggestions of how you can use these in your
 data analysis projects:
 
 - find top word or words for each location and plot on a map
