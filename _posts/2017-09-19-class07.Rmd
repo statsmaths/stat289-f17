@@ -54,8 +54,7 @@ We are going to look at a dataset of teas. Specifically,
 tea reviews from the [Adagio Tea](http://www.adagio.com/) website.
 I collected this dataset about 12 months ago, so it should be
 similar but not exactly the same as what is one the site today.
-Let's read the data into R from my website as we have done with
-the mammals and abalone datasets:
+Let's read the data into R from my website:
 
 ```{r, message = FALSE}
 tea <- read_csv("https://statsmaths.github.io/stat_data/tea.csv")
@@ -81,8 +80,15 @@ ggplot(tea, aes(price, score)) +
 Given the skew of the plot, it is hard to figure out the exact relationship
 between price and score.
 
-We have used the `geom_smooth` function to put what I
+We cans used the `geom_smooth` function to put what I
 called a best-fit line onto the plot.
+
+```{r, warning=FALSE}
+ggplot(tea, aes(price, score)) +
+  geom_point() +
+  geom_smotth(method = "lm")
+```
+
 Let's try to formalize this concept now.
 
 ### Ordinary least squares
@@ -169,6 +175,11 @@ ggplot(tea, aes(num_reviews, score)) +
   geom_segment(aes(xend = num_reviews, yend = score_pred))
 ```
 
+Notice how I was able to put together this relatively complex
+plot using the geometry layers from last week. Specifically, by
+assigning the aesthetics `xend` and `yend` we can create line
+segments showing the residuals.
+
 ## Evaluating models
 
 How should be evaluate the predictive ability of a model?
@@ -194,8 +205,9 @@ sqrt(mean((tea$score - tea$score_pred)^2, na.rm = TRUE))
 ```
 
 You'll find references to the RMSE through the literature on
-machine learning as it is by far the most common measurement
-for productiveness of continuous responses.
+machine learning. In statistics, the measurement known as the
+R-squared is often seen instead. It is a scaled version of the
+MSE which is forced to be between 0 and 1.
 
 ## Multivariate linear regression
 
@@ -257,7 +269,9 @@ mean of the response to change as an individual predictor changes, with
 all other predictors held fixed. The exact interpretation of these
 models is very difficult when there are more than a few numeric variables.
 Generally I find them useful for describing patterns in the data but
-find that one should not rely too closely on the exact output
+find that one should not rely too closely on the exact output unless
+you understand the model assumptions very well and know exactly how
+the data were collected.
 
 ## Inference for Regression Models
 
