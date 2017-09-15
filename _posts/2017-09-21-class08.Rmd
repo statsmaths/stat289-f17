@@ -1,5 +1,5 @@
 ---
-title: "Class 08: Extending Multivariate Models"
+title: "Class 08: Linear Regression"
 author: "Taylor Arnold"
 output: html_notebook
 ---
@@ -22,176 +22,206 @@ library(viridis)
 
 ![](../assets/img/data_pipeline_model.png)
 
+## Linear Regression
 
-## Multivariate regression with categorical data
+We started looking at models in R last class. Today we will fill in some of
+the details of linear regression, particularly how to apply it to models
+with more than one regression vector.
 
-### Cars Dataset
+There are three basic tasks of modelling in statistics:
 
-Today we are, once again, going to look at another classic datasets
-in statistics featuring data about a number of automobiles.
+- exploratory: understanding the distributions and
+relationships between variables
+- inferential: formal statistical hypothesis tests and
+confidence intervals
+- prediction: building models to predict new outputs
+
+One reason for the popularity of linear regression models is
+that they are excellent choices for all three types of tasks.
+We'll cover aspects of all three today.
+
+## Simple Linear Models
+
+### Tea data
+
+We are going to look at a dataset of teas. Specifically,
+tea reviews from the [Adagio Tea](http://www.adagio.com/) website.
+I collected this dataset about 12 months ago, so it should be
+similar but not exactly the same as what is one the site today.
+Let's read the data into R from my website:
 
 ```{r, message = FALSE}
-cars <- read_csv("https://statsmaths.github.io/stat_data/mpg.csv")
+tea <- read_csv("https://statsmaths.github.io/stat_data/tea.csv")
 ```
 
-Our goal today is to estimate the city fuel efficiency of each car.
+Opening the data in the data viewer, we see the variable `score`,
+which is the primary variable we would like to understand. That is,
+what makes a tea that people like?
 
-### Categorical predictors
+Variables available to predict the output are the type of tea,
+the number of reviews received the price of the tea. The latter
+is given in estimated cents per cup as reported on the site.
+We also have the full name of the tea.
 
-It would be reasonable to start with a regression model
-that uses `displ` to predict the response variable.
-We can just as easily add categorical data into our
-model. Next week we will cover the specifics of what
-is internally being done here, but for now let's just
-see what adding the `class` variable to the model does
-to the output:
+### Ordinary least squares
 
-```{r}
-model <- lm(cty ~ displ + class,
-            data = cars)
-cars$cty_pred <- predict(model, newdata = cars)
+The classical linear regression model assumes that the
+average value, or mean, of the response Y is a linear
+function of X. Symbolically, with the index i representing
+the i'th sample, this gives:
+
+$$ \text{mean} (Y_i) = \alpha + \beta * X_i $$
+
+Similarly, we can write that Y is equal to a fixed linear
+effect dependent on X plus a random variable epsilon with
+zero mean.
+
+$$ Y_i = \alpha + \beta * X_i + \epsilon_i, \quad mean(\epsilon_i) = 0 $$
+
+The estimation task here is to find reasonable estimates for
+the alpha and beta components given pairs of observations (X, Y).
+There are many ways of doing this but by far the most common is
+to use what is known as **Ordinary Least Squares** or OLS.
+This selects the alpha and beta that minimize the squared errors
+implied by the linear model. As before, let's write this down
+symbolically:
+
+$$ \alpha, \beta \in \arg\min \left\{ \left. \sum_i \left(y_i - a - b x_i \right)^2 \quad \right| \quad a, b \in \mathbb{R} \right\} $$
+
+### Linear Models - Visually
+
+In order to better understand linear models, it helps to see a
+picture. Below I have drawn a line through our dataset and
+indicated the errors (also known as residuals) that the ordinary
+least squares is concerned with minimizing.
+
+```{r, warning = FALSE}
+tea <- mutate(tea, score_pred = 89 + num_reviews * 0.002)
+ggplot(tea, aes(num_reviews, score)) +
+  geom_line(aes(y = score_pred), color = "orange") +
+  geom_point()
+```
+
+Notice that this line under-guesses most of the score of teas, particularly
+if the number of reviews is low.
+
+## Using lm
+
+Now, let's compute the best fit line using the lm function:
+
+```{r, warning = FALSE}
+model <- lm(score ~ num_reviews, data = tea)
 model
 ```
 
-Notice that it appears that we now have a separate term for
-each class of car. If you look more carefully you'll see that
-there is no mention of "2seater" in the list. This value is
-excluded because otherwise we would have perfect collinearity
-between the variables (a violation of the model assumptions)
-
-The model created here can be thought of as a set of parallel
-lines, one for each class of car. We can see that here:
+Let's use the predict function to fit this model
+to our data:
 
 ```{r}
-ggplot(cars, aes(displ, cty_pred)) +
-  geom_line(aes(color = class)) +
-  geom_point(aes(color = class)) 
+tea <- mutate(tea, score_pred = predict(model))
 ```
 
-Notice, for example, that compact and midsize have very close 
-estimates in the regression model and very close lines on the
-plot.
-
-Here, we have different offsets for each class but the same slope.
-It is possible, easy in fact, to have different slopes and the same
-intercept. We simply use the `:` sign instead of the `+` sign in
-the formula specification.
+And now plot the fitted values. Does it visually
+correspond to where you would expect the best fit
+line to run?
 
 ```{r}
-model <- lm(cty ~ displ:class,
-            data = cars)
-cars$cty_pred <- predict(model, newdata = cars)
+ggplot(tea, aes(num_reviews, score)) +
+  geom_smooth(method = "lm") +
+  geom_point() +
+  geom_segment(aes(xend = num_reviews, yend = score_pred))
+```
+
+Notice how I was able to put together this relatively complex
+plot using the geometry layers from last week. Specifically, by
+assigning the aesthetics `xend` and `yend` we can create line
+segments showing the residuals.
+
+## Multivariate linear regression
+
+The linear regression model I just introduced is known
+as simple linear regression because there is only one
+explanatory variable. We can easy consider multivariate
+models; for instance, we can be write a two variable
+model mathematically as follows:
+
+$$ Y_i = \alpha + \beta * X_i + \gamma * Z_i + \epsilon_i, \quad mean(\epsilon_i) = 0 $$
+
+The geometric interpretation of this is that we have plane
+in place of the line in the simple linear regression model.
+
+Each slope coefficient (beta and gamma here) corresponds to a
+weight placed on how much the response changes with each
+predictor variable.
+
+Fitting multivariate models is also quite easy with the
+`lm` function. Simply add the variables together that
+you would like to use for prediction. Here we use both
+the number of reviews and the price of the tea:
+
+```{r}
+model <- lm(score ~ num_reviews + price, data = tea)
+tea <- mutate(tea, score_pred = predict(model))
 model
 ```
 
-Here, the model gives the difference between each classes slope and 
-the baseline slope.
+Using the color aesthetic we
+can visualize the predicted values of this model. Don't
+get hung up on the code below; concentrate on the output.
 
 ```{r}
-ggplot(cars, aes(displ, cty_pred)) +
-  geom_line(aes(color = class)) +
-  geom_point(aes(color = class)) 
+tea_grid <- expand.grid(seq(min(tea$num_reviews), max(tea$num_reviews), length.out = 20),
+                        seq(min(tea$price), max(tea$price), length.out = 20))
+tea_grid <- data_frame(num_reviews = tea_grid[,1],
+                       price = tea_grid[,2])
+tea_grid$score_pred <- predict(model, newdata = tea_grid)
+ggplot(tea_grid, aes(price, num_reviews)) +
+  geom_point(aes(color = score_pred), size = 5) +
+  scale_color_viridis() +
+  theme_minimal()
 ```
 
-Finally, we could use a `*` in place of the `:` to have different slopes
-and intercepts. 
+## Interpreting Regression Models
 
-## Extensions to the linear model
+The interpretation of a regression model can be described succinctly in
+the language of calculus. The slopes correspond to how much we expect the
+mean of the response to change as an individual predictor changes, with
+all other predictors held fixed. The exact interpretation of these
+models is very difficult when there are more than a few numeric variables.
+Generally I find them useful for describing patterns in the data but
+find that one should not rely too closely on the exact output unless
+you understand the model assumptions very well and know exactly how
+the data were collected.
 
-### Generalized linear models
+## Inference for Regression Models
 
-There are many other functions in R that have similar calling
-mechanisms to `lm` but run different underlying models.
-
-For example, `glm` fits generalized linear models. These can
-be used, amongst other things, for fitting a model to a binary
-response. The *logit* model assumes the following relationship
-between the response y and the inputs x:
-
-$$ \frac{\mathbb{P}[y_i = 1]}{1 - \mathbb{P}[y_i = 1]} = \alpha + x_{1,i} \beta_1 + \cdots + x_{p,i} \beta_p  $$
-
-Which is often simplified using the logit function itself:
-
-$$ \text{logit}(\mathbb{P}[Y_i = 1]) = \alpha + x_{1,i} \beta_1 + \cdots + x_{p,i} \beta_p $$
-
-Fitting the model is easy; we just use `glm` and specify the
-binomial model:
+As mentioned last time, we can easily get p-values that test
+whether each coefficient in a regression model is zero by
+calling the `summary` function on the model output of `lm`:
 
 ```{r}
-df <- data_frame(y = c(0,0,0,0,1,1,1,1), x = rnorm(8))
-model <- glm(y ~ x, data = df, family = binomial())
+model <- lm(score ~ num_reviews + price, data = tea)
 summary(model)
 ```
 
-It is much harder, impossible perhaps, to fully understand the
-meaning of the coefficents (though we can make sense of the
-difference between it being negative, postive, and zero). To
-get predictions - which we will describe as the probability
-that y is equal to 1 - we would need to apply the inverse
-logit function:
+The tests are all T-tests; the t-score as well as the standard errors
+are included in the table at well. We need more probability theory
+than we have time to cover here to explain the detailed assumptions
+that make these p-values valid, but approximately we have the following:
 
-$$ \mathbb{P}[Y_i = 1] = \text{logit}^{-1} (\alpha + x_{1,i} \beta_1 + \cdots + x_{p,i} \beta_p) $$
+- the actual model is linear
+- the samples are all independent
+- the predictor values are "full rank" (you cannot write any
+predictor as a linear combination of the others)
+- the x-values are either non-random or independent of the errors
 
-Be careful, because the `predict` by default returns the linear
-combination of the inputs without the inverse logit transformation.
-Notice here that the range is not between zero and one:
+Similarly, we can access confidence intervals for the linear model
+using the `confint` function.
 
-```{r}
-df$pred <- predict(model, newdata = df)
-quantile(df$pred)
-```
 
-To get the predicted probabilities, we need to add an option to
-the predict function:
 
-```{r}
-df$pred <- predict(model, newdata = df, type = "response")
-quantile(df$pred)
-```
 
-Of course, we could also apply the inverse logit function
-ourselves, but that is more error prone and needs to be
-changed depending on the "family" choosen for the logistic
-regression. 
 
-### Robust linear models
-
-In the **MASS** package (included with all standard R
-installations) is the `rlm` function for fitting robust
-linear regression:
-
-```{r}
-library(MASS)
-x <- rnorm(100)
-y <- 1 + x + rnorm(100, sd = 0.2)
-y[50] <- 1e4
-model_lm <- lm(y ~ x)
-model_rlm <- rlm(y ~ x)
-```
-
-We see that the robust version is much more accurate than
-the standard regression function in this case:
-
-```{r}
-summary(model_lm)
-summary(model_rlm)
-```
-
-### Other models
-
-If you have a need for a specific model, you can usually
-find an R package that support it. In most cases, the model
-will roughly resemble calling `lm`.
-
-Some common examples you may run into:
-
-- `gam::gam` for generalized additive models
-- `nls` for non-linear regression
-- `lme4::lmer` for mixed effects models
-- `quantreg::qr` for quantila regression
-- `glmnet::glmnet` for the generalized elastic net
-- `randomforest::randomforest` for random forest classifications
-- `forcast::auto.arima` for modeling time series
 
 
 

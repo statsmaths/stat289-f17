@@ -1,5 +1,5 @@
 ---
-title: "Class 07: Regression Models"
+title: "Class 07: Reading Data and Statistical Tests"
 author: "Taylor Arnold"
 output: html_notebook
 ---
@@ -22,258 +22,11 @@ library(viridis)
 
 ![](../assets/img/data_pipeline_model.png)
 
-## Models
+## Statistical Tests
 
 Today we turn our attention to modeling, which complements
 the graphical and data manipulation techniques that we have
 so far covered.
-
-The first model we will look at is linear regression. You have,
-in fact, already seen this graphically when fitting a smoothing line
-to data using `geom_smooth("lm")`. Today we will start to see how to
-implement this model directly in R and how to analyze how well it fits
-the data at hand.
-
-There are three basic tasks of modelling in statistics:
-
-- exploratory: understanding the distributions and
-relationships between variables
-- inferential: formal statistical hypothesis tests and
-confidence intervals
-- prediction: building models to predict new outputs
-
-One reason for the popularity of linear regression models is
-that they are excellent choices for all three types of tasks.
-We'll cover aspects of all three today.
-
-## Simple Linear Models
-
-### Tea data
-
-We are going to look at a dataset of teas. Specifically,
-tea reviews from the [Adagio Tea](http://www.adagio.com/) website.
-I collected this dataset about 12 months ago, so it should be
-similar but not exactly the same as what is one the site today.
-Let's read the data into R from my website:
-
-```{r, message = FALSE}
-tea <- read_csv("https://statsmaths.github.io/stat_data/tea.csv")
-```
-
-Opening the data in the data viewer, we see the variable `score`,
-which is the primary variable we would like to understand. That is,
-what makes a tea that people like?
-
-Variables available to predict the output are the type of tea,
-the number of reviews received the price of the tea. The latter
-is given in estimated cents per cup as reported on the site.
-We also have the full name of the tea.
-
-There seems to be a slight positive relationship between the number of
-reviews and the score.
-
-```{r, warning=FALSE}
-ggplot(tea, aes(price, score)) +
-  geom_point()
-```
-
-Given the skew of the plot, it is hard to figure out the exact relationship
-between price and score.
-
-We cans used the `geom_smooth` function to put what I
-called a best-fit line onto the plot.
-
-```{r, warning=FALSE}
-ggplot(tea, aes(price, score)) +
-  geom_point() +
-  geom_smotth(method = "lm")
-```
-
-Let's try to formalize this concept now.
-
-### Ordinary least squares
-
-The classical linear regression model assumes that the
-average value, or mean, of the response Y is a linear
-function of X. Symbolically, with the index i representing
-the i'th sample, this gives:
-
-$$ \text{mean} (Y_i) = \alpha + \beta * X_i $$
-
-Similarly, we can write that Y is equal to a fixed linear
-effect dependent on X plus a random variable epsilon with
-zero mean.
-
-$$ Y_i = \alpha + \beta * X_i + \epsilon_i, \quad mean(\epsilon_i) = 0 $$
-
-The estimation task here is to find reasonable estimates for
-the alpha and beta components given pairs of observations (X, Y).
-There are many ways of doing this but by far the most common is
-to use what is known as **Ordinary Least Squares** or OLS.
-This selects the alpha and beta that minimize the squared errors
-implied by the linear model. As before, let's write this down
-symbolically:
-
-$$ \alpha, \beta \in \arg\min \left\{ \left. \sum_i \left(y_i - a - b x_i \right)^2 \quad \right| \quad a, b \in \mathbb{R} \right\} $$
-
-A natural question is to ask why we are interested in the squared
-errors. We could just as likely ask for the minimizer of the
-absolute value of the errors or the minimizer of the maximum
-errors.
-
-I can offer two justifications of the squared error, one numerical
-and one statistical. Using the squared error, unlike the absolute
-errors or maximum errors, produces a smooth function. That is, a
-function that has an infinite number of derivatives at every point
-(although, all derivatives after 2 are equal to zero). This makes it
-easier to find a solution to the linear equation. Secondly, if the
-errors are distributed as a normal random variable the OLS estimator
-is equivalent to the maximum likelihood estimator (MLE).
-
-### Linear Models - Visually
-
-In order to better understand linear models, it helps to see a
-picture. Below I have drawn a line through our dataset and
-indicated the errors (also known as residuals) that the ordinary
-least squares is concerned with minimizing.
-
-```{r, warning = FALSE}
-tea <- mutate(tea, score_pred = 89 + num_reviews * 0.002)
-ggplot(tea, aes(num_reviews, score)) +
-  geom_line(aes(y = score_pred), color = "orange") +
-  geom_point()
-```
-
-Notice that this line under-guesses most of the score of teas, particularly
-if the number of reviews is low.
-
-
-## Using lm
-
-Now, let's compute the best fit line using the lm function:
-
-```{r, warning = FALSE}
-model <- lm(score ~ num_reviews, data = tea)
-model
-```
-
-Let's use the predict function to fit this model
-to our data:
-
-```{r}
-tea <- mutate(tea, score_pred = predict(model))
-```
-
-And now plot the fitted values. Does it visually
-correspond to where you would expect the best fit
-line to run?
-
-```{r}
-ggplot(tea, aes(num_reviews, score)) +
-  geom_smooth(method = "lm") +
-  geom_point() +
-  geom_segment(aes(xend = num_reviews, yend = score_pred))
-```
-
-Notice how I was able to put together this relatively complex
-plot using the geometry layers from last week. Specifically, by
-assigning the aesthetics `xend` and `yend` we can create line
-segments showing the residuals.
-
-## Evaluating models
-
-How should be evaluate the predictive ability of a model?
-The method of ordinary least squares suggests that we
-should consider the sum of squared errors. A challenge with
-this is that the value of a sum will grow in proportion to
-how many observations there are. This makes it hard to compare
-results across data sources and subsets. A simple solution
-is to use the average value of the squared errors, known as
-the mean squared error or MSE:
-
-```{r, warning=FALSE}
-mean((tea$score - tea$score_pred)^2, na.rm = TRUE)
-```
-
-This works as a general measurement of error, but the units
-are a bit strange as they are given in squared scores. A
-simple solution to this exists by taking the square root
-of the MSE, resulting in the root mean squared error (RMSE):
-
-```{r, warning=FALSE}
-sqrt(mean((tea$score - tea$score_pred)^2, na.rm = TRUE))
-```
-
-You'll find references to the RMSE through the literature on
-machine learning. In statistics, the measurement known as the
-R-squared is often seen instead. It is a scaled version of the
-MSE which is forced to be between 0 and 1.
-
-## Multivariate linear regression
-
-The linear regression model I just introduced is known
-as simple linear regression because there is only one
-explanatory variable. We can easy consider multivariate
-models; for instance, we can be write a two variable
-model mathematically as follows:
-
-$$ Y_i = \alpha + \beta * X_i + \gamma * Z_i + \epsilon_i, \quad mean(\epsilon_i) = 0 $$
-
-The geometric interpretation of this is that we have plane
-in place of the line in the simple linear regression model.
-
-Each slope coefficient (beta and gamma here) corresponds to a
-weight placed on how much the response changes with each
-predictor variable.
-
-Fitting multivariate models is also quite easy with the
-`lm` function. Simply add the variables together that
-you would like to use for prediction. Here we use both
-the number of reviews and the price of the tea:
-
-```{r}
-model <- lm(score ~ num_reviews + price, data = tea)
-tea <- mutate(tea, score_pred = predict(model))
-model
-```
-
-Using the color aesthetic we
-can visualize the predicted values of this model. Don't
-get hung up on the code below; concentrate on the output.
-
-```{r}
-tea_grid <- expand.grid(seq(min(tea$num_reviews), max(tea$num_reviews), length.out = 20),
-                        seq(min(tea$price), max(tea$price), length.out = 20))
-tea_grid <- data_frame(num_reviews = tea_grid[,1],
-                       price = tea_grid[,2])
-tea_grid$score_pred <- predict(model, newdata = tea_grid)
-ggplot(tea_grid, aes(price, num_reviews)) +
-  geom_point(aes(color = score_pred), size = 5) +
-  scale_color_viridis() +
-  theme_minimal()
-```
-
-Also, the productiveness of the model has been
-improved over the simple linear regression from
-before:
-
-```{r}
-sqrt(mean((tea$score - tea$score_pred)^2, na.rm = TRUE))
-```
-
-## Interpreting Regression Models
-
-The interpretation of a regression model can be described succinctly in
-the language of calculus. The slopes correspond to how much we expect the
-mean of the response to change as an individual predictor changes, with
-all other predictors held fixed. The exact interpretation of these
-models is very difficult when there are more than a few numeric variables.
-Generally I find them useful for describing patterns in the data but
-find that one should not rely too closely on the exact output unless
-you understand the model assumptions very well and know exactly how
-the data were collected.
-
-## Inference for Regression Models
 
 You should all be familiar with the structure of statistical hypothesis
 testing and confidence intervals. If not, the following is a good sources
@@ -282,45 +35,183 @@ for a brief review or catch-up:
 - [*Nature* Points of Significance: Significance, P values
 and t-tests](https://www.nature.com/nmeth/journal/v10/n11/pdf/nmeth.2698.pdf)
 
-We can easily get p-values that test whether each coefficient in a
-regression model is zero by calling the `summary` function on the
-model output of `lm`:
+Today I will very quickly review this material in the context of the dataset
+we just constructed.
+
+### One-sample inference
+
+Let's look at the mpg data set once again.
+
+```{r, message = FALSE}
+mpg <- read_csv("https://statsmaths.github.io/stat_data/mpg.csv")
+```
+
+Assuming that this was constructed as a random sample from all available
+car models, we could construt a confidence interval for what the mean
+city fuel efficency of all cars on the market are by using the function
+`t.test`.
 
 ```{r}
-model <- lm(score ~ num_reviews + price, data = tea)
+t.test(mpg$cty)
+```
+
+We see that the 95% confidence interval is from 16.31 to 17.41
+miles per gallon. If this is actually a uniform random sample from
+some population, and the true distribution is not too highly
+skewed, this procedure is guaranteed to give a range containing
+the true mean 95% of the time.
+
+The `t.test` function also runs an hypothesis test for us. If the
+true average value of city fuel efficency was 0 miles per gallon,
+we would have observed a sample with this large a sample mean less
+that 2.2e-16 of the time (the p-value above). Of course, testing
+for fuel efficency being zero is ridiculous. It has to be a non-negative
+value for any functioning car. Let's instead test for how rare these
+results are if the "true mean" was 16:
+
+```{r}
+t.test(mpg$cty, mu = 16)
+```
+
+Here, we would expect a sample as *extreme* as this one only 0.226% of 
+the time if the true mean were 16 mile per gallon.
+
+### Two-sample inference
+
+We can also use the `t.test` function to compare the means of
+two different groups. For example, is there a difference between
+the city fuel efficency of a randomly choosen Subaru car and a randomly
+choosen Toyota car. We can make two different datasets to compare
+this using our `filter` function:
+
+```{r}
+subaru <- filter(mpg, manufacturer == "subaru")
+toyota <- filter(mpg, manufacturer == "toyota")
+```
+
+And then passing both variables to the `t.test` function:
+
+```{r}
+t.test(subaru$cty, toyota$cty)
+```
+
+Here, the default null-hypothesis is that there is not difference
+between the two fuel efficencies. We see that the p-value is only
+0.31, so 31% of the time we would get these results if there is
+no difference between the fuel efficency of a randomly choosen
+Toyota automobile and randomly choosen Subaru automobile. The
+confidence interval for the difference in fuel efficencies is
+-0.73 to 2.24 miles per gallon. Notice that this range includes
+zero, indicating our lack of confidence in there being any difference
+at all.
+
+### Simple linear regression
+
+Let's assume that there is a linear relationship between the city
+fuel efficency and highway fuel efficency of any randomly choosen
+automobile. Specifically, assume that:
+
+$$ \text{cty}_i = \alpha + \beta \cdot \text{hwy}_i + \epsilon_i$$
+
+Where alpha and beta are constant and epsilon is some random noise
+that has a zero mean, is not correlated with the highway fuel efficency,
+and is independent for each sampled car. We can represent this
+relationship graphically with our tools at hand:
+
+```{r}
+ggplot(mpg, aes(hwy, cty)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal()
+```
+
+We can model this more formally in R with the `lm` function:
+
+```{r}
+model <- lm(cty ~ hwy, data = mpg)
+model
+```
+
+The model object gives us the predicted slope and intercept. More
+on this later. If we apply the `summary` function (not `summarize`),
+we will get T-scores and p-values, which run hypothesis test for each
+coefficents being equal to zero:
+
+```{r}
 summary(model)
 ```
 
-The tests are all T-tests; the t-score as well as the standard errors
-are included in the table at well. We need more probability theory
-than we have time to cover here to explain the detailed assumptions
-that make these p-values valid, but approximately we have the following:
-
-- the actual model is linear
-- the samples are all independent
-- the predictor values are "full rank" (you cannot write any
-predictor as a linear combination of the others)
-- the x-values are either non-random or independent of the errors
-
-Similarly, we can access confidence intervals for the linear model
-using the `confint` function:
+And the `confint` function gives confidence intervals for each
+parameter.
 
 ```{r}
-model <- lm(score ~ num_reviews + price, data = tea)
-confint(model, level = 0.95)
+confint(model)
 ```
 
-The assumptions are the same as those for the hypothesis tests.
 
-I am personally quite sceptical of p-values from large linear models.
-Here is an excellent demo showing how easy *p-hacking* is:
+![](../assets/img/data_pipeline_collect.png)
 
-[Hack Your Way To Scientific Glory](https://fivethirtyeight.com/features/science-isnt-broken/#part1)
+## Data Collection
 
-In general, in order to be valid hypothesis tests, we need to decide
-on the exact model before seeing any of the data and only run one
-model on the dataset. While we can run more models and modify them
-as we observe results, these can only be used for exploratory purposes.
+Today's lab has you create a small dataset and apply these modelling
+techniques on your dataset. Start by opening
+some spreadsheet software on your machine. This can be Excel, GoogleSheets,
+OpenOffice, or anything else that you are comfortable with.
+
+Create a new spreadsheet. The first step in collecting data is decided
+what variables are going to be collected and what we want to call them.
+Here, we are going to collect data about the number of emails that you
+receive each day in your University of Richmond email account. The variables
+we want to store are the following
+
+- **date**: the date of the observation, in YYYY-MM-DD format
+- **total_count**: the total number of e-mail chains you received
+- **self_count**: the total number of e-mail chains you received, when
+filtering only to those that used your first name
+- **week_num**: the week of the semester, either 2 or 3
+- **dow**: the day of the week; equal to 1 for Monday, 2 for Tuesday, ...,
+and 7 for Sunday
+
+It will be easiest, given that you all have GMail accounts, to tabulate
+e-mail chains rather than individual e-mails. Most chains all occur on
+the same day anyway, so this should not be a problem. 
+
+We are going to collect data from 2017-09-04 (Monday)
+through 2017-08-17 (this Sunday). This gives two complete weeks of data.
+
+The best way to start collecting this data is to fill in all of the dates
+(I recommend working backwards; that's how your e-mail is shown) and the
+easy variables like **week_num** and **dow** that do not require looking at
+your e-mail. Then, go through and quickly count the number of messages in
+each day. Finally, search for your first name, and repeate the process.
+
+## Data Export and Import
+
+Once you have finished inputing the dataset, export the document as a csv
+file. I recommend saving it as "email_data.csv" and storing in on your
+desktop. Then, go into R and read the dataset in with the `read_csv` function.
+You may need to change this if you saved the file:
+
+```{r, eval = FALSE}
+email <- read_csv("email_data.csv")
+```
+
+Make sure that all of the variables loaded in correctly and have the correct
+data type.
+
+We are going to use the data you just constructed to investigate three
+questions:
+
+- *What is the mean number of emails you have in a day?*
+- *Do you receive more emails in the first half of the week (Monday-Tuesday)
+compared to the second (Wednesday - Friday)?*
+- *What is the linear relationship between the total number of
+emails you receive in a day and the total number of email chains
+you receive in a day that use your first name?*
+
+There is nothing particularly tricky here. Just apply the three tests
+I have mentioned in the notes today.
+
 
 
 
