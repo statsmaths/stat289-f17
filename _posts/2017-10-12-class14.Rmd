@@ -1,5 +1,5 @@
 ---
-title: "Class 14: Nonlinear Linear Models"
+title: "Class 14: Relational Data"
 author: "Taylor Arnold"
 output: html_notebook
 ---
@@ -20,494 +20,190 @@ library(dplyr)
 library(viridis)
 ```
 
-![](../assets/img/data_pipeline_model.png)
 
+![](../assets/img/data_pipeline_transform.png)
 
-## California Housing Prices
+## Airline data again
 
-Today we are going to look at a dataset of housing prices from
-California. Loading it in we see that each row of the dataset
-is a small neighborhood (technically a census tract) and the
-goal is to predict the median house price within the tract.
-
-```{r, message = FALSE}
-ca <- read_csv("https://statsmaths.github.io/ml_data/ca_house_price.csv")
-```
-
-Looking at the dataset we see a number of potentially useful
-covariates. Our interest right now focuses on just the mean household
-income, latitude, and longitude of the neighborhood. The lab for
-today will ask you to extrapolate on this using the remaining variables.
-
-## Non-linear relationships
-
-In the prior two classes we have introduced the notion of linear
-models. We have even extended this idea to multivariate linear
-models and linear models with categorical variables. What about
-relationships that are non-linear? It may seem that the linear
-model is highly restrictive, perhaps even to the point of
-uselessness on larger, more complex datasets.
-
-The catch is that linear models need only be linear in the
-unknown parameters. That is, the following is not a linear
-model:
-
-$$ Y_i = \alpha + X_i^\beta + \epsilon_i $$
-
-However, this is:
-
-$$ Y_i = \alpha + \beta_1 X_i + \beta_2 X_i^2 + \beta_3 X_i^3 + \epsilon_i $$
-
-By picking large enough polynomials, in theory we can approximate
-any relationship between X and Y.
-
-Let's take a look at the relationship between mean household
-income and median house value. I'll put a best fit line through
-the data to visually see how well it performs:
-
-```{r, message = FALSE, warning = FALSE}
-ggplot(ca, aes(mean_household_income, median_house_value)) +
-  geom_point() +
-  geom_smooth(method = "lm")
-```
-
-The line does a decent job, but seems to over predict house values in areas
-with very high mean household incomes.
-
-Let's remove the `model = 'lm'` in the `geom_smooth` layer and see what
-a non-linear fit looks like:
-
-```{r, message = FALSE, warning = FALSE}
-ggplot(ca, aes(mean_household_income, median_house_value)) +
-  geom_point() +
-  geom_smooth()
-```
-
-This line, in contrast, seems to fit the data much more accurately.
-We will see later today the exact algorithm used in `geom_smooth`.
-For now, let's us the polynomial expansion trick we just derived
-to fit the curve using `lm`. We will fit a cubic polynomial to the
-data. The first step is to create two new variables:
+Today we will once again look at the NYC flights dataset:
 
 ```{r}
-ca$mean_household_income_2 <- ca$mean_household_income^2
-ca$mean_household_income_3 <- ca$mean_household_income^3
+flights <- read_csv("https://statsmaths.github.io/stat_data/flights.csv")
 ```
 
-In order to compare how well a cubic polynomial fits the
-data, let's evaluate how well the mean model performs:
+This time we will also look at several other tables that describe
+various aspects of the flights. Most of the names of these
+should be self-explanatory:
 
 ```{r}
-avg <- mean(ca$median_house_value, na.rm = TRUE)
-sqrt(tapply((ca$median_house_value - avg)^2,
-            ca$train_id, mean))
+airlines <- read_csv("https://statsmaths.github.io/stat_data/f_airlines.csv")
+airports <- read_csv("https://statsmaths.github.io/stat_data/f_airports.csv")
+planes <- read_csv("https://statsmaths.github.io/stat_data/f_planes.csv")
+weather <- read_csv("https://statsmaths.github.io/stat_data/f_weather.csv")
 ```
 
-And the linear model:
+## Relational data keys
+
+All of these tables are connected by way of common shared
+variables known in database theory as *keys*. A key may be
+a single variable or a collection of variables (known as
+a composite key). There are two types of keys:
+
+- a **primary key** uniquely identifies a row in a data table
+- a **foreign key** uniquely identifies a row in another data table
+
+An individual variable may be part of both a primary and foreign
+key even within the same table. Notice that variables in a key
+may have a different name in another table. In fact, they may
+even map to multiple variables in another table. An example is the
+`faa` code in the airports dataset, which maps to both the
+origin and destination fields in the `flights` dataset.
+
+The diagram below shows all of the connections between the five
+tables that we have loaded:
+
+![](../assets/img/relational-nycflights.png)
+
+A primary key and the corresponding foreign key in another table form a *relation*.
+Typically a relation maps a single row in one dataset to many rows in another.
+For example, each flight has one origin, but each origin has many flights.
+
+# Two table verbs
+
+Recall that we called the functions from **dplyr** that take a dataset and
+return another dataset *verbs*. Specifically, all of the verbs we have learned
+so far are *one table verbs* as they take just a single table as an input.
+When working with relational data we need verbs that take two tables and
+return some sort of new output. These are called **two table verbs**. In
+case you are wondering, there are no three table verbs. To work with more
+than two tables, simply chain together multiple two table verbs.
+
+## Mutating joins
+
+Mutating joins take two tables and combine them into a single table
+that contains all variables in either original table. We can use them
+for operations such as adding weather information to the flights dataset.
+
+Before moving forward, I'll create a smaller version of the flights
+dataset to make sure that this prints out well in the HTML notes:
 
 ```{r}
-model <- lm(median_house_value ~ mean_household_income,
-            subset = train_id == "train",
-            data = ca)
-ca$value_pred <- predict(model, newdata = ca)
-sqrt(tapply((ca$median_house_value - ca$value_pred)^2,
-            ca$train_id, mean))
+flights_sml <- flights %>%
+  select(year:day, hour, tailnum, carrier)
 ```
 
-Now, we'll build a cubic model to fit to the data and see
-how well it seems to fit visually.
+In my experience, the two table verb `left_join` is by far the most
+commonly used way of combining two tables. The function takes two
+tables as its first two arguments, followed by the input `by` that
+describes which variables are going to be used to join the tables.
+Here we see that it returns a new table with the same number of rows
+as the `flights_sml` dataset but now with the full name of the carrier:
 
 ```{r}
-model <- lm(median_house_value ~ mean_household_income +
-              mean_household_income_2 + mean_household_income_3,
-            subset = train_id == "train",
-            data = ca)
-ca$value_pred <- predict(model, newdata = ca)
-ggplot(ca, aes(mean_household_income, value_pred)) +
-  geom_point()
+left_join(flights_sml, airlines, by = "carrier")
 ```
 
-Notice that our polynomial now predicts a non-linear relationship
-between the mean household income and the median house value.
-The predictions are slightly better than the linear model, though
-not by very much as the linear model performed fairly well already:
+As mentioned before, the key of interest may have different names in each
+data set. The `by` option can be modified to specific the name of the key
+in the first table and the name of the key in the second table. Here we
+use it to combine the flights dataset with the airports data:
 
 ```{r}
-sqrt(tapply((ca$median_house_value - ca$value_pred)^2,
-            ca$train_id, mean))
+flights_sml <- flights %>%
+  select(year:day, hour, origin, dest)
+left_join(flights_sml, airports, by = c("dest" = "faa"))
 ```
 
-## Basis expansion with poly()
+Notice that the destination for the fourth row did not match
+with any rows of the airports data. The airport "BQN" was not found
+(if you are curious, BQN is in Aguadilla, Puerto Rico; presumably
+the airports data onlyincludes those in the 50 US states).
 
-The technique of creating more complex relationships by
-explicitly adding transformed versions of the original
-variables is called **basis expansion**. It is a very
-powerful and useful tool.
+### Inner and outer joins
 
-We can make use of polynomial expansions without having
-to directly construct all of the polynomial terms using
-the `poly` function. For example, here we use it to fit
-the cubic polynomial again:
+There are four mutating joins available in **dplyr**. These have the
+same syntax. If the join key is a primary key in one table and there
+are no missing matches, they all function exactly the same. If the
+join key is a primary key in one table and not all foreign keys in
+the other table match an entry in the other, the following happens:
+
+- `left_join` only non-matching rows in the first dataset are kept
+- `right_join` only non-matching rows in the second dataset are kept
+- `full_join` non-matching rows are included from either table
+- `inner_join` only matching rows from both tables are included
+
+All of this can become quite complicated. I follow one simple rule
+that make this much easier:
+
+- make sure that the key used for the join is a primary key for
+the *second* dataset; that is, it unique defines each row of the
+second dataset (usually this dataset contains metadata about the
+first dataset)
+
+If you follow this rule, you only ever need `left_join` (if you are
+okay with missing values in the metadata) and `inner_join`
+(if you want to remove rows that did not have associated metadata).
+
+### Composite keys
+
+Recall that a key may consist of multiple variables. To
+join on many variables at once, provide a vector of all the names
+to the option `by`:
 
 ```{r}
-model <- lm(median_house_value ~
-              poly(mean_household_income, degree = 3),
-            subset = train_id == "train",
-            data = ca)
-ca$value_pred <- predict(model, newdata = ca)
-ggplot(ca, aes(mean_household_income, value_pred)) +
-  geom_point()
+flights_sml <- flights %>%
+  select(year:day, hour, origin, dest)
+
+inner_join(flights_sml, weather,
+          by = c("year", "month", "day", "hour", "origin"))
 ```
 
-Note that the predicted values are the same as before, however
-the exact polynomial terms are actually different. R has picked
-a polynomial basis which is much more numerically stable that the
-naive one we used. We will explore this more when we dive into
-R matricies next week.
+### Common variables
 
-With this new function it is easy to expand the polynomial basis
-to a large order. Try for example, 15:
+Sometimes there may be a variable name present in two datasets that
+we want to merge together but that has a different meaning in each
+dataset. For example, `year` is the year of the flight in the `flights`
+dataset but the year of creating in the `airplanes` dataset. If
+we join these two, we see that a suffix is added to each variable:
 
 ```{r}
-model <- lm(median_house_value ~ poly(mean_household_income, 15),
-            subset = train_id == "train",
-            data = ca)
-ca$value_pred <- predict(model, newdata = ca)
-ggplot(ca, aes(mean_household_income, value_pred)) +
-  geom_point()
+flights_sml <- flights %>%
+  select(year:day, tailnum)
+
+inner_join(flights_sml, planes,
+          by = c("tailnum"))
 ```
 
-Notice that we get *edge effects*, where the polynomial acts
-very strangly for extreme values of the X variable. The fit
-here is marginally better than the cubic fit:
+This behavior is fine, but it is better to manually describe
+what the suffix should be:
 
 ```{r}
-sqrt(tapply((ca$median_house_value - ca$value_pred)^2,
-            ca$train_id, mean))
+inner_join(flights_sml, planes,
+          by = c("tailnum"),
+          suffix = c("", "_plane"))
 ```
 
-## Additive models
+### Unspecified key
 
-With large polynomials, we are in a sense approximating the
-non-linear regression model given by the following:
+If we do not specify the key to join with in the `by` option, **dplyr**
+will assume that we want to join on all common keys. A warning will be
+produced warning which variables were choosen. This can be useful in a
+pinch, but generally is a bad idea to rely on.
 
-$$ Y_i = f(X_i) + \epsilon_i, \quad mean(\epsilon_i) = 0 $$
+## Filtering joins
 
-Where the goal is to estimate the function f. Here we are doing
-so by approximating it by a large polynomial. A natural extension
-of non-linear regression is the **additive model**. Here there is
-a non-linear relationship between the predictor variables and
-the response, but their are no interaction terms between the two
-predictor variables:
+There are two additional two table verbs that act like the `filter`
+command, returning a subset of the rows, rather than like `mutate`,
+which adds new columns. Specifically:
 
-$$ Y_i = f(X_i) + g(Z_i) + \epsilon_i, \quad mean(\epsilon_i) = 0 $$
+- `semi_join(x, y)` keeps all rows in `x` that have a match in `y`
+- `anti_join(x, y)` keeps all rows in `x` that do not have a match in `y`
 
-We can fit models like this by the same polynomial trick. Here,
-let's use it to predict median house value as a function the mean
-and median household incomes:
+Unlike mutating joins, we do not need to be nearly as careful to make
+sure that the joining key is a primary key for the second dataset.
 
-```{r}
-model <- lm(median_house_value ~ poly(mean_household_income, 3) +
-              poly(median_household_income, 3),
-            subset = train_id == "train",
-            data = ca)
-ca$value_pred <- predict(model, newdata = ca)
-sqrt(tapply((ca$median_house_value - ca$value_pred)^2,
-            ca$train_id, mean))
-```
-
-Again, we see minor improvements with the increased complexity of
-the model.
-
-## Non-linear interactions
-
-A more general form of the additive model would allow arbitrary
-interactions between the predictor variables. We would write
-this as the following:
-
-$$ Y_i = f(X_i, Z_i) + \epsilon_i $$
-
-To approximate this with a polynomial, we would need to
-include all interaction terms as well. For example, here
-is the quadratic approximation:
-
-$$ Y_i = \alpha + \beta_1 X + \beta_2 X^2 + \beta_3 Z + \beta_4 Z^2 + \beta_5 X\cdot Z + \epsilon_i $$
-
-In the quadratic case, the number of terms grows only by 1. For
-higher orders to number of interactions increases significantly
-faster.
-
-To fit such models in R, we simply use the `poly` function and
-give it multiple variables. Here is the cubic interaction of
-mean and median household income:
-
-```{r, message = FALSE}
-model <- lm(median_house_value ~
-               poly(mean_household_income, median_household_income,
-                    degree = 3),
-            subset = train_id == "train",
-            data = ca)
-model
-```
-
-The numbers in the coefficients give the degree of the first term,
-a dot, and the degree of the second term. Once again, this more
-complex model offers some (modest) gains over the simpler models.
-
-```{r}
-ca$value_pred <- predict(model, newdata = ca)
-sqrt(tapply((ca$median_house_value - ca$value_pred)^2,
-            ca$train_id, mean))
-```
-
-And, as we have seen, this increases the predictiveness of the
-model by a slight amount.
-
-## Over fitting
-
-As a general pattern, we see that increasing the complexity of
-the model creates a more predictive output. This should not be
-taken as a given. Let's increase the interaction polynomial
-degrees from 6, to 10, and to 12. Notice what happens with the
-training and validation errors:
-
-```{r, message = FALSE}
-model <- lm(median_house_value ~
-               poly(mean_household_income, median_household_income,
-                    degree = 6),
-            subset = train_id == "train",
-            data = ca)
-ca$value_pred <- predict(model, newdata = ca)
-sqrt(tapply((ca$median_house_value - ca$value_pred)^2,
-            ca$train_id, mean))
-```
-
-```{r, message = FALSE}
-model <- lm(median_house_value ~
-               poly(mean_household_income, median_household_income,
-                    degree = 10),
-            subset = train_id == "train",
-            data = ca)
-ca$value_pred <- predict(model, newdata = ca)
-sqrt(tapply((ca$median_house_value - ca$value_pred)^2,
-            ca$train_id, mean))
-```
-
-```{r, message = FALSE}
-model <- lm(median_house_value ~
-               poly(mean_household_income, median_household_income,
-                    degree = 12),
-            subset = train_id == "train",
-            data = ca)
-ca$value_pred <- predict(model, newdata = ca)
-sqrt(tapply((ca$median_house_value - ca$value_pred)^2,
-            ca$train_id, mean))
-```
-
-We see that the training error slowly gets lower as we increase the
-degree of the polynomial. With more terms to use, it will always
-improve the fit on the data it is trained on (at least up to numerical
-stability). However, the higher order fits begin to over fit to the training
-data. For degree six polynomials this creates a slightly worse fit. For
-degree 10 the fit is significantly worse. At degree 12, the validation RMSE
-is many times higher than the training error.
-
-As a general rule, we use the validation set to determine exactly how
-complex to make the model by determining which model minimizes the RMSE
-on the validation set. Visually, we see the following relationship
-(though in our case we do not know the test set and are comparing with
-the validation set):
-
-![](https://statsmaths.github.io/stat395/assets/img/pg38.png)
-
-I have several videos that demonstrate the process of moving from over-fitting
-to under-fitting. Here are three examples:
-
-- [k-nearest neighbors](http://euler.stat.yale.edu/~tba3/stat665/lectures/lec02/media/knnEst.mp4)
-- [kernel smoothers](http://euler.stat.yale.edu/~tba3/stat665/lectures/lec02/media/ksmoothEst.mp4)
-- [lowess](http://euler.stat.yale.edu/~tba3/stat665/lectures/lec02/media/loessEst.mp4)
-
-While we have not yet seen these particular models, the basic ideas between
-over-fitting and under-fitting still apply.
-
-## Latitude and Longitude
-
-By looking at how predictive the models are, we can clearly see that there
-are non-linearities and interactions between the relationship of mean
-and median income and median house values. Let's move on, however, to a
-more obvious example where the relationship should be non-linear and
-need interactions: using longitude and latitude to predict house value.
-
-A simple plots show how using longitude and latitude creates and ad hoc
-map.
-
-```{r, message = FALSE}
-library(viridis)
-ggplot(ca[ca$train_id != 'test',], aes(longitude, latitude)) +
-  geom_point(aes(color = median_house_value), size = 0.5) +
-  scale_color_viridis()
-```
-
-If you know California well, you may be able to infer a lot from this
-plot. Otherwise, layering a map under the data helps substantially.
-Using the **ggmap** package, I can reproduce the prior plot with a map.
-We will see later more formally how to make this work:
-
-```{r, message = FALSE}
-library(ggmap)
-qmplot(longitude, latitude, data = ca[ca$train_id != 'test',],
-       color = median_house_value, size = I(0.5)) +
-  scale_color_viridis()
-```
-
-As we might expect, prices jump near Los Angeles and San Francisco
-and drop as you move inland.
-
-Let's fit a model to the data using the `poly` function:
-
-```{r, message = FALSE}
-model <- lm(median_house_value ~
-               poly(latitude, longitude,
-                    degree = 6),
-            subset = train_id == "train",
-            data = ca)
-ca$value_pred <- predict(model, newdata = ca)
-sqrt(tapply((ca$median_house_value - ca$value_pred)^2,
-            ca$train_id, mean))
-```
-
-And see what this plot looks like over the map:
-
-```{r, message = FALSE}
-library(ggmap)
-qmplot(longitude, latitude, data = ca,
-       color = value_pred, size = I(0.5)) +
-  scale_color_viridis()
-```
-
-As hoped, our model lights up near the two big cities and decreases
-as we move inland.
-
-## Other basis expansions
-
-There are other alternatives to using a polynomial basis. One of my
-favorite is to do a discrete transformation of the dataset using the
-`cut` function. Here, we break every mean household income into ten
-buckets:
-
-```{r}
-ca$mean_household_income_cut <- cut(ca$mean_household_income, 10, labels = FALSE)
-ggplot(ca, aes(mean_household_income, mean_household_income_cut)) +
-  geom_point()
-```
-
-A linear model fit on this variable (we use the `factor` function
-to tell R to treat it as a categorical variable), is able to fit
-any abritrary number to each bin resulting in fits that can be
-very non-linear.
-
-```{r}
-model <- lm(median_house_value ~ factor(mean_household_income_cut),
-            subset = train_id == "train",
-            data = ca)
-ca$value_pred <- predict(model, newdata = ca)
-
-ggplot(ca, aes(mean_household_income, value_pred)) +
-  geom_point()
-```
-
-Similarly, the `bin` function in the **smodels** package breaks the
-variable into a number of bins as well. However, here the bins are
-required to contain the same number of points rather than the being
-the same width:
-
-```{r}
-library(smodels)
-ca$mean_household_income_bin <- bin(ca$mean_household_income, 10)
-ggplot(ca, aes(mean_household_income, mean_household_income_bin)) +
-  geom_point()
-```
-
-There is not a direct function for computing two dimensional cuts or bins,
-but we can create these directly without much trouble. See for example the
-following code to bin the latitude and longitude:
-
-```{r}
-ca$latitude_bin <- cut(ca$latitude, 5, label = FALSE)
-ca$longitude_bin <- cut(ca$longitude, 5, label = FALSE)
-ca$lat_long_bin <- ca$latitude_bin + ca$longitude_bin * 10
-```
-
-The resulting plot yields a different prediction for each
-bin:
-
-```{r, message = FALSE}
-library(ggmap)
-model <- lm(median_house_value ~  factor(lat_long_bin), data = ca)
-ca$value_pred <- predict(model, newdata = ca)
-qmplot(longitude, latitude, data = ca, color = value_pred) +
-  scale_color_viridis()
-```
-
-## Linear smoothers with gam
-
-We conclude with a brief introduction to the **gam** package. The
-package allows us to replace the `lm` function with the `gam` function.
-With no other options selected, this will not effect the results in
-any way. The benefit comes from the included functions `s`, which
-stands for smoothing spline, and `lo`, which stands for LOcal polynomial
-smoothers. We can use these functions as a drop-in replacement
-for the `poly` function. However, unlike poly we do not need to
-specify the degree of the polynomial as the complexity of the model
-will be determined by the data:
-
-```{r, message = FALSE}
-library(gam)
-model <- gam(median_house_value ~
-              s(mean_household_income),
-            subset = train_id == "train",
-            data = ca)
-ca$value_pred <- predict(model, newdata = ca)
-
-ggplot(ca, aes(mean_household_income, value_pred)) +
-  geom_point()
-```
-
-We can add two smoothed variable together much as we did with the poly
-function:
-
-```{r, message = FALSE}
-library(ggmap)
-model <- gam(median_house_value ~ s(latitude)  + s(longitude), data = ca)
-ca$value_pred <- predict(model, newdata = ca)
-qmplot(longitude, latitude, data = ca, color = value_pred) +
-  scale_color_viridis()
-```
-
-The `lo` function, but not the `s` function, also allows for
-multivariate effects. So, we can smooth over interactions between
-latitude and longitude:
-
-```{r, message = FALSE, warning = FALSE}
-library(ggmap)
-model <- gam(median_house_value ~ lo(latitude, longitude), data = ca)
-ca$value_pred <- predict(model, newdata = ca)
-qmplot(longitude, latitude, data = ca, color = value_pred) +
-  scale_color_viridis()
-```
-
-Notice that the `s` and `lo` functions are doing more than intelligently selecting
-the degree of the polynomial. There are some downsides to using the `gam` function
-compared to polynomial basis expansion with the `lm` function. The primary downside
-is that the computational time can be quite long with larger datasets, particularly
-if we try to fit iteraction terms. In fact, just the last block of code took a
-non-negligable amount of time to run and we only have a few thousand rows of data
-and two variables. Secondly, iteraction terms can become unstable in dimensions
-three or more. Often, a low-order polynomial expansion can be used up to even
-4 or 5 dimensions if there is sufficent data.
-
-
-
+We will see that filtering joins are particularly useful when working
+with spatial and text data.
 
 
 
