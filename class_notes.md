@@ -12,3 +12,16 @@ and not just copying
 - notes took about 35 minutes
 - not a lot of confusion generally
 - some students have not been keeping up with the labs
+
+
+
+- Raleigh, NC        458,880
+- Washington, DC     681,170
+- New York, NY     8,537,673
+- Richmond, VA       223,170
+- Detroit, MI        672,795
+- Sacramento, CA     495,234
+- Aurora, CO         361,710
+- Minneapolis, MN    413,651
+- Glendale, AZ       245,895
+- Seattle, WA        704,352
