@@ -13,7 +13,7 @@ and not just copying
 - not a lot of confusion generally
 - some students have not been keeping up with the labs
 
-
+# CLASS 05
 
 - Raleigh, NC        458,880
 - Washington, DC     681,170
