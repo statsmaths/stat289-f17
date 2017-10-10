@@ -29,8 +29,8 @@ We are going to start today by having you all open either
 excel, open office, Google sheets, or the spreadsheet editor
 of your choice.
 
-You will be constructing a dataset representing your ten
-favorite films.
+You will be constructing a dataset representing a set of
+ten films of your choosing.
 
 Please collect the following (I suggest starting with Wikipedia
 and going to IMDb and rotten tomatoes for the rest):
@@ -43,10 +43,8 @@ and going to IMDb and rotten tomatoes for the rest):
 - birthplace of each actor
 - rotten tomatoes rating of the movie
 
-Once you are done with this, export the file as a CSV to your
-computer and read this into R using the `read_csv` function.
 If you have time remaining before we come back together as
-a group, try to construct some interesting plots.
+a group, try to download the file and read it into R.
 
 # Data Collection
 
