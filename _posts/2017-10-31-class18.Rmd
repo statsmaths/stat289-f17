@@ -211,7 +211,7 @@ There are many other more complex regular expressions. For
 example, this one is very useful:
 
 ```{r, eval = FALSE}
-stri_replace(html, " ", regex = "<[^>]+>")
+stri_replace_all(html, " ", regex = "<[^>]+>")
 ```
 
 If `html` is a string, this will replace all of the characters
