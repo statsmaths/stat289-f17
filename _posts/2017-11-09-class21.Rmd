@@ -177,10 +177,8 @@ Saint Petersburg due to ties.
 
 ## Idea for using this
 
-In the next class, our final discussion of text, we will
-see how to build models out of token lists. In the meantime,
-here are some suggestions of how you can use these in your
-data analysis projects:
+Here are some suggestions of how you can use these in the
+exploratory portion of your second project report:
 
 - find top word or words for each location and plot on a map
 - count number of words in each page and use this as metadata

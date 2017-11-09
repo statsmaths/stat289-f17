@@ -21,3 +21,58 @@ library(viridis)
 ```
 
 ![](../assets/img/data_pipeline_visualize.png)
+
+## Maps
+
+```{r}
+election <- read_csv("https://statsmaths.github.io/stat_data/french_election_2012.csv")
+```
+
+```{r}
+ggplot(election, aes(lon, lat)) +
+  geom_text(aes(label = departement)) +
+  theme_minimal()
+```
+
+
+```{r, message = FALSE}
+library(ggmap)
+qmplot(lon, lat, data = election, geom = "blank") +
+  geom_text(aes(label = departement), color = "orange")
+```
+
+```{r, message = FALSE}
+qmplot(lon, lat, data = election, geom = "blank", zoom = 7) +
+  geom_text(aes(label = departement), color = "orange")
+```
+
+```{r, message = FALSE}
+qmplot(lon, lat, data = election, geom = "blank",
+       maptype = "toner") +
+  geom_text(aes(label = departement), color = "orange")
+```
+
+
+```{r, message = FALSE}
+qmplot(lon, lat, data = election, geom = "blank",
+       maptype = "watercolor") +
+  geom_text(aes(label = departement), color = "black")
+```
+
+```{r, message = FALSE}
+qmplot(lon, lat, data = election, geom = "blank",
+       maptype = "toner") +
+  geom_point(aes(color = (hollande_2 > 50)), size = 5)
+```
+
+## 
+
+```{r, message = FALSE}
+library(plotly)
+qmplot(lon, lat, data = election, geom = "blank",
+       maptype = "toner") +
+  geom_point(aes(color = (hollande_2 > 50)), size = 5)
+ggplotly()
+```
+
+
