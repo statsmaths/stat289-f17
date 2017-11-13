@@ -49,7 +49,7 @@ nodes
 
 ```{r}
 library(smodels)
-z <- graph_data(nodes, edges)
+z <- graph_data(edges, nodes)
 nodes <- z$nodes
 edges <- z$edges
 ```
@@ -308,7 +308,7 @@ edges <- structure(list(id = c("agreeable", "agreeable", "man", "agreeable",
 ```
 
 ```{r}
-z <- graph_data(nodes, edges)
+z <- graph_data(edges, nodes)
 nodes <- z$nodes
 edges <- z$edges
 ```
