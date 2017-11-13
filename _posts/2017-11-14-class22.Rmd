@@ -1,5 +1,5 @@
 ---
-title: "Class 22: Working with Spatial Data"
+title: "Class 22: Working with Network Data"
 author: "Taylor Arnold"
 output: html_notebook
 ---
@@ -22,57 +22,311 @@ library(viridis)
 
 ![](../assets/img/data_pipeline_visualize.png)
 
-## Maps
-
-```{r}
-election <- read_csv("https://statsmaths.github.io/stat_data/french_election_2012.csv")
+```{r, echo = FALSE}
+edges <- structure(list(id = c("Albert", "Albert", "Albert", "Albert", 
+"Betty", "Betty", "Betty", "Claudia", "Claudia", "Dieter", "Dieter", 
+"Dieter", "Ed", "Flavia", "Flavia", "Gaby", "Hellen"), id_out = c("Betty", 
+"Claudia", "Dieter", "Flavia", "Dieter", "Ed", "Gaby", "Dieter", 
+"Flavia", "Ed", "Flavia", "Gaby", "Gaby", "Gaby", "Hellen", "Hellen", 
+"Ida")), .Names = c("id", "id_out"), row.names = c(NA, -17L), class = c("tbl_df", 
+"tbl", "data.frame"))
+nodes <- structure(list(id = c("Albert", "Betty", "Claudia", "Dieter", 
+"Ed", "Flavia", "Gaby", "Hellen", "Ida"), age = c(14L, 12L, 17L, 
+16L, 17L, 14L, 15L, 14L, 18L), belt = c("green", "black", "green", 
+"green", "green", "black", "white", "green", "green")), .Names = c("id", 
+"age", "belt"), row.names = c(NA, -9L), class = c("tbl_df", "tbl", 
+"data.frame"))
 ```
 
 ```{r}
-ggplot(election, aes(lon, lat)) +
-  geom_text(aes(label = departement)) +
-  theme_minimal()
+edges
+```
+
+```{r}
+nodes
 ```
 
 
-```{r, message = FALSE}
-library(ggmap)
-qmplot(lon, lat, data = election, geom = "blank") +
-  geom_text(aes(label = departement), color = "orange")
-```
-
-```{r, message = FALSE}
-qmplot(lon, lat, data = election, geom = "blank", zoom = 7) +
-  geom_text(aes(label = departement), color = "orange")
-```
-
-```{r, message = FALSE}
-qmplot(lon, lat, data = election, geom = "blank",
-       maptype = "toner") +
-  geom_text(aes(label = departement), color = "orange")
+```{r}
+library(smodels)
+z <- graph_data(nodes, edges)
+nodes <- z$nodes
+edges <- z$edges
 ```
 
 
-```{r, message = FALSE}
-qmplot(lon, lat, data = election, geom = "blank",
-       maptype = "watercolor") +
-  geom_text(aes(label = departement), color = "black")
+```{r}
+nodes
 ```
 
-```{r, message = FALSE}
-qmplot(lon, lat, data = election, geom = "blank",
-       maptype = "toner") +
-  geom_point(aes(color = (hollande_2 > 50)), size = 5)
+```{r}
+edges
 ```
 
-## 
+```{r}
+ggplot(nodes, aes(x, y)) +
+  geom_point(size = 10) +
+  theme_void()
+```
 
-```{r, message = FALSE}
+```{r}
+ggplot(nodes, aes(x, y, label = id)) +
+  geom_segment(aes(xend = xend, yend = yend), data = edges,
+               color = grey(0.9), alpha = 0.9, size = 4) +
+  geom_point(aes(color = belt), size = 15) +
+  geom_text(aes(y = y - 0.15), size = 8) +
+  theme_void()
+```
+
+
+
+
+```{r}
 library(plotly)
-qmplot(lon, lat, data = election, geom = "blank",
-       maptype = "toner") +
-  geom_point(aes(color = (hollande_2 > 50)), size = 5)
 ggplotly()
 ```
 
+## Centrality
+
+```{r}
+ggplot(nodes, aes(x, y, label = id)) +
+  geom_segment(aes(xend = xend, yend = yend), data = edges,
+               color = grey(0.9), alpha = 0.9, size = 4) +
+  geom_point(aes(color = eigen), size = 15) +
+  geom_text(aes(y = y - 0.15), size = 8) +
+  scale_color_viridis() +
+  theme_void()
+```
+
+```{r}
+ggplot(nodes, aes(x, y, label = id)) +
+  geom_segment(aes(xend = xend, yend = yend), data = edges,
+               color = grey(0.9), alpha = 0.9, size = 4) +
+  geom_point(aes(color = close), size = 15) +
+  geom_text(aes(y = y - 0.15), size = 8) +
+  scale_color_viridis() +
+  theme_void()
+```
+
+```{r}
+ggplot(nodes, aes(x, y, label = id)) +
+  geom_segment(aes(xend = xend, yend = yend), data = edges,
+               color = grey(0.9), alpha = 0.9, size = 4) +
+  geom_point(aes(color = between), size = 15) +
+  geom_text(aes(y = y - 0.15), size = 8) +
+  scale_color_viridis() +
+  theme_void()
+```
+
+
+## Clusters
+
+```{r}
+ggplot(nodes, aes(x, y, label = id)) +
+  geom_segment(aes(xend = xend, yend = yend), data = edges,
+               color = grey(0.9), alpha = 0.9, size = 4) +
+  geom_point(aes(color = cluster), size = 15, show.legend = FALSE) +
+  geom_text(aes(y = y - 0.15), size = 8) +
+  theme_void()
+```
+
+
+## Social Network
+
+```{r}
+nodes <- read_csv("~/gh/stat_data/work_nodes.csv")
+edges <- read_csv("~/gh/stat_data/work_edges.csv")
+```
+
+```{r}
+library(smodels)
+temp <- graph_data(filter(edges, reports == 1), nodes, directed = TRUE)
+nodes <- temp$nodes
+edges <- temp$edges
+```
+
+
+```{r}
+ggplot(nodes, aes(x, y, label = id)) +
+  geom_segment(aes(xend = xend, yend = yend), data = edges,
+               color = grey(0.9), alpha = 0.9,
+               arrow = arrow(type = "closed", angle = 15)) +
+  geom_point(aes(color = factor(between)), size = 6) +
+  #scale_color_viridis() + 
+  theme_void()
+```
+
+
+## Other Networks
+
+
+## 
+
+```{r, echo = FALSE}
+nodes <- structure(list(id = c("agreeable", "man", "old", "person", "anything", 
+"short", "arm", "round", "aunt", "first", "bad", "air", "boy", 
+"beautiful", "black", "face", "letter", "little", "young", "best", 
+"course", "friend", "love", "part", "room", "thing", "time", 
+"way", "better", "heart", "mind", "place", "right", "state", 
+"woman", "word", "door", "eye", "bright", "evening", "morning", 
+"certain", "day", "other", "child", "happy", "common", "dark", 
+"kind", "night", "dear", "good", "home", "mother", "pretty", 
+"open", "early", "fire", "full", "great", "master", "moment", 
+"work", "general", "fancy", "voice", "head", "hope", "long", 
+"greater", "hand", "hard", "red", "life", "glad", "large", "new", 
+"white", "late", "whole", "light", "manner", "bed", "house", 
+"low", "money", "ready", "small", "strange", "thought", "lost", 
+"alone", "nothing", "miserable", "natural", "half", "wrong", 
+"name", "pleasant", "possible", "side", "perfect", "poor", "quiet", 
+"same", "strong", "something", "true", "usual", "family", "world", 
+"year"), noun = c(0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 
+1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 
+1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 
+1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 
+0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 
+0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1)), .Names = c("id", "noun"
+), class = c("tbl_df", "tbl", "data.frame"), row.names = c(NA, 
+-112L))
+edges <- structure(list(id = c("agreeable", "agreeable", "man", "agreeable", 
+"old", "anything", "short", "arm", "man", "old", "person", "aunt", 
+"person", "old", "bad", "first", "bad", "man", "old", "beautiful", 
+"round", "beautiful", "beautiful", "black", "man", "old", "short", 
+"round", "first", "boy", "beautiful", "black", "face", "man", 
+"person", "boy", "beautiful", "man", "best", "old", "round", 
+"little", "young", "best", "old", "little", "best", "old", "best", 
+"old", "first", "little", "best", "old", "first", "black", "little", 
+"best", "old", "first", "little", "best", "old", "short", "little", 
+"best", "man", "little", "friend", "young", "better", "thing", 
+"better", "old", "little", "better", "short", "arm", "face", 
+"little", "better", "place", "better", "old", "little", "young", 
+"better", "little", "better", "old", "black", "little", "room", 
+"round", "black", "little", "round", "face", "little", "eye", 
+"short", "first", "bright", "first", "air", "bright", "man", 
+"old", "person", "thing", "place", "bright", "old", "first", 
+"certain", "person", "short", "boy", "face", "little", "young", 
+"course", "friend", "part", "room", "time", "way", "place", "door", 
+"evening", "certain", "little", "young", "better", "other", "man", 
+"old", "love", "child", "man", "thing", "part", "room", "eye", 
+"face", "friend", "thing", "word", "other", "dark", "room", "dark", 
+"old", "bad", "boy", "little", "young", "friend", "child", "kind", 
+"man", "old", "person", "arm", "round", "little", "young", "friend", 
+"part", "thing", "time", "mind", "place", "right", "woman", "word", 
+"bright", "day", "night", "dear", "arm", "little", "way", "right", 
+"happy", "dear", "young", "dear", "old", "little", "young", "way", 
+"woman", "dear", "good", "mother", "arm", "door", "time", "morning", 
+"day", "home", "eye", "good", "heart", "eye", "first", "black", 
+"part", "thing", "eye", "other", "night", "good", "first", "young", 
+"first", "first", "air", "way", "other", "general", "little", 
+"great", "general", "old", "little", "other", "good", "little", 
+"good", "black", "letter", "room", "time", "way", "night", "good", 
+"pretty", "air", "part", "round", "little", "right", "other", 
+"pretty", "open", "great", "long", "black", "word", "great", 
+"master", "work", "little", "eye", "pretty", "great", "head", 
+"old", "happy", "mother", "long", "hard", "heart", "round", "face", 
+"room", "pretty", "fire", "head", "long", "hand", "face", "room", 
+"way", "state", "kind", "master", "hope", "life", "large", "little", 
+"thing", "large", "dear", "pretty", "face", "course", "time", 
+"way", "heart", "mind", "place", "day", "late", "little", "time", 
+"way", "other", "red", "new", "other", "whole", "light", "little", 
+"old", "little", "other", "whole", "little", "mind", "state", 
+"voice", "long", "person", "little", "little", "place", "round", 
+"boy", "little", "room", "way", "door", "voice", "hope", "hand", 
+"house", "boy", "face", "little", "thing", "kind", "anything", 
+"first", "little", "better", "mother", "day", "man", "better", 
+"mind", "new", "thought", "old", "little", "course", "love", 
+"manner", "nothing", "way", "nothing", "old", "old", "air", "little", 
+"other", "manner", "other", "thought", "right", "other", "good", 
+"master", "man", "old", "boy", "beautiful", "little", "child", 
+"dear", "mother", "head", "hand", "little", "room", "way", "place", 
+"eye", "evening", "voice", "life", "old", "air", "boy", "face", 
+"little", "room", "thing", "time", "place", "state", "word", 
+"bright", "common", "kind", "dear", "great", "moment", "manner", 
+"low", "quiet", "old", "black", "part", "hand", "red", "same", 
+"round", "good", "new", "light", "strange", "wrong", "state", 
+"woman", "course", "room", "place", "strong", "whole", "whole", 
+"side", "old"), id_out = c("man", "old", "old", "person", "person", 
+"short", "arm", "round", "first", "first", "first", "first", 
+"bad", "air", "air", "boy", "boy", "black", "black", "black", 
+"face", "face", "letter", "letter", "little", "little", "little", 
+"little", "little", "little", "little", "little", "little", "young", 
+"young", "young", "young", "best", "course", "friend", "friend", 
+"friend", "friend", "friend", "love", "love", "love", "part", 
+"part", "room", "room", "room", "room", "thing", "thing", "thing", 
+"thing", "thing", "time", "time", "time", "time", "way", "way", 
+"way", "way", "better", "better", "better", "heart", "heart", 
+"mind", "mind", "place", "place", "place", "right", "right", 
+"right", "right", "right", "right", "state", "woman", "woman", 
+"woman", "woman", "word", "word", "door", "door", "door", "door", 
+"eye", "eye", "eye", "bright", "bright", "bright", "bright", 
+"evening", "evening", "evening", "morning", "morning", "morning", 
+"certain", "certain", "certain", "certain", "certain", "certain", 
+"day", "day", "day", "other", "other", "other", "other", "other", 
+"other", "other", "other", "other", "other", "other", "other", 
+"other", "other", "other", "other", "child", "child", "child", 
+"child", "happy", "happy", "happy", "happy", "common", "common", 
+"dark", "dark", "dark", "kind", "kind", "kind", "kind", "kind", 
+"kind", "night", "night", "dear", "dear", "dear", "dear", "dear", 
+"dear", "dear", "dear", "good", "good", "good", "good", "good", 
+"good", "good", "good", "good", "good", "good", "good", "good", 
+"good", "good", "good", "good", "good", "good", "good", "home", 
+"home", "home", "home", "home", "home", "mother", "mother", "pretty", 
+"pretty", "pretty", "pretty", "pretty", "pretty", "pretty", "pretty", 
+"open", "open", "early", "early", "early", "early", "fire", "fire", 
+"full", "full", "great", "great", "great", "great", "great", 
+"great", "great", "great", "master", "master", "moment", "work", 
+"general", "general", "general", "fancy", "voice", "voice", "voice", 
+"head", "head", "head", "head", "hope", "hope", "long", "long", 
+"long", "long", "long", "long", "long", "long", "greater", "greater", 
+"hand", "hand", "hand", "hand", "hand", "hand", "hand", "hand", 
+"hard", "hard", "hard", "hard", "hard", "red", "red", "red", 
+"red", "red", "life", "life", "life", "life", "life", "glad", 
+"large", "large", "large", "large", "large", "large", "large", 
+"large", "new", "new", "new", "new", "new", "new", "new", "new", 
+"new", "white", "white", "white", "late", "late", "whole", "whole", 
+"whole", "whole", "whole", "whole", "whole", "whole", "whole", 
+"light", "light", "light", "light", "light", "light", "manner", 
+"manner", "manner", "bed", "house", "house", "house", "house", 
+"low", "low", "low", "low", "low", "money", "money", "ready", 
+"ready", "small", "small", "small", "small", "small", "small", 
+"small", "small", "small", "small", "strange", "strange", "strange", 
+"strange", "strange", "thought", "thought", "thought", "thought", 
+"thought", "lost", "alone", "nothing", "nothing", "nothing", 
+"nothing", "miserable", "miserable", "natural", "natural", "natural", 
+"half", "wrong", "wrong", "name", "pleasant", "pleasant", "pleasant", 
+"pleasant", "pleasant", "possible", "possible", "side", "side", 
+"perfect", "perfect", "poor", "poor", "poor", "poor", "poor", 
+"poor", "poor", "poor", "poor", "poor", "quiet", "quiet", "quiet", 
+"quiet", "quiet", "quiet", "quiet", "quiet", "same", "same", 
+"same", "same", "same", "same", "same", "same", "same", "same", 
+"same", "same", "same", "same", "same", "same", "same", "same", 
+"same", "same", "strong", "strong", "strong", "strong", "strong", 
+"strong", "something", "something", "something", "something", 
+"something", "something", "true", "true", "usual", "usual", "usual", 
+"usual", "family", "world", "world", "year")), .Names = c("id", 
+"id_out"), class = c("tbl_df", "tbl", "data.frame"), row.names = c(NA, 
+-425L))
+```
+
+```{r}
+z <- graph_data(nodes, edges)
+nodes <- z$nodes
+edges <- z$edges
+```
+
+```{r}
+ggplot(nodes, aes(x, y, label = id)) +
+  geom_segment(aes(xend = xend, yend = yend), data = edges,
+               color = grey(0.9), alpha = 0.9) +
+  geom_point(aes(color = eigen), size = 3, show.legend = FALSE) +
+  scale_color_viridis() + 
+  theme_void()
+```
+
+```{r}
+ggplot(nodes, aes(eigen, between)) +
+  geom_point() +
+  geom_text(aes(y = between + 50, label = id), data = nodes[nodes$between > 250,]) +
+  geom_point(color = "red", data = nodes[nodes$between > 250,]) +
+  theme_minimal()
+```
 
