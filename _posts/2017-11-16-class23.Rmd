@@ -18,7 +18,238 @@ library(readr)
 library(dplyr)
 library(ggplot2)
 library(viridis)
+library(stringi)
 ```
 
 ![](../assets/img/data_pipeline_transform.png)
+
+## 
+
+```{r}
+page <- "/wiki/Richmond,_Virginia"
+
+url <- sprintf("https://en.wikipedia.org%s", page)
+wpage <- data_frame(line = readLines(url))
+wpage <- filter(wpage, stri_detect(line, fixed = "<p"))
+links <- stri_extract_all(wpage$line, regex = "\"/wiki/[^[\"#]]+")
+links[1:3]
+```
+
+
+```{r}
+links <- unlist(links)
+links <- stri_sub(links[!is.na(links)], 2, -1)
+links <- unique(links)
+links <- links[!stri_detect(links, fixed = ":")]
+links
+```
+
+```{r, eval = FALSE}
+pages <- links
+edges <- matrix(NA_character_, ncol = 2, nrow = 0)
+for (i in seq_along(pages)) {
+  url <- sprintf("https://en.wikipedia.org%s", pages[i])
+  wpage <- data_frame(line = readLines(url))
+  wpage <- filter(wpage, stri_detect(line, fixed = "<p"))
+  links <- stri_extract_all(wpage$line,
+                            regex = "\"/wiki/[^[\"#]]+")
+  links <- unlist(links)
+  links <- stri_sub(links[!is.na(links)], 2, -1)
+  links <- unique(links)
+  links <- links[!stri_detect(links, fixed = ":")]
+
+  if (length(links) > 0)
+    edges <- rbind(edges, cbind(pages[i], links))
+
+  cat(sprintf("Done with %03d of %03d (%06d rows)\n",
+      i, length(pages), nrow(edges)))
+}
+
+write_rds(edges, "../assets/data/wiki_link_edges.rds")
+```
+
+```{r, echo = FALSE}
+edges <- read_rds("../assets/data/wiki_link_edges.rds")
+```
+
+
+```{r}
+mean(edges[,2] %in% edges[,1])
+```
+
+```{r}
+el <- edges[edges[,2] %in% edges[,1],]
+el[,1] <- stri_sub(el[,1], 7, -1)
+el[,2] <- stri_sub(el[,2], 7, -1)
+head(el)
+```
+
+```{r}
+library(smodels)
+gr <- graph_data(as_data_frame(el))
+```
+
+```{r}
+ggplot(gr$nodes, aes(x, y, label = id)) +
+  geom_segment(aes(xend = xend, yend = yend), data = gr$edges,
+               color = grey(0.9), alpha = 0.9) +
+  geom_point(aes(color = eigen), size = 3) +
+  scale_color_viridis() +
+  theme_void()
+```
+
+```{r}
+arrange(gr$nodes, desc(eigen))$id[1:25]
+```
+
+```{r}
+ggplot(gr$nodes, aes(eigen, between)) +
+  geom_point() +
+  geom_text(aes(y = between - 400, label = id),
+            data = filter(gr$nodes, between > 5000)) +
+  theme_minimal()
+```
+
+```{r}
+temp <- gr$nodes %>%
+  group_by(cluster) %>%
+  mutate(cluster_size = length(cluster)) %>%
+  filter(cluster_size > 5) %>%
+  arrange(cluster, eigen) %>%
+  top_n(wt = eigen, n = 5)
+split(temp$id, temp$cluster)
+```
+
+## Co-citation
+
+```{r}
+gr_co <- graph_data(filter(co_cite(as_data_frame(el)), count > 2))
+```
+
+```{r}
+ggplot(gr_co$nodes, aes(x, y, label = id)) +
+  geom_segment(aes(xend = xend, yend = yend), data = gr_co$edges,
+               color = grey(0.9), alpha = 0.9) +
+  geom_point(aes(color = eigen), size = 3) +
+  scale_color_viridis() +
+  theme_void()
+```
+
+
+```{r}
+arrange(gr_co$nodes, desc(eigen))$id[1:25]
+```
+
+```{r}
+nodes <- left_join(gr$nodes, gr_co$nodes, by = "id", suffix = c("", "_co"))
+```
+
+
+```{r}
+ggplot(nodes, aes(eigen, eigen_co)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0) + 
+  theme_minimal() 
+```
+
+```{r}
+mutate(nodes, diff = abs(eigen - eigen_co)) %>%
+  arrange(desc(diff)) %>%
+  select(id, eigen, eigen_co) %>%
+  print(n = 25)
+```
+
+## Text similarity
+
+```{r}
+page <- "/wiki/Statistics"
+
+url <- sprintf("https://en.wikipedia.org%s", page)
+wpage <- data_frame(line = readLines(url))
+wpage <- filter(wpage, stri_detect(line, fixed = "<p"))
+links <- stri_extract_all(wpage$line, regex = "\"/wiki/[^[\"#]]+")
+links <- unlist(links)
+links <- stri_sub(links[!is.na(links)], 2, -1)
+links <- unique(links)
+links <- links[!stri_detect(links, fixed = ":")]
+```
+
+```{r, eval = FALSE}
+pages <- links
+df <- data_frame(pages = pages, text = NA_character_)
+for (i in seq_along(pages)) {
+  url <- sprintf("https://en.wikipedia.org%s", pages[i])
+  wpage <- data_frame(line = readLines(url))
+  wpage <- filter(wpage, stri_detect(line, fixed = "<p"))
+  wpage$line <- stri_replace_all(wpage$line, "", regex = "<[^>]+>")
+  df$text[i] <- stri_paste(wpage$line, collapse = "")
+
+  cat(sprintf("Done with %03d of %03d\n", i, length(pages)))
+}
+```
+
+
+```{r, echo = FALSE}
+df <- read_rds("../assets/data/wiki_text_df.rds")
+```
+
+```{r}
+library(tokenizers)
+token_list <- tokenize_words(df$text)
+token_df <- term_list_to_df(token_list)
+X <- term_df_to_matrix(token_df)
+d <- as.matrix(dist(X))
+d <- data_frame(dist = as.numeric(d),
+                row = as.integer(row(d)),
+                col = as.integer(col(d)))
+```
+
+```{r}
+el <- filter(d, row != col)
+el <- filter(el, dist < 45)
+el <- data_frame(id = df$pages[el$row], id_out = df$pages[el$col])
+el$id <- stri_sub(el$id, 7, -1)
+el$id_out <- stri_sub(el$id_out, 7, -1)
+```
+
+```{r}
+gr <- graph_data(el)
+
+ggplot(gr$nodes, aes(x, y, label = id)) +
+  geom_segment(aes(xend = xend, yend = yend), data = gr$edges,
+               color = grey(0.9), alpha = 0.9) +
+  geom_point(aes(color = degree), size = 3) +
+  scale_color_viridis() +
+  theme_void()
+```
+
+```{r}
+el <- filter(d, row != col)
+el <- filter(group_by(el, row), dist <= sort(dist)[3])
+el <- data_frame(id = df$pages[el$row], id_out = df$pages[el$col])
+el$id <- stri_sub(el$id, 7, -1)
+el$id_out <- stri_sub(el$id_out, 7, -1)
+```
+
+```{r}
+gr <- graph_data(el)
+
+ggplot(gr$nodes, aes(x, y, label = id)) +
+  geom_segment(aes(xend = xend, yend = yend), data = gr$edges,
+               color = grey(0.9), alpha = 0.9) +
+  geom_point(aes(color = eigen), size = 3) +
+  scale_color_viridis() +
+  theme_void()
+```
+
+```{r}
+temp <- gr$nodes %>%
+  group_by(cluster) %>%
+  mutate(cluster_size = length(cluster)) %>%
+  filter(cluster_size > 5) %>%
+  arrange(cluster, eigen) %>%
+  top_n(wt = eigen, n = 5)
+split(temp$id, temp$cluster)
+```
+
 

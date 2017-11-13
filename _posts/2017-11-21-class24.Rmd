@@ -1,5 +1,5 @@
 ---
-title: "Class 24: Project Consultations"
+title: "Class 24: "
 author: "Taylor Arnold"
 output: html_notebook
 ---
@@ -20,5 +20,15 @@ library(ggplot2)
 library(viridis)
 ```
 
-Class today will consist of meeting in small groups to discuss
-topics for project III.
+```{r}
+library(smodels)
+H <- igraph::read_graph("https://raw.githubusercontent.com/Submanifold/Shakespeare/master/Networks/Speech/A_Midsummer-Night's_Dream.net", format = "pajek")
+z <- igraph::get.edgelist(H)
+gr <- graph_data(dplyr::as_data_frame(z))
+gr$nodes
+```
+
+
+
+
+
