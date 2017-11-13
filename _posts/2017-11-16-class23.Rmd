@@ -1,5 +1,5 @@
 ---
-title: "Class 23: Shape Files and Spatial Joins"
+title: "Class 23: Creating Citation Graphs"
 author: "Taylor Arnold"
 output: html_notebook
 ---
@@ -23,7 +23,15 @@ library(stringi)
 
 ![](../assets/img/data_pipeline_transform.png)
 
-## 
+## Citation Networks
+
+Today we are going to build several types of graphs describing the relationship between Wikipedia
+pages. This builds nicely on the text analysis work that you have from project II (the code should
+actually be more straightforward as you'll generally be able to take mine with only minor changes).
+
+Let's start with building a citation graph. That is, our nodes will be Wikipedia pages and two pages
+will share an edge if there is a link between their pages. To start, I'll select the Richmond, Virginia
+page. We'll print out the links from the first three paragraphs:
 
 ```{r}
 page <- "/wiki/Richmond,_Virginia"
@@ -35,6 +43,8 @@ links <- stri_extract_all(wpage$line, regex = "\"/wiki/[^[\"#]]+")
 links[1:3]
 ```
 
+Notice that we do not want links that contain a colon (":") as these are special Wikipedia pages.
+Filtering these out and taking the unique links gives a fairly large set of pages:
 
 ```{r}
 links <- unlist(links)
@@ -43,6 +53,10 @@ links <- unique(links)
 links <- links[!stri_detect(links, fixed = ":")]
 links
 ```
+
+As with the webscraping code, we'll cycle over all of these links and download each
+page. Here, I'll just extract all links from *those* pages and built a matrix of all
+links on every page mentioned on the Richmond, Virginia one.
 
 ```{r, eval = FALSE}
 pages <- links
@@ -67,15 +81,22 @@ for (i in seq_along(pages)) {
 
 write_rds(edges, "../assets/data/wiki_link_edges.rds")
 ```
-
 ```{r, echo = FALSE}
 edges <- read_rds("../assets/data/wiki_link_edges.rds")
 ```
 
+This can take a little time, so I included a counter that prints out the progress of the
+algorithm. 
+
+Notice that many of the links on these 538 pages are to other pages to in our set. On
+average only 6% of the links are in our collection:
 
 ```{r}
 mean(edges[,2] %in% edges[,1])
 ```
+
+For now, we only want those edges that point to another page in our initial set. We
+will construct a manual edge list from this:
 
 ```{r}
 el <- edges[edges[,2] %in% edges[,1],]
@@ -84,23 +105,40 @@ el[,2] <- stri_sub(el[,2], 7, -1)
 head(el)
 ```
 
+Now, I will use the `graph_data` function to extract network data from the edge
+list. Notice that not passing a node list creates one automatically from the
+edges (however, there will not be any additional metadata in this case to work
+with):
+
 ```{r}
 library(smodels)
 gr <- graph_data(as_data_frame(el))
 ```
 
+Plotting the network we can get an idea of what the citation graph looks like:
+
 ```{r}
 ggplot(gr$nodes, aes(x, y, label = id)) +
   geom_segment(aes(xend = xend, yend = yend), data = gr$edges,
                color = grey(0.9), alpha = 0.9) +
-  geom_point(aes(color = eigen), size = 3) +
+  geom_point(aes(color = eigen), size = 1) +
   scale_color_viridis() +
   theme_void()
 ```
 
+We could make this interactive to try to read the node names, which is helpful. Alternatively
+we can work with the nodes data as a table, ordering from the largest to the smallest eigenvalue
+centrality score:
+
 ```{r}
 arrange(gr$nodes, desc(eigen))$id[1:25]
 ```
+
+What do you notice about the most central pages? Remember, Richmond is **not** included in 
+the set, so it is not surprising that it's missing.
+
+Plotting eigenvalue and betweenness scores, we see that VCU and "Geographic Coordinate System"
+are the gatekeepers in this network:
 
 ```{r}
 ggplot(gr$nodes, aes(eigen, between)) +
@@ -109,6 +147,9 @@ ggplot(gr$nodes, aes(eigen, between)) +
             data = filter(gr$nodes, between > 5000)) +
   theme_minimal()
 ```
+
+What are the clusters? Let's select the clusters with more than five pages and find the most
+central nodes within each:
 
 ```{r}
 temp <- gr$nodes %>%
@@ -120,11 +161,27 @@ temp <- gr$nodes %>%
 split(temp$id, temp$cluster)
 ```
 
+Could you describe any of these with a short title?
+
 ## Co-citation
 
+An alternative method for constructing a citation network is to form the co-citation
+network. A co-citation connects two nodes if *other* pages cite *both* of them together.
+We can get co-citations using the `co_cite` function:
+
 ```{r}
-gr_co <- graph_data(filter(co_cite(as_data_frame(el)), count > 2))
+el_co <- co_cite(as_data_frame(el))
+el_co
 ```
+
+You can toy around with how many counts you want to include before connecting two pages.
+Here I'll just use 3 or more counts:
+
+```{r}
+gr_co <- graph_data(filter(el_co, count >= 3))
+```
+
+The graph looks quite a bit different now:
 
 ```{r}
 ggplot(gr_co$nodes, aes(x, y, label = id)) +
@@ -135,15 +192,19 @@ ggplot(gr_co$nodes, aes(x, y, label = id)) +
   theme_void()
 ```
 
+And the most central nodes have changed as well:
 
 ```{r}
 arrange(gr_co$nodes, desc(eigen))$id[1:25]
 ```
 
+Let's join the two datasets together to find the largest differences:
+
 ```{r}
 nodes <- left_join(gr$nodes, gr_co$nodes, by = "id", suffix = c("", "_co"))
 ```
 
+The eigenvalue scores are certainly correlated, but not a perfect copy of one another.
 
 ```{r}
 ggplot(nodes, aes(eigen, eigen_co)) +
@@ -152,6 +213,8 @@ ggplot(nodes, aes(eigen, eigen_co)) +
   theme_minimal() 
 ```
 
+Here are the most different nodes between the two measurements:
+
 ```{r}
 mutate(nodes, diff = abs(eigen - eigen_co)) %>%
   arrange(desc(diff)) %>%
@@ -159,7 +222,13 @@ mutate(nodes, diff = abs(eigen - eigen_co)) %>%
   print(n = 25)
 ```
 
+Do you notice any patterns about these? Where do you think they tend to appear most?
+
 ## Text similarity
+
+Citations are not the only way of creating a graph over the Wikipedia entries. An alternative
+method is to use the text itself to connect pages that have similar content. Let's start with
+the Statistics page, grabbing the links again:
 
 ```{r}
 page <- "/wiki/Statistics"
@@ -173,6 +242,9 @@ links <- stri_sub(links[!is.na(links)], 2, -1)
 links <- unique(links)
 links <- links[!stri_detect(links, fixed = ":")]
 ```
+
+Now, we will cycle over these pages but instead of grabbing links I'll just
+save the text (without the HTML codes):
 
 ```{r, eval = FALSE}
 pages <- links
@@ -188,29 +260,38 @@ for (i in seq_along(pages)) {
 }
 ```
 
-
 ```{r, echo = FALSE}
 df <- read_rds("../assets/data/wiki_text_df.rds")
 ```
+
+Now, I'll use the tokenization code to create a data frame showing
+the "distance" between any two documents. The distance is a function
+of how similar the words are between the documents
 
 ```{r}
 library(tokenizers)
 token_list <- tokenize_words(df$text)
 token_df <- term_list_to_df(token_list)
-X <- term_df_to_matrix(token_df)
+X <- term_df_to_matrix(token_df, scale = TRUE, min_df = 0.1, max_df = 0.9)
 d <- as.matrix(dist(X))
 d <- data_frame(dist = as.numeric(d),
                 row = as.integer(row(d)),
                 col = as.integer(col(d)))
+d
 ```
+
+Then, I'll create an edge list by including only those documents that are a distance
+of 45 away from each other (I selected this cut-off by trial and error):
 
 ```{r}
 el <- filter(d, row != col)
-el <- filter(el, dist < 45)
+el <- filter(el, dist < 0.1)
 el <- data_frame(id = df$pages[el$row], id_out = df$pages[el$col])
 el$id <- stri_sub(el$id, 7, -1)
 el$id_out <- stri_sub(el$id_out, 7, -1)
 ```
+
+And you can see that the resulting graph is very centered on a tight clustering of documents:
 
 ```{r}
 gr <- graph_data(el)
@@ -223,6 +304,9 @@ ggplot(gr$nodes, aes(x, y, label = id)) +
   theme_void()
 ```
 
+Alternatively, we can connect each page to its k-nearest neighbors. Here, I'll link
+to the closest 3 pages:
+
 ```{r}
 el <- filter(d, row != col)
 el <- filter(group_by(el, row), dist <= sort(dist)[3])
@@ -230,6 +314,8 @@ el <- data_frame(id = df$pages[el$row], id_out = df$pages[el$col])
 el$id <- stri_sub(el$id, 7, -1)
 el$id_out <- stri_sub(el$id_out, 7, -1)
 ```
+
+This graph looks quite a bit more interesting and spread out:
 
 ```{r}
 gr <- graph_data(el)
@@ -242,6 +328,8 @@ ggplot(gr$nodes, aes(x, y, label = id)) +
   theme_void()
 ```
 
+Can you make any sense of the topics here?
+
 ```{r}
 temp <- gr$nodes %>%
   group_by(cluster) %>%
@@ -251,5 +339,11 @@ temp <- gr$nodes %>%
   top_n(wt = eigen, n = 5)
 split(temp$id, temp$cluster)
 ```
+
+Changing the cut-off value significantly effects the output of the model. You'll have a chance to experiment
+with this in Project 3.
+
+
+
 
 
