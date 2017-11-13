@@ -19,6 +19,8 @@ library(dplyr)
 library(ggplot2)
 library(viridis)
 library(stringi)
+library(Matrix)
+library(methods)
 ```
 
 ![](../assets/img/data_pipeline_transform.png)
@@ -86,7 +88,7 @@ edges <- read_rds("../assets/data/wiki_link_edges.rds")
 ```
 
 This can take a little time, so I included a counter that prints out the progress of the
-algorithm. 
+algorithm.
 
 Notice that many of the links on these 538 pages are to other pages to in our set. On
 average only 6% of the links are in our collection:
@@ -134,7 +136,7 @@ centrality score:
 arrange(gr$nodes, desc(eigen))$id[1:25]
 ```
 
-What do you notice about the most central pages? Remember, Richmond is **not** included in 
+What do you notice about the most central pages? Remember, Richmond is **not** included in
 the set, so it is not surprising that it's missing.
 
 Plotting eigenvalue and betweenness scores, we see that VCU and "Geographic Coordinate System"
@@ -209,8 +211,8 @@ The eigenvalue scores are certainly correlated, but not a perfect copy of one an
 ```{r}
 ggplot(nodes, aes(eigen, eigen_co)) +
   geom_point() +
-  geom_abline(slope = 1, intercept = 0) + 
-  theme_minimal() 
+  geom_abline(slope = 1, intercept = 0) +
+  theme_minimal()
 ```
 
 Here are the most different nodes between the two measurements:
