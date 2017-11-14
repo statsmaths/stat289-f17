@@ -1,5 +1,5 @@
 ---
-title: "Class 24: "
+title: "Class 24: More Network Types"
 author: "Taylor Arnold"
 output: html_notebook
 ---
@@ -20,13 +20,138 @@ library(ggplot2)
 library(viridis)
 ```
 
+Today, we'll look at three additional examples of networks.
+Pay attention as you'll be selecting from amongst these for
+the third and final project.
+
+## Baseball data
+
+```{r, message = FALSE}
+mlb_nodes <- read_csv("https://statsmaths.github.io/stat_data/mlb_teams_nodes.csv")
+mlb_edges <- read_csv("https://statsmaths.github.io/stat_data/mlb_teams_edges.csv")
+mlb_edges
+```
+
 ```{r}
 library(smodels)
-H <- igraph::read_graph("https://raw.githubusercontent.com/Submanifold/Shakespeare/master/Networks/Speech/A_Midsummer-Night's_Dream.net", format = "pajek")
-z <- igraph::get.edgelist(H)
-gr <- graph_data(dplyr::as_data_frame(z))
-gr$nodes
+gr <- graph_data(filter(mlb_edges, year == 2010, count > 10), mlb_nodes)
+
+ggplot(gr$nodes, aes(x, y, label = id)) +
+  geom_segment(aes(xend = xend, yend = yend), data = gr$edges,
+               color = grey(0.9), alpha = 0.9) +
+  geom_point(aes(color = eigen), size = 6) +
+  geom_text(aes(y = y - 0.1)) +
+  scale_color_viridis() +
+  theme_void()
 ```
+
+```{r, message = FALSE}
+college_nodes <- read_csv("https://statsmaths.github.io/stat_data/mlb_college_nodes.csv")
+college_edges <- read_csv("https://statsmaths.github.io/stat_data/mlb_college_edges.csv")
+college_edges
+```
+
+```{r}
+library(smodels)
+gr <- graph_data(filter(college_edges, year == 1950), college_nodes)
+
+ggplot(gr$nodes, aes(x, y, label = id)) +
+  geom_segment(aes(xend = xend, yend = yend), data = gr$edges,
+               color = grey(0.9), alpha = 0.9) +
+  geom_point(aes(color = type), size = 6) +
+  geom_text(aes(y = y - 0.1)) +
+  theme_void()
+```
+
+## RFID Tags
+
+```{r, message = FALSE}
+rfid_nodes <- read_csv("https://statsmaths.github.io/stat_data/rfid_nodes.csv")
+rfid_edges <- read_csv("https://statsmaths.github.io/stat_data/rfid_edges.csv")
+rfid_edges
+```
+
+```{r}
+library(smodels)
+gr <- graph_data(filter(rfid_edges, time > 60 * 60 * 20, time < 60 * 60 * 22),
+                 rfid_nodes)
+
+ggplot(gr$nodes, aes(x, y, label = id)) +
+  geom_segment(aes(xend = xend, yend = yend), data = gr$edges,
+               color = grey(0.9), alpha = 0.9, size = 1) +
+  geom_point(aes(color = status), size = 5) +
+  geom_text(aes(y = y - 0.15), size = 5) +
+  theme_void()
+```
+
+
+
+## Shakespeare characters
+
+```{r}
+temp <- read_rds(url("https://github.com/statsmaths/stat_data/blob/gh-pages/shakespeare_plays.rds?raw=true"))
+speech <- temp$speech
+time <- temp$time
+plays <- temp$plays
+```
+
+
+```{r}
+library(smodels)
+gr <- graph_data(time[[1]])
+```
+
+```{r}
+ggplot(gr$nodes, aes(x, y, label = id)) +
+  geom_segment(aes(xend = xend, yend = yend), data = gr$edges,
+               color = grey(0.9), alpha = 0.9, size = 1) +
+  geom_point(aes(color = cluster), size = 5, show.legend = FALSE) +
+  geom_text(aes(y = y - 0.15), size = 5) +
+  theme_void() +
+  ggtitle(plays[[1]])
+```
+
+```{r}
+gr <- graph_data(filter(speech[[1]], score > 1))
+ggplot(gr$nodes, aes(x, y, label = id)) +
+  geom_segment(aes(xend = xend, yend = yend), data = gr$edges,
+               color = grey(0.9), alpha = 0.9, size = 1) +
+  geom_point(aes(color = eigen), size = 5, show.legend = FALSE) +
+  geom_text(aes(y = y - 0.15), size = 5) +
+  scale_color_viridis() +
+  theme_void() +
+  ggtitle(plays[[1]])
+```
+
+```{r}
+gr <- graph_data(speech[[25]])
+ggplot(gr$nodes, aes(x, y, label = id)) +
+  geom_segment(aes(xend = xend, yend = yend), data = gr$edges,
+               color = grey(0.9), alpha = 0.9, size = 1) +
+  geom_point(aes(color = eigen), size = 5, show.legend = FALSE) +
+  geom_text(aes(y = y - 0.15), size = 5) +
+  scale_color_viridis() +
+  theme_void() +
+  ggtitle(plays[[25]])
+```
+
+## Project III
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
