@@ -22,15 +22,31 @@ library(viridis)
 
 Today, we'll look at three additional examples of networks.
 Pay attention as you'll be selecting from amongst these for
-the third and final project.
+the third and final project. Notice that all of these, like 
+the Supreme Court citations, are too large to look at all at
+once and you'll need to subset the edges or nodes.
 
 ## Baseball data
 
+For those of you interested in sports data, I have two datasets constructed from
+Major League Baseball. The nodes in the first are the various MLB franchises:
+
 ```{r, message = FALSE}
 mlb_nodes <- read_csv("https://statsmaths.github.io/stat_data/mlb_teams_nodes.csv")
+mlb_nodes
+```
+
+And the edges indicate, in a given year, how many players on one team came from
+another team:
+
+```{r, message = FALSE}
 mlb_edges <- read_csv("https://statsmaths.github.io/stat_data/mlb_teams_edges.csv")
 mlb_edges
 ```
+
+To do something interesting with this, you'll need to take a subset of the years 
+and (likely) truncate to only those edges with a large enough count. Here, I'll 
+look at 2010 and counts above 10:
 
 ```{r}
 library(smodels)
@@ -45,11 +61,32 @@ ggplot(gr$nodes, aes(x, y, label = id)) +
   theme_void()
 ```
 
+Interesting questions include local effects (how does this graph change over 
+a specific decade), or how does it change over a long time period. For example,
+here is the graph from before the modern free-agency era:
+
+```{r}
+gr <- graph_data(filter(mlb_edges, year == 1970, count > 10), mlb_nodes)
+
+ggplot(gr$nodes, aes(x, y, label = id)) +
+  geom_segment(aes(xend = xend, yend = yend), data = gr$edges,
+               color = grey(0.9), alpha = 0.9) +
+  geom_point(aes(color = eigen), size = 6) +
+  geom_text(aes(y = y - 0.1)) +
+  scale_color_viridis() +
+  theme_void()
+```
+
+The second baseball dataset is similar, but includes links between MLB teams and
+college teams for a given year:
+
 ```{r, message = FALSE}
 college_nodes <- read_csv("https://statsmaths.github.io/stat_data/mlb_college_nodes.csv")
 college_edges <- read_csv("https://statsmaths.github.io/stat_data/mlb_college_edges.csv")
-college_edges
+sample_n(college_nodes, size = 16)
 ```
+
+Take a look at the data from 1950:
 
 ```{r}
 library(smodels)
@@ -63,13 +100,29 @@ ggplot(gr$nodes, aes(x, y, label = id)) +
   theme_void()
 ```
 
+I can see some regional effects here in the 1950's graph (the Red Sox have the only players from
+Providence and UConn, for example). Richmond even has a player on the Yankees roster!
+
 ## RFID Tags
+
+The second set of graph data concerns RFID tags from a French Hospital system over the
+course of 8 days. The nodes consist of patients, nurses, administrators, and physicians:
 
 ```{r, message = FALSE}
 rfid_nodes <- read_csv("https://statsmaths.github.io/stat_data/rfid_nodes.csv")
+sample_n(rfid_nodes, size = 10)
+```
+
+The edges indicate whenever two entities came in contact with one another in a given 20-second
+time interval:
+
+```{r, message = FALSE}
 rfid_edges <- read_csv("https://statsmaths.github.io/stat_data/rfid_edges.csv")
 rfid_edges
 ```
+
+Interesting relationships can be understood by looking at the graph over various
+time periods:
 
 ```{r}
 library(smodels)
@@ -84,24 +137,33 @@ ggplot(gr$nodes, aes(x, y, label = id)) +
   theme_void()
 ```
 
-
+A particularly interesting approach could collect summary statistics over particular hours
+and then plot **that** data. There is a lot of potential here, though it will take some 
+digging into the dataset to find it.
 
 ## Shakespeare characters
+
+The final dataset comes from character relationships from Shakespeare's plays. There are
+two different sets of edges (there is no seperate nodes table), depending on whether links
+should indicate whether two characters talk to one another or appear within a fixed number
+of words of one another:
 
 ```{r}
 temp <- read_rds(url("https://github.com/statsmaths/stat_data/blob/gh-pages/shakespeare_plays.rds?raw=true"))
 speech <- temp$speech
 time <- temp$time
 plays <- temp$plays
+time[[1]]
 ```
 
+There is a seperate element for each play. As you can see, connections have scores that you
+could use to filter to only the strongest relationship. Here is the network from "A Midsummer
+Night's Dream":
 
 ```{r}
 library(smodels)
 gr <- graph_data(time[[1]])
-```
 
-```{r}
 ggplot(gr$nodes, aes(x, y, label = id)) +
   geom_segment(aes(xend = xend, yend = yend), data = gr$edges,
                color = grey(0.9), alpha = 0.9, size = 1) +
@@ -110,6 +172,9 @@ ggplot(gr$nodes, aes(x, y, label = id)) +
   theme_void() +
   ggtitle(plays[[1]])
 ```
+
+The clusters line up well to the different aspects of the play.
+And here is the same set of characters using the speech network:
 
 ```{r}
 gr <- graph_data(filter(speech[[1]], score > 1))
@@ -123,6 +188,8 @@ ggplot(gr$nodes, aes(x, y, label = id)) +
   ggtitle(plays[[1]])
 ```
 
+You can study and compare multiple plays; here is Romeo and Juliete:
+
 ```{r}
 gr <- graph_data(speech[[25]])
 ggplot(gr$nodes, aes(x, y, label = id)) +
@@ -135,11 +202,26 @@ ggplot(gr$nodes, aes(x, y, label = id)) +
   ggtitle(plays[[25]])
 ```
 
+An interesting project would be to study the differences and similarities between the plays.
+Do they themselves relate in any way?
+
 ## Project III
 
+The third project requires you do a data analysis based on network data. Your analysis
+should not focus on just a single network, but should consist of comparing multiple 
+networks to find more interesting meta-patterns. I am open to other suggestions, but
+generally I recommend that you use one of the following datasets:
 
+- **Wikipedia links data** (double hops; text vs. citation vs. co-citation; contrast different starting points)
+- **Baseball datasets** (compare college vs. pro; look across years; apply different cut-offs)
+- **Shakespeare plays** (compare speech vs. time; play with the cut-off; compare plays, perhaps clustered on type:
+comedy, tragedy, history)
+- **RFID data** (look at the graph over time; compare across days, hours, types, and individuals)
 
-
+The end goal is to find something interesting and relay these interesting ideas through
+graphics and/or models through your data analysis report. This should more closely resemble
+the first data analysis rather than the second one (i.e., there should be a thesis rather than
+an hypothesis). We will have presentations on these reports during the final week of the term.
 
 
 
