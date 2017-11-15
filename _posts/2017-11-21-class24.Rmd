@@ -22,7 +22,7 @@ library(viridis)
 
 Today, we'll look at three additional examples of networks.
 Pay attention as you'll be selecting from amongst these for
-the third and final project. Notice that all of these, like 
+the third and final project. Notice that all of these, like
 the Supreme Court citations, are too large to look at all at
 once and you'll need to subset the edges or nodes.
 
@@ -44,8 +44,8 @@ mlb_edges <- read_csv("https://statsmaths.github.io/stat_data/mlb_teams_edges.cs
 mlb_edges
 ```
 
-To do something interesting with this, you'll need to take a subset of the years 
-and (likely) truncate to only those edges with a large enough count. Here, I'll 
+To do something interesting with this, you'll need to take a subset of the years
+and (likely) truncate to only those edges with a large enough count. Here, I'll
 look at 2010 and counts above 10:
 
 ```{r}
@@ -61,7 +61,7 @@ ggplot(gr$nodes, aes(x, y, label = id)) +
   theme_void()
 ```
 
-Interesting questions include local effects (how does this graph change over 
+Interesting questions include local effects (how does this graph change over
 a specific decade), or how does it change over a long time period. For example,
 here is the graph from before the modern free-agency era:
 
@@ -138,7 +138,7 @@ ggplot(gr$nodes, aes(x, y, label = id)) +
 ```
 
 A particularly interesting approach could collect summary statistics over particular hours
-and then plot **that** data. There is a lot of potential here, though it will take some 
+and then plot **that** data. There is a lot of potential here, though it will take some
 digging into the dataset to find it.
 
 ## Shakespeare characters
@@ -208,7 +208,7 @@ Do they themselves relate in any way?
 ## Project III
 
 The third project requires you do a data analysis based on network data. Your analysis
-should not focus on just a single network, but should consist of comparing multiple 
+should not focus on just a single network, but should consist of comparing multiple
 networks to find more interesting meta-patterns. I am open to other suggestions, but
 generally I recommend that you use one of the following datasets:
 
@@ -217,6 +217,7 @@ generally I recommend that you use one of the following datasets:
 - **Shakespeare plays** (compare speech vs. time; play with the cut-off; compare plays, perhaps clustered on type:
 comedy, tragedy, history)
 - **RFID data** (look at the graph over time; compare across days, hours, types, and individuals)
+- **Supreme Court citations** (look at the graph for various issues, perhaps over time, using different cut-offs and looking at citation and co-citation graphs)
 
 The end goal is to find something interesting and relay these interesting ideas through
 graphics and/or models through your data analysis report. This should more closely resemble
