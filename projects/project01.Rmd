@@ -1,0 +1,47 @@
+---
+title: "MY TITLE"
+author: "MY NAME"
+fontsize: 12pt
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = TRUE)
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(smodels)
+library(forcats)
+library(stringi)
+
+theme_set(theme_minimal())
+```
+
+## Introduction
+
+This file is just a template. Feel free to re-organize and
+modify it. You do not need to use these exact sections.
+
+In R-markdown, we write code in special text blocks such
+as the following:
+
+```{r, echo = TRUE}
+speed <- read_csv("https://statsmaths.github.io/stat_data/speed_dating.csv")
+```
+
+The option `echo` determined whether the code is shown as well
+as run. In many (perhaps most) cases, you will want to show the code 
+even though you want to show the output. Change this to `FALSE` in
+those cases.
+
+## Conclusions
+
+Use sections headers starting with two pound signs (`##`). If needed,
+you can also use subsections (`###`).
+
+
+

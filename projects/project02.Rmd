@@ -1,0 +1,36 @@
+---
+title: "MY TITLE"
+author: "MY NAME"
+fontsize: 12pt
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = TRUE)
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(smodels)
+library(forcats)
+library(stringi)
+
+theme_set(theme_minimal())
+```
+
+## Introduction
+
+## Data collection
+
+## Methods
+
+## Results
+
+## Post-hoc exploration
+
+## Conclusions
+
+
